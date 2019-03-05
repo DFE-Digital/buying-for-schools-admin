@@ -1,0 +1,72 @@
+
+table {
+  border-collapse: collapse;
+}
+
+td {
+  vertical-align: baseline;
+  margin: 0;
+  padding: 4px;
+  /*border-color: #ccc;
+  border-width: 1px;
+  border-style: solid;*/
+  position: relative;
+}
+
+.answer {
+  min-width: 100px;
+}
+
+.answer h3 {
+  font-weight: normal;
+  font-size: 12px;
+}
+
+.answer a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.answer--outer::before {
+  position: absolute;
+  display: block;
+  content: '';
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background-color: #000;
+}
+
+.answer--outer::after {
+  position: absolute;
+  display: block;
+  content: '';
+  top: 0;
+  left: 50%;
+  width: 2px;
+  height: 10px;
+  background-color: #000;
+}
+
+.answer--outer:first-child::before {
+  left: 50%;
+  width: 50%;
+}
+
+.answer--outer:last-child::before {
+  width: 50%;
+}
+
+.result {
+  border-color: #b9e0f7;
+  border-width: 1px;
+  border-style: solid;
+  border-radius: 4px;
+  background-color: #e1f4ff;
+}
+
+.result--exists {
+  border-color: #a9dcc0;
+  background-color: #bdf5d6;
+}

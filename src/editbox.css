@@ -1,0 +1,35 @@
+.editbox {
+  text-align: left;
+  position: fixed;
+  top: 0;
+  left: calc(50% - 200px);
+  width: 400px;
+  background-color: #eee;
+  border-style: solid;
+  border-color: #ccc;
+  border-width: 1px;
+  padding: 10px;
+  box-sizing: border-box;
+  z-index: 10000;
+}
+
+.editbox__field {
+
+}
+
+.editbox__label {
+  display: inline-block;
+  width: 60px;
+}
+
+.editbox__input {
+  display: inline-block;
+  width: 260px;
+  margin-bottom: 10px;
+  padding: 5px;
+  box-sizing: border-box;
+}
+
+.editbox__input--ref {
+  width: 100px;
+}
