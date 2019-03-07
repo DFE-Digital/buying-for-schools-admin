@@ -17,6 +17,7 @@ class Edit extends Component {
         editBoxTitle: 'Answer',
         keyref: answer.ref,
         title: answer.title,
+        hint: answer.hint,
         next: nextBranch && nextBranch.ref ? nextBranch.ref : nextBranch,
         result: answer.result
       }
@@ -25,7 +26,9 @@ class Edit extends Component {
         isAnswer: false,
         editBoxTitle: 'Question',
         keyref: hierarchy.ref,
-        title: hierarchy.title
+        title: hierarchy.title,
+        hint: hierarchy.hint,
+        err: hierarchy.err
       }
     }
   }
@@ -45,6 +48,10 @@ class Edit extends Component {
     this.setState({ title: e.target.value });
   }
 
+  handleHintChange (e) {
+    this.setState({ hint: e.target.value });
+  }
+
   handleResultChange (e) {
     this.setState({ result: e.target.value });
   }
@@ -53,14 +60,24 @@ class Edit extends Component {
     this.setState({ next: e.target.value });
   }
 
+  handleErrChange (e) {
+    this.setState({ err: e.target.value });
+  }
+
   getSaveUrl () {
     if (this.state.isNew) {
       return '/api/question/' + this.props.hierarchy.ref + '/answer'
     } else if (this.state.isAnswer) {
       return '/api/question/' + this.props.hierarchy.ref + '/answer/' + this.props.answer.ref
-    } else {
-      return '/api/question/' + this.props.hierarchy.ref
     }
+    return '/api/question/' + this.props.hierarchy.ref
+  }
+
+  getDeleteUrl () {
+    if (this.state.isAnswer) {
+      return '/api/question/' + this.props.hierarchy.ref + '/answer/' + this.props.answer.ref
+    } 
+    return '/api/question/' + this.props.hierarchy.ref
   }
 
   save (e) {
@@ -68,7 +85,9 @@ class Edit extends Component {
     const method = this.state.isNew ? 'POST': 'PUT'
     const data = {
       ref: this.state.keyref,
-      title: this.state.title
+      title: this.state.title,
+      hint: this.state.hint,
+      err: this.state.err
     }
     if (this.state.isAnswer) {
       data.next = this.state.next
@@ -88,6 +107,19 @@ class Edit extends Component {
       })
     })
 
+  }
+
+  delete (e) {
+    e.preventDefault()
+    fetch(this.getSaveUrl(), { method: 'DELETE' })
+    .then(res => res.json())
+    .then(result => {
+      Globals.app.setState({
+        ...result,
+        editing: null,
+        editingAnswer: null
+      })
+    })
   }
 
   render () {
@@ -120,6 +152,28 @@ class Edit extends Component {
             onChange={this.handleTitleChange.bind(this)} 
           />
         </div>
+        { !this.state.isAnswer && (
+          <div className="editbox__field">
+            <label className="editbox__label" htmlFor="err">Error</label>
+            <input 
+              id="err"
+              className="editbox__input editbox__input--err" 
+              type="text" 
+              defaultValue={this.state.err} 
+              onChange={this.handleErrChange.bind(this)} 
+            />
+          </div>  
+        )}
+        <div className="editbox__field">
+          <label className="editbox__label" htmlFor="hint">Hint</label>
+          <input 
+            id="hint"
+            className="editbox__input editbox__input--hint" 
+            type="text" 
+            defaultValue={this.state.hint} 
+            onChange={this.handleHintChange.bind(this)} 
+          />
+        </div>
         { this.state.isAnswer && (
           <div>
             <div className="editbox__field">
@@ -145,8 +199,9 @@ class Edit extends Component {
             </div>
           </div>
         )}
-        <a onClick={e => this.closeIt(e)}>Close</a>
-        <a onClick={e => this.save(e)}>Save</a>
+        <a href="#" className="btn btn--grey" onClick={e => this.closeIt(e)}>Close</a>
+        <a href="#" className="btn btn--green"onClick={e => this.save(e)}>Save</a>
+        { !this.state.isNew && (<a href="#" className="btn btn--red"onClick={e => this.delete(e)}>Delete</a>)}
       </div>
     )
   }

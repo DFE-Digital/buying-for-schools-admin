@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import Question from './Question'
 import Result from './Result'
 import Globals from './Globals'
+import './answer.css'
 
 class Answer extends Component {
   showEdit (e) {
@@ -21,6 +22,7 @@ class Answer extends Component {
     return (
       <div className="answer">
         <h3><a href="#" onClick={e => this.showEdit(e)}>{ opt.title }</a></h3>
+        { opt.hint && (<span className="answer__hint">{ opt.hint }</span>)}
         {nxt && <Question hierarchy={nxt} />}
         {result && <Result result={result} templateExists={opt.templateExists}/>}
       </div>

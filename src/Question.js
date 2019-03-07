@@ -28,6 +28,8 @@ class Question extends Component {
           <tr className="question--outer">
             <td className="question" colSpan={ hierarchy.options.length }>
               <h2><a href="#" onClick={e => this.showEdit(e)}>{ hierarchy.title }</a></h2>
+              { hierarchy.hint && (<span className="question__hint">{ hierarchy.hint }</span>)}
+              { hierarchy.err && (<span className="question__err">{hierarchy.err}</span>)}
               <a className="question__addanswer" href="#" onClick={e => this.addOption(e)}>+</a>
             </td>
           </tr>

@@ -29,6 +29,11 @@
   font-weight: normal;
 }
 
+.question h2:hover {
+  /*color: #fff;*/
+  background-color: #9f9;
+}
+
 .question__addanswer {
   position: absolute;
   left: calc(50% + 4px);
@@ -38,4 +43,30 @@
   font-size: 12px;
   background-color: #0f0;
   border-radius: 8px;
+}
+
+.question__addanswer:hover {
+  background-color: #090;
+  color: #fff;
+}
+
+.question__hint {
+  position: relative;
+  z-index: 1;
+  font-size: 10px;
+  background-color: #fff;
+  line-height: 1;
+  display: block;
+  margin: 2px 0;
+}
+
+.question__err {
+  position: relative;
+  z-index: 1;
+  font-size: 10px;
+  color: #f00;
+  background-color: #fff;
+  line-height: 1;
+  display: block;
+  margin: 2px 0;
 }

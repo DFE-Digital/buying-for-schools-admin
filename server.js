@@ -7,8 +7,8 @@ const bodyParser = require('body-parser')
 app.use(bodyParser.json())
 
 const frameworksTemplatePath = path.resolve(__dirname, '../buying-for-schools/app/templates/frameworks/')
-const treePath = path.resolve(__dirname, 'tree.json')
-const tree = JSON.parse(fs.readFileSync(treePath))
+const treePath = path.resolve(__dirname, '../buying-for-schools/app/tree.json')
+let tree = JSON.parse(fs.readFileSync(treePath))
 
 const treeHierarchy = (thetree, ref, depth = 0) => {
   if (!ref) {
@@ -23,6 +23,8 @@ const treeHierarchy = (thetree, ref, depth = 0) => {
   const newEntry = {
     ref,
     title: thisBranch.title,
+    hint: thisBranch.hint,
+    err: thisBranch.err,
     depth,
     options: [],
     decendants: 0
@@ -33,6 +35,7 @@ const treeHierarchy = (thetree, ref, depth = 0) => {
       ref: opt.ref,
       title: opt.title || opt.ref,
       result: opt.result || undefined,
+      hint: opt.hint,
       decendants: 1
     }
 
@@ -81,8 +84,6 @@ app.get('/api/decision-tree', (req, res) => {
 app.put('/api/question/:qref', (req, res) => {
   const currentRef = req.params.qref
   const currentEntry = tree.find(branch => branch.ref === currentRef)
-  console.log(currentRef)
-  console.log(currentEntry)
 
   if (!currentEntry) {
     res.statusCode = 400
@@ -91,7 +92,27 @@ app.put('/api/question/:qref', (req, res) => {
 
   currentEntry.title = req.body.title
   currentEntry.ref = req.body.ref
+  currentEntry.hint = req.body.hint
+  currentEntry.err = req.body.err
 
+  save()
+
+  res.send({
+    hierarchy: treeHierarchy(tree),
+    tree
+  })
+})
+
+app.delete('/api/question/:qref', (req, res) => {
+  const currentRef = req.params.qref
+  const currentEntry = tree.find(branch => branch.ref === currentRef)
+
+  if (!currentEntry) {
+    res.statusCode = 400
+    return res.send({})
+  }
+
+  tree = tree.filter(branch => branch.ref !== currentRef)
   save()
 
   res.send({
@@ -137,11 +158,30 @@ app.put('/api/question/:qref/answer/:ansref', (req, res) => {
   currentAnswer.ref = req.body.ref
   currentAnswer.next = req.body.next
   currentAnswer.result = req.body.result
+  currentAnswer.hint = req.body.hint
 
   createNextBranchIfRequired(currentAnswer.next)
 
   save()
 
+  res.send({
+    hierarchy: treeHierarchy(tree),
+    tree
+  })
+})
+
+app.delete('/api/question/:qref/answer/:ansref', (req, res) => {
+  const currentRef = req.params.qref
+  const currentEntry = tree.find(branch => branch.ref === currentRef)
+  const currentAnsref = req.params.ansref
+  if (!currentEntry) {
+    res.statusCode = 400
+    return res.send({})
+  }
+
+  currentEntry.options = currentEntry.options.filter(opt => opt.ref !== currentAnsref)
+
+  save()
   res.send({
     hierarchy: treeHierarchy(tree),
     tree
