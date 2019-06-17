@@ -13,15 +13,3 @@ td {
   position: relative;
 }
 
-.result {
-  border-color: #b9e0f7;
-  border-width: 1px;
-  border-style: solid;
-  border-radius: 4px;
-  background-color: #e1f4ff;
-}
-
-.result--exists {
-  border-color: #a9dcc0;
-  background-color: #bdf5d6;
-}

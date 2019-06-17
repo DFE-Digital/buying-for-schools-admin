@@ -6,9 +6,14 @@ const fs = require('fs')
 const bodyParser = require('body-parser')
 app.use(bodyParser.json())
 
+const dataPath = path.resolve(__dirname, '../buying-for-schools/app/data')
 const frameworksTemplatePath = path.resolve(__dirname, '../buying-for-schools/app/templates/frameworks/')
-const treePath = path.resolve(__dirname, '../buying-for-schools/app/tree.json')
+let frameworksPath = path.resolve(dataPath, 'frameworks.json')
+let treePath = path.resolve(dataPath, 'tree.json')
 let tree = JSON.parse(fs.readFileSync(treePath))
+let frameworks = JSON.parse(fs.readFileSync(frameworksPath))
+
+
 
 const treeHierarchy = (thetree, ref, depth = 0) => {
   if (!ref) {
@@ -19,7 +24,7 @@ const treeHierarchy = (thetree, ref, depth = 0) => {
   if (!thisBranch) {
     return null
   }
-  thisBranch.used = true
+
   const newEntry = {
     ref,
     title: thisBranch.title,
@@ -37,10 +42,6 @@ const treeHierarchy = (thetree, ref, depth = 0) => {
       result: opt.result || undefined,
       hint: opt.hint,
       decendants: 1
-    }
-
-    if (opt.result) {
-      newOpt.templateExists = fs.existsSync(path.join(frameworksTemplatePath, opt.result + '.njk'))
     }
 
     if (opt.next) {
@@ -74,11 +75,66 @@ const save = () => {
   })
 }
 
-app.get('/api/decision-tree', (req, res) => {
-  res.send({
-    hierarchy: treeHierarchy(tree),
-    tree
+const saveFramework = () => {
+  fs.renameSync(frameworksPath, path.resolve(__dirname, 'backup/framework-' + new Date().toISOString() + '.json'))
+  const cleanFrameworks = frameworks.map(f => {
+    return {
+      ref: f.ref,
+      title: f.title,
+      supplier: f.supplier,
+      url: f.url,
+      cat: f.cat
+    }
   })
+  fs.writeFile(frameworksPath, JSON.stringify(cleanFrameworks, null, '  '), 'utf8', err => {
+     if (err) {
+       throw(err)
+     }
+  })
+}
+
+const stdResponse = () => {
+  const frameworksInfo = frameworks.map(f => {
+    return {
+      ...f,
+      templateExists: fs.existsSync(`${frameworksTemplatePath}/${f.ref}.njk`)
+    }
+  })
+  return {
+    hierarchy: treeHierarchy(tree),
+    tree,
+    frameworks: frameworksInfo,
+    dataSets: [
+      "default",
+      "mock-animals"
+    ]
+  }
+}
+
+app.put('/api/dataset', (req, res) => {
+  const d = req.body.dataSet
+  switch(d) {
+    case 'mock-animals': {
+      treePath = path.join(dataPath, `mocks/animals/animal-tree.json`)
+      frameworksPath = path.join(dataPath, `mocks/animals/animal-frameworks.json`)
+      break
+    }
+
+    default: {
+      treePath = path.join(dataPath, 'tree.json')
+      frameworksPath = path.join(dataPath, 'frameworks.json')
+    }
+  }
+
+  
+  tree = JSON.parse(fs.readFileSync(treePath))
+  frameworks = JSON.parse(fs.readFileSync(frameworksPath))
+
+  res.send(stdResponse())
+})
+
+app.get('/api/decision-tree', (req, res) => {
+  res.send(stdResponse())
 })
 
 app.put('/api/question/:qref', (req, res) => {
@@ -97,10 +153,7 @@ app.put('/api/question/:qref', (req, res) => {
 
   save()
 
-  res.send({
-    hierarchy: treeHierarchy(tree),
-    tree
-  })
+  res.send(stdResponse())
 })
 
 app.delete('/api/question/:qref', (req, res) => {
@@ -115,10 +168,7 @@ app.delete('/api/question/:qref', (req, res) => {
   tree = tree.filter(branch => branch.ref !== currentRef)
   save()
 
-  res.send({
-    hierarchy: treeHierarchy(tree),
-    tree
-  })
+  res.send(stdResponse())
 })
 
 app.post('/api/question/:qref/answer', (req, res) => {
@@ -129,18 +179,17 @@ app.post('/api/question/:qref/answer', (req, res) => {
     return res.send({})
   }
 
+  const result = req.body.result || ''
+
   currentEntry.options.push({
     ref: req.body.ref,
     title: req.body.title,
     next: req.body.next,
-    result: req.body.result
+    result: (result.pop) ? result: result.split(',')
   })
 
   save()
-  res.send({
-    hierarchy: treeHierarchy(tree),
-    tree
-  })
+  res.send(stdResponse())
 })
 
 app.put('/api/question/:qref/answer/:ansref', (req, res) => {
@@ -163,11 +212,7 @@ app.put('/api/question/:qref/answer/:ansref', (req, res) => {
   createNextBranchIfRequired(currentAnswer.next)
 
   save()
-
-  res.send({
-    hierarchy: treeHierarchy(tree),
-    tree
-  })
+  res.send(stdResponse())
 })
 
 app.delete('/api/question/:qref/answer/:ansref', (req, res) => {
@@ -182,12 +227,45 @@ app.delete('/api/question/:qref/answer/:ansref', (req, res) => {
   currentEntry.options = currentEntry.options.filter(opt => opt.ref !== currentAnsref)
 
   save()
-  res.send({
-    hierarchy: treeHierarchy(tree),
-    tree
-  })
+  res.send(stdResponse())
 })
 
+app.put('/api/framework/:ref', (req, res) => {
+  const currentRef = req.params.ref
+  const currentEntry = frameworks.find(f => f.ref === currentRef)
+  if (!currentEntry) {
+    res.statusCode = 400
+    return res.send({})
+  }
+
+  currentEntry.ref = req.body.ref
+  currentEntry.title = req.body.title  
+  currentEntry.supplier = req.body.supplier 
+  currentEntry.url = req.body.url
+  currentEntry.cat = req.body.cat
+
+  saveFramework()
+  res.send(stdResponse())
+})
+
+app.post('/api/framework', (req, res) => {
+  const currentEntry = frameworks.find(f => f.ref === req.body.ref)
+  if (currentEntry) {
+    res.statusCode = 400
+    return res.send({})
+  }
+
+  newEntry = {
+    ref: req.body.ref,
+    title: req.body.title,
+    supplier: req.body.supplier,
+    url: req.body.url,
+    cat: req.body.cat
+  }
+  frameworks.push(newEntry)
+  saveFramework()
+  res.send(stdResponse())
+})
 
 app.listen(port, function () {
   console.log('Magic happens on port ' + port)

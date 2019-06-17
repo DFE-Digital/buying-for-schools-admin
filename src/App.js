@@ -2,7 +2,9 @@ import React, { Component } from 'react'
 
 import './App.css'
 import Diagram from './Diagram'
+import DataSets from './DataSets'
 import Edit from './Edit'
+import EditFramework from './EditFramework'
 import Globals from './Globals'
 
 
@@ -12,7 +14,9 @@ class App extends Component {
     this.state = { 
       tree: [],
       editing: null,
-      editingAnswer: null
+      editingAnswer: null,
+      editingFramework: null,
+      selectedDataSet: 'default'
     }
     Globals.app = this
   }
@@ -21,7 +25,17 @@ class App extends Component {
     // console.log('EDIT', hierarchy, e)
     this.setState({ 
       editing: hierarchy, 
-      editingAnswer: answer
+      editingAnswer: answer,
+      editingFramework: null,
+    })
+  }
+
+  editFramework (framework) {
+    console.log(framework)
+    this.setState({
+      editing: null,
+      editingAnswer: null,
+      editingFramework: framework
     })
   }
 
@@ -31,7 +45,8 @@ class App extends Component {
       editingAnswer: {
         ref: '',
         title: ''
-      }
+      },
+      editingFramework: null
     }) 
   }
 
@@ -52,17 +67,18 @@ class App extends Component {
     return (
       <div className='App'>
         <h1>Admin</h1>
+        <DataSets dataSets={ this.state.dataSets } selectedDataSet={ this.state.selectedDataSet } /> 
         <Diagram hierarchy={ this.state.hierarchy } />
         <div className="orphans">
           <h2>Orphan nodes</h2>
           <ul className="orphans__list">
             {orphans.map(o => (
-              <li><span class="ref">{o.ref}</span> <span class="title">{o.title}</span></li>
+              <li><span class="ref">{o.ref}</span> <span class="title">{ o.title }</span></li>
             ))}
           </ul>
         </div>
         { this.state.editing && <Edit hierarchy={this.state.editing} answer={this.state.editingAnswer} />}
-
+        { this.state.editingFramework && <EditFramework framework={this.state.editingFramework} />}
       </div>
     )
   }

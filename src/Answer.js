@@ -24,7 +24,9 @@ class Answer extends Component {
         <h3><a href="#" onClick={e => this.showEdit(e)}>{ opt.title }</a></h3>
         { opt.hint && (<span className="answer__hint">{ opt.hint }</span>)}
         {nxt && <Question hierarchy={nxt} />}
-        {result && <Result result={result} templateExists={opt.templateExists}/>}
+        {result && result.length && result.map(res => (
+          <Result result={res} />
+        ))}
       </div>
     )
   }

@@ -91,7 +91,7 @@ class Edit extends Component {
     }
     if (this.state.isAnswer) {
       data.next = this.state.next
-      data.result = this.state.result
+      data.result = (this.state.result && this.state.result.split) ? this.state.result.split(',') : this.state.result
     }
     fetch(this.getSaveUrl(), {
       method,
@@ -207,5 +207,4 @@ class Edit extends Component {
   }
 }
 
-export default 
-Edit
+export default Edit
