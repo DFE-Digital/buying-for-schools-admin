@@ -1,272 +1,94 @@
+const port = process.env.PORT || 5000
+
 const express = require('express')
-const app = express()
-const path = require('path')
-const port = 4000
-const fs = require('fs')
 const bodyParser = require('body-parser')
+const mongoose = require('mongoose')
+mongoose.set('useCreateIndex', true)
+mongoose.set('useFindAndModify', false)
+mongoose.connect(process.env.BUYINGFORSCHOOLS_MONGO, { useNewUrlParser: true })
+const db = mongoose.connection
+db.on('error', console.error.bind(console, 'MongoDB connection error:'))
+
+const models = require('./api/models/models')(mongoose)
+
+const questionService = require('./api/services/questionService')(models)
+
+const frameworkController = require('./api/controllers/framework')(models)
+const questionController = require('./api/controllers/question')(models)
+const questionHierarchy = require('./api/controllers/questionHierarchy')(models)
+
+
+
+const app = express()
 app.use(bodyParser.json())
-
-const dataPath = path.resolve(__dirname, '../buying-for-schools/app/data')
-const frameworksTemplatePath = path.resolve(__dirname, '../buying-for-schools/app/templates/frameworks/')
-let frameworksPath = path.resolve(dataPath, 'frameworks.json')
-let treePath = path.resolve(dataPath, 'tree.json')
-let tree = JSON.parse(fs.readFileSync(treePath))
-let frameworks = JSON.parse(fs.readFileSync(frameworksPath))
+app.get('/api/framework', frameworkController.list)
+app.post('/api/framework', frameworkController.create)
+app.get('/api/framework/:frameworkId', frameworkController.get)
+app.put('/api/framework/:frameworkId', frameworkController.put)
+app.delete('/api/framework/:frameworkId', frameworkController.remove)
 
 
+app.get('/api/question', questionController.list)
+app.post('/api/question', questionController.create)
+app.get('/api/question/:questionId', questionController.get)
+app.put('/api/question/:questionId', questionController.put)
+app.delete('/api/question/:questionId', questionController.remove)
 
-const treeHierarchy = (thetree, ref, depth = 0) => {
-  if (!ref) {
-    ref = thetree[0].ref
-  }
+app.get('/api/questionhierarchy/:questionId', questionHierarchy.get)
 
-  const thisBranch = thetree.find(branch => branch.ref === ref)
-  if (!thisBranch) {
-    return null
-  }
 
-  const newEntry = {
-    ref,
-    title: thisBranch.title,
-    hint: thisBranch.hint,
-    err: thisBranch.err,
-    depth,
-    options: [],
-    decendants: 0
-  }
+// models.question.findOne({options: {"$elemMatch": { next: 'booksmaterials'}}}, (err, result) => {
+//   console.log(result)
+// })
 
-  newEntry.options = thisBranch.options.map(opt => {
-    const newOpt = {
-      ref: opt.ref,
-      title: opt.title || opt.ref,
-      result: opt.result || undefined,
-      hint: opt.hint,
-      decendants: 1
-    }
 
-    if (opt.next) {
-      newOpt.next = treeHierarchy(thetree, opt.next, depth +1)
-      if (newOpt.next) {
-        newOpt.decendants = newOpt.next.decendants
-      } else {
-        newOpt.next = opt.next
-      }
-    }
-    newEntry.decendants += newOpt.decendants
-    return newOpt
-  })
+// questionService.getHierarchy('booksmaterials').then(result => {
+//   console.log(result)
+// })
 
-  return newEntry
-}
 
-const createNextBranchIfRequired = (ref) => {
-  const existingBranch = tree.find(branch => branch.ref === ref)
-  if (!existingBranch) {
-    tree.push({ ref, title: 'New branch with ref ' + ref, options: [] })
-  }
-}
+// models.question.find({}, (err, results) => {
+//   console.log(err)
+//   if (err) return handleError(err);
+//   console.log('results:', results.length)
+// })
 
-const save = () => {
-  fs.renameSync(treePath, path.resolve(__dirname, 'backup/' + new Date().toISOString() + '.json'))
-  fs.writeFile(treePath, JSON.stringify(tree, null, '  '), 'utf8', err => {
-     if (err) {
-       throw(err)
-     }
-  })
-}
+// const newquestion = {
+//   ref: 'test',
+//   title: 'Hello world',
+//   options: [{
+//     ref: 'a',
+//     title: 'Aardvark'
+//   }]
+// }
+// models.question.create(newquestion, function (err, result) {
+//   console.log(err)
+//   console.log(result)
+// })
 
-const saveFramework = () => {
-  fs.renameSync(frameworksPath, path.resolve(__dirname, 'backup/framework-' + new Date().toISOString() + '.json'))
-  const cleanFrameworks = frameworks.map(f => {
-    return {
-      ref: f.ref,
-      title: f.title,
-      supplier: f.supplier,
-      url: f.url,
-      cat: f.cat
-    }
-  })
-  fs.writeFile(frameworksPath, JSON.stringify(cleanFrameworks, null, '  '), 'utf8', err => {
-     if (err) {
-       throw(err)
-     }
-  })
-}
+// models.question.deleteOne({ref: 'test'}, (err) => {
+//   console.log(err)
+// }) 
 
-const stdResponse = () => {
-  const frameworksInfo = frameworks.map(f => {
-    return {
-      ...f,
-      templateExists: fs.existsSync(`${frameworksTemplatePath}/${f.ref}.njk`)
-    }
-  })
-  return {
-    hierarchy: treeHierarchy(tree),
-    tree,
-    frameworks: frameworksInfo,
-    dataSets: [
-      "default",
-      "mock-animals"
-    ]
-  }
-}
+// const newframework = {
+//     "ref": "library",
+//     "title": "Library resources",
+//     "supplier": "CPC",
+//     "url": "https://www.academies.thecpc.ac.uk/suppliers/categories/framework.php?categoryID=6&frameworkID=177",
+//     "cat": "books",
+//     "descr": "Includes the provision of books, e-books, journals/ periodicals, e-journals, audio books, audio summary, library discovery and associated services split into 4 lots with 12 suppliers. Curriculum books are also available via this deal.",
+//     "expiry": "2019-08-08"
+// }
+// models.framework.create(newframework, (err, result) => {
+//   console.log(err)
+//   console.log(result)  
+// })
 
-app.put('/api/dataset', (req, res) => {
-  const d = req.body.dataSet
-  switch(d) {
-    case 'mock-animals': {
-      treePath = path.join(dataPath, `mocks/animals/animal-tree.json`)
-      frameworksPath = path.join(dataPath, `mocks/animals/animal-frameworks.json`)
-      break
-    }
 
-    default: {
-      treePath = path.join(dataPath, 'tree.json')
-      frameworksPath = path.join(dataPath, 'frameworks.json')
-    }
-  }
-
-  
-  tree = JSON.parse(fs.readFileSync(treePath))
-  frameworks = JSON.parse(fs.readFileSync(frameworksPath))
-
-  res.send(stdResponse())
-})
-
-app.get('/api/decision-tree', (req, res) => {
-  res.send(stdResponse())
-})
-
-app.put('/api/question/:qref', (req, res) => {
-  const currentRef = req.params.qref
-  const currentEntry = tree.find(branch => branch.ref === currentRef)
-
-  if (!currentEntry) {
-    res.statusCode = 400
-    return res.send({})
-  }
-
-  currentEntry.title = req.body.title
-  currentEntry.ref = req.body.ref
-  currentEntry.hint = req.body.hint
-  currentEntry.err = req.body.err
-
-  save()
-
-  res.send(stdResponse())
-})
-
-app.delete('/api/question/:qref', (req, res) => {
-  const currentRef = req.params.qref
-  const currentEntry = tree.find(branch => branch.ref === currentRef)
-
-  if (!currentEntry) {
-    res.statusCode = 400
-    return res.send({})
-  }
-
-  tree = tree.filter(branch => branch.ref !== currentRef)
-  save()
-
-  res.send(stdResponse())
-})
-
-app.post('/api/question/:qref/answer', (req, res) => {
-  const currentRef = req.params.qref
-  const currentEntry = tree.find(branch => branch.ref === currentRef)
-  if (!currentEntry) {
-    res.statusCode = 400
-    return res.send({})
-  }
-
-  const result = req.body.result || ''
-
-  currentEntry.options.push({
-    ref: req.body.ref,
-    title: req.body.title,
-    next: req.body.next,
-    result: (result.pop) ? result: result.split(',')
-  })
-
-  save()
-  res.send(stdResponse())
-})
-
-app.put('/api/question/:qref/answer/:ansref', (req, res) => {
-  const currentRef = req.params.qref
-  const currentEntry = tree.find(branch => branch.ref === currentRef)
-  const currentAnsref = req.params.ansref
-  const currentAnswer = currentEntry.options.find(opt => opt.ref === currentAnsref)
-
-  if (!currentEntry || !currentAnswer) {
-    res.statusCode = 400
-    return res.send({})
-  }
-
-  currentAnswer.title = req.body.title
-  currentAnswer.ref = req.body.ref
-  currentAnswer.next = req.body.next
-  currentAnswer.result = req.body.result
-  currentAnswer.hint = req.body.hint
-
-  createNextBranchIfRequired(currentAnswer.next)
-
-  save()
-  res.send(stdResponse())
-})
-
-app.delete('/api/question/:qref/answer/:ansref', (req, res) => {
-  const currentRef = req.params.qref
-  const currentEntry = tree.find(branch => branch.ref === currentRef)
-  const currentAnsref = req.params.ansref
-  if (!currentEntry) {
-    res.statusCode = 400
-    return res.send({})
-  }
-
-  currentEntry.options = currentEntry.options.filter(opt => opt.ref !== currentAnsref)
-
-  save()
-  res.send(stdResponse())
-})
-
-app.put('/api/framework/:ref', (req, res) => {
-  const currentRef = req.params.ref
-  const currentEntry = frameworks.find(f => f.ref === currentRef)
-  if (!currentEntry) {
-    res.statusCode = 400
-    return res.send({})
-  }
-
-  currentEntry.ref = req.body.ref
-  currentEntry.title = req.body.title  
-  currentEntry.supplier = req.body.supplier 
-  currentEntry.url = req.body.url
-  currentEntry.cat = req.body.cat
-
-  saveFramework()
-  res.send(stdResponse())
-})
-
-app.post('/api/framework', (req, res) => {
-  const currentEntry = frameworks.find(f => f.ref === req.body.ref)
-  if (currentEntry) {
-    res.statusCode = 400
-    return res.send({})
-  }
-
-  newEntry = {
-    ref: req.body.ref,
-    title: req.body.title,
-    supplier: req.body.supplier,
-    url: req.body.url,
-    cat: req.body.cat
-  }
-  frameworks.push(newEntry)
-  saveFramework()
-  res.send(stdResponse())
-})
-
-app.listen(port, function () {
+const server = app.listen(port, () => {
   console.log('Magic happens on port ' + port)
 })
+
+module.exports = {
+  server
+}

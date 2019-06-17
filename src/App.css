@@ -1,76 +1,42 @@
-.App {
-  text-align: center;
-}
-
-.btn {
-  min-width: 100px;
-  display: inline-block;
-  background-color: #fff;
-  padding: 4px 8px;
-  margin: 4px 4px 4px 0;
-  text-align: center;
-  text-decoration: none;
-  color: #000;
-  border-color: #000;
-  border-width: 1px;
-  border-style: solid;
-  border-radius: 2px;
-}
-
-.btn--red {
-  color: #fff;
-  background-color: #c00;
-  border-color: #900;
-}
-
-.btn--red:hover {
-  background-color: #a00;
-}
-
-.btn--grey {
-  color: #fff;
-  background-color: #666;
-  border-color: #333;
-}
-
-.btn--grey:hover {
-  background-color: #333;
-}
-
-.btn--green {
-  color: #fff;
-  background-color: #090;
-  border-color: #030;
-}
-
-.btn--green:hover {
-  background-color: #060;
-}
-
-.ref {
-  font-size: 10px;
-  display: inline-block;
-  padding: 2px 10px;
-  background-color: #eee;
-  border-style: solid;
-  border-width: 1px;
-  border-color: #ccc;
-  border-radius: 4px;
-}
-
-.orphans {
-  text-align: left;
+body {
   padding: 20px;
 }
 
-.orphans__list {
-  margin: 0;
-  padding: 0;
-  list-style: none;
+table {
+  border-collapse: collapse;
 }
 
-.orphans li {
-  margin: 0;
-  padding: 0;
-  list-style: none; 
+td, th {
+  border: 1px solid grey;
+  padding: 4px;
+}
+
+.button {
+  text-decoration: none;
+  background-color: #eee;
+  color: #000;
+  padding: 5px 10px;
+  margin: 10px 0;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 2px;
+  cursor: pointer;
+  display: inline-block;
+}
+.button:hover {
+  background-color: #ccc;
+}
+
+.button--green {
+  background-color: green;
+  border-color: darkgreen;
+  color: #fff;
+}
+
+.button--green:hover {
+  background-color: darkgreen;
+}
+
+.button + .button {
+  margin-left: 20px;
 }

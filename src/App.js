@@ -1,87 +1,31 @@
-import React, { Component } from 'react'
+import React from 'react';
+import { BrowserRouter as Router, Route, NavLink } from 'react-router-dom'
+import './App.css';
 
-import './App.css'
-import Diagram from './Diagram'
-import DataSets from './DataSets'
-import Edit from './Edit'
-import EditFramework from './EditFramework'
-import Globals from './Globals'
+import Dashboard from './components/Dashboard'
+import Frameworks from './components/Frameworks'
+import Framework from './components/Framework'
+import Questions from './components/Questions'
+import Question from './components/Question'
+import Diagram from './components/diagram/Diagram'
 
-
-class App extends Component {
-  constructor (props) {
-    super(props)
-    this.state = { 
-      tree: [],
-      editing: null,
-      editingAnswer: null,
-      editingFramework: null,
-      selectedDataSet: 'default'
-    }
-    Globals.app = this
-  }
-
-  edit (hierarchy, answer, e) {
-    // console.log('EDIT', hierarchy, e)
-    this.setState({ 
-      editing: hierarchy, 
-      editingAnswer: answer,
-      editingFramework: null,
-    })
-  }
-
-  editFramework (framework) {
-    console.log(framework)
-    this.setState({
-      editing: null,
-      editingAnswer: null,
-      editingFramework: framework
-    })
-  }
-
-  addOption (hierarchy, e) {
-    this.setState({
-      editing: hierarchy, 
-      editingAnswer: {
-        ref: '',
-        title: ''
-      },
-      editingFramework: null
-    }) 
-  }
-
-  componentDidMount () {
-    fetch('/api/decision-tree')
-      .then(res => res.json())
-      .then(result => {
-        this.setState({
-          ...result
-        })
-      }, error => {
-        console.log('ERROR', error)
-      })
-  }
-
-  render () {
-    const orphans = this.state.tree.filter(branch => !branch.used)
-    return (
-      <div className='App'>
-        <h1>Admin</h1>
-        <DataSets dataSets={ this.state.dataSets } selectedDataSet={ this.state.selectedDataSet } /> 
-        <Diagram hierarchy={ this.state.hierarchy } />
-        <div className="orphans">
-          <h2>Orphan nodes</h2>
-          <ul className="orphans__list">
-            {orphans.map(o => (
-              <li><span class="ref">{o.ref}</span> <span class="title">{ o.title }</span></li>
-            ))}
-          </ul>
-        </div>
-        { this.state.editing && <Edit hierarchy={this.state.editing} answer={this.state.editingAnswer} />}
-        { this.state.editingFramework && <EditFramework framework={this.state.editingFramework} />}
+function App() {
+  return (
+    <Router>
+      <div className="App">
+        <NavLink to="/">Dashboard</NavLink>
+        <NavLink to="/framework">Frameworks</NavLink>
+        <NavLink to="/question">Question</NavLink>
+        
+        <Route path='/' component={Dashboard} exact />
+        <Route path='/framework' component={Frameworks} exact />
+        <Route path='/framework/:frameworkId' component={Framework} exact />
+        <Route path='/question' component={Questions} exact />
+        <Route path='/question/:questionId' component={Question} exact />
+        <Route path='/diagram' component={Diagram} exact />
       </div>
-    )
-  }
+    </Router>
+  );
 }
 
-export default App
+export default App;

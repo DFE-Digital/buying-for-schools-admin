@@ -1,0 +1,20 @@
+.forminput {
+  margin: 10px 0;
+}
+
+.forminput label {
+  display: block;
+  padding-bottom: 5px;
+}
+
+.forminput input {
+  display: block;
+  font-size: 16px;
+  padding: 5px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+input[type="submit"] {
+  
+}

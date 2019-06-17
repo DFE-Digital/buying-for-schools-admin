@@ -1,0 +1,12 @@
+.optionstable label {
+  display: none;
+}
+
+.optionstable td {
+  padding: 0;
+  margin: 0;
+}
+
+.optionstable .forminput {
+  margin: 0;
+}
