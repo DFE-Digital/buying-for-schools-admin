@@ -7,7 +7,7 @@ const questionController = (models) => {
         if (err) {
           return res.send(err)
         }
-
+        console.log(results)
         res.send(results)
       })
     },

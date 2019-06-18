@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import ReactDOM from 'react-dom'
 import { Link } from 'react-router-dom'
 import { get } from '../../services/io'
 import { questionUrl, rootQuestionRef } from '../../config'
@@ -11,6 +12,8 @@ export class Diagram extends Component {
     this.state = {
       questions: []
     }
+
+    this.myRef = React.createRef()
   }
 
   componentDidMount() {
@@ -19,6 +22,23 @@ export class Diagram extends Component {
     })
   }
 
+  componentDidUpdate () {
+    const path = '/what/goods/goods/ict'
+    const el = document.getElementById(path)
+    const rect = el.getBoundingClientRect();
+    el.scrollIntoView()
+  }
+
+  closeEditWindow (e) {
+    e.preventDefault(e)
+    this.setState({ editing: false })
+  }
+
+  openEditWindow (e) {
+    e.preventDefault(e)
+    this.setState({ editing: true })
+  }  
+
   render() {
     if (this.state.questions.length === 0) {
       return (
@@ -26,8 +46,30 @@ export class Diagram extends Component {
       )
     }
 
+    const diagramQuestionClasses = ['diagram']
+    const editWindowClasses = ['editwindow']
+    if (this.state.editing) {
+      diagramQuestionClasses.push('diagram--editing')
+      editWindowClasses.push('editwindow--open')
+    }
+
     return (
-      <DiagramQuestion questions={ this.state.questions } qref={ rootQuestionRef } />
+      <div className="diagramouter" ref={this.myRef}>
+
+        <div className={editWindowClasses.join(' ')}>
+          <button onClick={this.closeEditWindow.bind(this)}>Close</button>
+          <h2>EDIT</h2>
+        </div>
+        
+        <div className={diagramQuestionClasses.join(' ')} id="diagram">
+          <DiagramQuestion questions={ this.state.questions } qref={ rootQuestionRef } path={''} />
+        </div>
+        
+
+        { !this.state.editing && (
+          <button onClick={this.openEditWindow.bind(this)}>Open</button>
+        )}
+      </div>
     )
   }
 }  

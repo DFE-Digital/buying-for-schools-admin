@@ -7,9 +7,39 @@ td {
   vertical-align: baseline;
   margin: 0;
   padding: 4px;
-  /*border-color: #ccc;
+  /*
+  border-color: #ccc;
   border-width: 1px;
-  border-style: solid;*/
+  border-style: solid;
+  */
   position: relative;
 }
 
+.diagramouter {
+  width: 100%;
+  overflow: hidden;
+}
+
+.diagram {
+  width: 100%;
+  transition: width 0.25s;
+  overflow: auto;
+}
+
+.diagram--editing {
+  width: 50%;
+}
+
+.editwindow {
+  
+  position: absolute;
+  left: 100%;
+  width: 50%;
+  overflow: hidden;
+  background-color: #ccc;
+  transition: left 0.25s;
+}
+
+.editwindow--open {
+  left: 50%;
+}

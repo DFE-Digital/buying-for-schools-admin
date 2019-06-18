@@ -12,11 +12,13 @@ const DiagramOption = (props) => {
     return <h4>Undefined option</h4>
   }
 
+  const path = props.path + '/' + opt.ref
+
   return (
     <div className="doption">
-      <h3>{ opt.title }</h3>
+      <h3 id={path}>{ opt.title }</h3>
       { opt.hint && (<span className="doption__hint">{ opt.hint }</span>)}
-      {nxt && <DiagramQuestion questions={props.questions} qref={nxt} />}
+      {nxt && <DiagramQuestion questions={props.questions} qref={nxt} path={path} />}
       {result && result.length && result.map(res => (
         <DiagramResult result={res} />
       ))}
