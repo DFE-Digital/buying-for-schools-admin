@@ -1,3 +1,5 @@
+
+
 body {
   padding: 20px;
 }
@@ -23,6 +25,11 @@ td, th {
   cursor: pointer;
   display: inline-block;
 }
+
+.button + .button {
+  margin-left: 20px;
+}
+
 .button:hover {
   background-color: #ccc;
 }
@@ -37,6 +44,12 @@ td, th {
   background-color: darkgreen;
 }
 
-.button + .button {
-  margin-left: 20px;
+.button--red {
+  background-color: #c00;
+  border-color: #900;
+  color: #fff;
+}
+
+.button--red:hover {
+  background-color: #900;
 }

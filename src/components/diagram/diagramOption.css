@@ -4,6 +4,7 @@
 }
 
 .doption h3 {
+  display: inline-block;
   font-weight: normal;
   font-size: 12px;
 }
@@ -15,6 +16,19 @@
 .doption a {
   color: inherit;
   text-decoration: none;
+}
+
+.doption__endoptions {
+  text-align: center;
+  display: none;
+}
+
+.doption:hover>.doption__endoptions {
+  display: block;
+}
+
+.doption__endbutton {
+  font-size: 14px;
 }
 
 .doption--outer::before {

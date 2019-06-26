@@ -1,6 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, NavLink } from 'react-router-dom'
 import './App.css';
+import "../node_modules/govuk-frontend/all.scss"
 
 import Dashboard from './components/Dashboard'
 import Frameworks from './components/Frameworks'

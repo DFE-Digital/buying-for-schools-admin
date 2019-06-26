@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
-import FrameworkForm from './FrameworkForm'
-import { get, put, post, remove } from '../services/io'
+import { get } from '../services/io'
 
 import { questionHierarchyUrl } from '../config'
 
@@ -22,7 +21,6 @@ export class QuestionHierarchy extends Component {
 
     const history = this.state.hierarchy.map(q => {
       const answer = q.question.options.find(opt => opt.ref === q.selectedOption)
-      console.log('answer', answer)
       return {
         ref: q.question.ref,
         title: q.question.title,

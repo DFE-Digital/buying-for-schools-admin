@@ -54,11 +54,46 @@ const questionService = (models = null) => {
     })
   }
 
+  const findOneAndUpdate = (criteria, data, options = {}) => {
+    console.log({criteria, data, options})
+    return new Promise((resolve, reject) => {
+      
+      _models.question.findOneAndUpdate(criteria, data, options, (err, results) => {
+        // console.log({err, results})
+        if (err) {
+          if (err.code === 11000) {
+            return reject({ err: 'validation', msg: 'Validation errors', errors: [{ id: 'ref', msg: 'Ref must be unique' }] })     
+          }
+          return reject({ err: err.code, msg: err.errmsg })
+        }
+        if (!results) {
+          return resolve({ success: true })
+        }
+
+        return resolve(results)
+      })
+    })
+  }
+
+  const create = (data) => {
+    return new Promise((resolve, reject) => {
+      _models.question.create(data, (err, results) => {
+        if (err) {
+          return reject({ err: err.code, msg: err.errmsg })
+        }
+
+        return resolve(results)
+      })
+    })
+  }
+
   return {
     get,
     getByRef,
     getByOptionWithNext,
-    getHierarchy
+    getHierarchy,
+    findOneAndUpdate,
+    create
   }
 }
 

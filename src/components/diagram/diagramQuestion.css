@@ -1,4 +1,8 @@
 
+.dquestiontable {
+  width: 100%;
+}
+
 .dquestiontable td {
   border: none;
   text-align: center;
@@ -55,6 +59,8 @@
   color: #fff;
 }
 
+
+
 .dquestion__hint {
   position: relative;
   z-index: 1;
@@ -74,4 +80,44 @@
   line-height: 1;
   display: block;
   margin: 2px 0;
+}
+
+
+
+.dquestion__addoption {
+  background-color: #138213;
+  color: #fff;
+  width: 16px;
+  height: 16px;
+  position: absolute;
+  bottom: 2px;
+  left: calc(50% - 8px);
+  border-radius: 10px;
+  text-align: center;
+  border: none;
+  opacity: 0.1;
+}
+
+.dquestion:hover .dquestion__addoption {
+  opacity: 1;
+}
+
+.dquestion__addoption::before {
+  content: '';
+  width: 2px;
+  height: 10px;
+  position: absolute;
+  left: 7px;
+  top: 3px;
+  background-color: #fff;
+}
+
+.dquestion__addoption::after {
+  content: '';
+  width: 10px;
+  height: 2px;
+  position: absolute;
+  left: 3px;
+  top: 7px;
+  background-color: #fff;
 }

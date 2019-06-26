@@ -22,7 +22,6 @@ export const dataFetchSuccess = (data, key) => {
 
 export const dataFetch = (url, key="DEFAULT", postData=null, method=null) => {
   return (dispatch) => {
-    console.log(postData, method)
     dispatch(dataIsLoading(true, key))
     const opts = {}
     if (postData) {

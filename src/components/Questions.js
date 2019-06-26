@@ -1,7 +1,24 @@
 import React, { Component } from 'react'
+import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { get } from '../services/io'
 import { questionUrl } from '../config'
+import { List } from 'immutable'
+import { getQuestions, deleteQuestion } from '../actions/question-actions'
+
+const mapStateToProps = (state) => {
+  return {
+    questions: state.questionReducer.questions || []
+  }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    getQuestions: () => dispatch(getQuestions()),
+    deleteQuestion: (id) => dispatch(deleteQuestion(id))
+  }
+}
+
 
 export class Questions extends Component {
   constructor (props) {
@@ -12,13 +29,21 @@ export class Questions extends Component {
   }
 
   componentDidMount() {
-    get(questionUrl).then(questions => {
-      this.setState({ questions })
-    })
+    this.props.getQuestions()
+  }
+
+  deleteQuestion(id) {
+    this.props.deleteQuestion(id)
   }
 
   render() {
     // let the Dropdown do the display
+    if (!List.isList(this.props.questions)) {
+      return (
+        <p>Loading</p>
+      )
+    }
+
 
     return (
       <div>
@@ -32,24 +57,26 @@ export class Questions extends Component {
             </tr>
           </thead>
           <tbody>
-            {this.state.questions.map((q) => (
-              <tr key={q.ref}>
-                <td><Link to={`/question/${q.ref}`}>{q.ref}</Link></td>
+            {this.props.questions.map(q => (
+              <tr key={q.get('ref')}>
+                <td><Link to={`/question/${q.get('_id')}`}>{q.get('ref')}</Link></td>
                 <td>{q.title}</td>
                 <td>
                   <table>
                     <tbody>
-                      {q.options.map((opt) => (
-                        <tr key={q.ref + opt.ref}>
-                          <td>{opt.ref}</td>
-                          <td>{opt.title}</td>
-                          <td>{opt.result}</td>
-                          <td>{opt.next}</td>
+                      {q.get('options').map(opt => (
+                        <tr key={q.get('_id')}>
+                          <td>{opt.get('ref')}</td>
+                          <td>{opt.get('title')}</td>
+                          <td>{opt.get('result')}</td>
+                          <td>{opt.get('next')}</td>
                         </tr>
                       ))}
                     </tbody>
                   </table>
                 </td>
+                <td><button className="button button--red" onClick={e => this.deleteQuestion(q.get('_id'))}>Delete</button></td>
+
               </tr>
             ))}
           </tbody>
@@ -62,4 +89,4 @@ export class Questions extends Component {
   }
 }
 
-export default Questions
+export default connect(mapStateToProps, mapDispatchToProps)(Questions)

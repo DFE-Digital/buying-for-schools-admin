@@ -42,7 +42,6 @@ export class Framework extends Component {
       if (response.ok) {
         this.props.history.push('/framework')
       } else {
-        console.log(response)
         this.setState({ error: response.data.msg })
       }
     })

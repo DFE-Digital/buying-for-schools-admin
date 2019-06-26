@@ -30,16 +30,3 @@ td {
   width: 50%;
 }
 
-.editwindow {
-  
-  position: absolute;
-  left: 100%;
-  width: 50%;
-  overflow: hidden;
-  background-color: #ccc;
-  transition: left 0.25s;
-}
-
-.editwindow--open {
-  left: 50%;
-}

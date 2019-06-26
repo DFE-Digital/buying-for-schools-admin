@@ -1,0 +1,18 @@
+.editwindow {
+  
+  position: absolute;
+  left: 100%;
+  width: 50%;
+  overflow: hidden;
+  background-color: #fff;
+  transition: left 0.25s;
+  padding: 20px;
+  box-sizing: border-box;
+  border-width: 0 0 0 1px;
+  border-style: solid;
+  border-color: #ccc;
+}
+
+.editwindow--open {
+  left: 50%;
+}

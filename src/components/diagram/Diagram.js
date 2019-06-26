@@ -1,78 +1,66 @@
 import React, { Component } from 'react'
-import ReactDOM from 'react-dom'
-import { Link } from 'react-router-dom'
-import { get } from '../../services/io'
-import { questionUrl, rootQuestionRef } from '../../config'
+import { connect } from 'react-redux'
+import { rootQuestionRef } from '../../config'
+import { getQuestions, cancelEdit } from '../../actions/question-actions'
+import { getFrameworks } from '../../actions/framework-actions'
 import DiagramQuestion from './DiagramQuestion'
+import EditWindow from '../edit/EditWindow'
+import { List, Map } from 'immutable'
 import './diagram.css'
 
-export class Diagram extends Component {
-  constructor (props) {
-    super(props)
-    this.state = {
-      questions: []
-    }
-
-    this.myRef = React.createRef()
+const mapStateToProps = (state) => {
+  return {
+    questions: state.questionReducer.questions,
+    frameworks: state.frameworkReducer.frameworks,
+    editing: state.questionReducer.editing
   }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    getQuestions: () => dispatch(getQuestions()),
+    getFrameworks: () => dispatch(getFrameworks()),
+    cancelEdit: () => dispatch(cancelEdit())
+  }
+}
+
+export class Diagram extends Component {
 
   componentDidMount() {
-    get(questionUrl).then(questions => {
-      this.setState({ questions })
-    })
+    this.props.getQuestions()
+    this.props.getFrameworks()
   }
-
-  componentDidUpdate () {
-    const path = '/what/goods/goods/ict'
-    const el = document.getElementById(path)
-    const rect = el.getBoundingClientRect();
-    el.scrollIntoView()
-  }
-
-  closeEditWindow (e) {
-    e.preventDefault(e)
-    this.setState({ editing: false })
-  }
-
-  openEditWindow (e) {
-    e.preventDefault(e)
-    this.setState({ editing: true })
-  }  
 
   render() {
-    if (this.state.questions.length === 0) {
+    if (!List.isList(this.props.questions)) {
       return (
         <p>Loading</p>
       )
     }
 
     const diagramQuestionClasses = ['diagram']
-    const editWindowClasses = ['editwindow']
-    if (this.state.editing) {
+    
+    if (this.props.editing) {
       diagramQuestionClasses.push('diagram--editing')
-      editWindowClasses.push('editwindow--open')
     }
 
+    const rootQuestion = this.props.questions.find(q => q.get('ref') === rootQuestionRef)
+    if (!Map.isMap(rootQuestion)) {
+      return <p>RootQuestion not found</p>
+    }
+
+    const style = { height: window.innerHeight }
+
     return (
-      <div className="diagramouter" ref={this.myRef}>
-
-        <div className={editWindowClasses.join(' ')}>
-          <button onClick={this.closeEditWindow.bind(this)}>Close</button>
-          <h2>EDIT</h2>
+      <div className="diagramouter">
+        <EditWindow />
+        <div className={diagramQuestionClasses.join(' ')} id="diagram" style={style}>
+          <DiagramQuestion qID={ rootQuestion.get('_id') } />
         </div>
-        
-        <div className={diagramQuestionClasses.join(' ')} id="diagram">
-          <DiagramQuestion questions={ this.state.questions } qref={ rootQuestionRef } path={''} />
-        </div>
-        
-
-        { !this.state.editing && (
-          <button onClick={this.openEditWindow.bind(this)}>Open</button>
-        )}
       </div>
     )
   }
 }  
 
 
-export default Diagram
+export default connect(mapStateToProps, mapDispatchToProps)(Diagram)

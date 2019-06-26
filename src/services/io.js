@@ -2,13 +2,18 @@ export const ioCache = {
   get: {}
 }
 
+const IoError = function (err) {
+   this.error = err
+   this.msg = 'io error'
+}
+
+
 export const get = (url, fromCache) => {
 
   return new Promise((resolve, reject) => {
     if (fromCache) {
       const cached = ioCache.get[url]
       if (cached) {
-        // console.log('from cache', url, cached)
         return resolve(cached)
       }
     }
@@ -20,7 +25,6 @@ export const get = (url, fromCache) => {
       return response.json()
     }).then(data => {
       ioCache.get[url] = data
-      // console.log('added to cache', url, data)
       return resolve(data)
     })
   })
@@ -42,6 +46,13 @@ export const put = (url, data) => {
   }).then(data => {
     const status = theresponse.status
     const ok = theresponse.ok
+    if (!ok) {
+      throw new IoError({
+        data,
+        status,
+        ok
+      })
+    }
     return {
       data,
       status,
