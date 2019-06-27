@@ -1,0 +1,32 @@
+{
+  "world": {
+    "ref": "world",
+    "title": "The World Is Not Enough",
+    "hint": "3rd to star Pierce Brosnan",
+    "err": "You need to rate this film",
+    "suffix": "custom.tpl",
+    "options": [
+      { 
+        "ref": "good",
+        "title": "Good",
+        "hint": "It was great",
+        "next": "",
+        "result": []
+      },
+      {
+        "ref": "bad",
+        "title": "Bad",
+        "hint": "It was not great",
+        "next": "",
+        "result": []
+      },
+      {
+        "ref": "ugly",
+        "title": "ugly",
+        "hint": "It was awful",
+        "next": "",
+        "result": []
+      }
+    ]
+  }
+}

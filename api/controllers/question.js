@@ -1,18 +1,20 @@
 const questionService = require('../services/questionService')()
-
+const validateQuestionRef = RegExp(/^[a-z-]*$/)
 
 const questionController = (models) => {
   const me = {
-    validation: (q) => {
-      const errors = []
-      if(!q.ref) {
-        errors.push({ id: 'ref', msg: 'A reference must be defined, short, no spaces and unique'})
-      }
-      if(!q.title) {
-        errors.push({id: 'title', msg: 'Title cannot be blank this is the question text.'})
-      }
-      return errors
-    },
+    // validation: (q) => {
+    //   const errors = []
+    //   // console.log(`validation ref: "${q.ref}"`, validateQuestionRef.test(q.ref))
+    //   if(!q.ref || !validateQuestionRef.test(q.ref)) {
+    //     errors.push({ id: 'ref', msg: 'A reference must be defined, short, no spaces and unique'})
+    //   }
+
+    //   if(!q.title) {
+    //     errors.push({id: 'title', msg: 'Title cannot be blank this is the question text.'})
+    //   }
+    //   return errors
+    // },
 
     list: (req, res) => {
       models.question.find({}, (err, results) => {
@@ -33,11 +35,11 @@ const questionController = (models) => {
 
     put: (req, res) => {
       const questionId = req.params.questionId || req.body._id
-      const errors = me.validation(req.body)
-      if (errors.length) {
-        res.statusCode = 400
-        return res.send({ err: 'validation', msg: 'Validation errors', errors })
-      }
+      // const errors = me.validation(req.body)
+      // if (errors.length) {
+      //   res.statusCode = 400
+      //   return res.send({ err: 'validation', msg: 'Validation errors', errors })
+      // }
 
       questionService.findOneAndUpdate({_id: questionId}, req.body).then(results => {
         res.send(results)
@@ -52,10 +54,11 @@ const questionController = (models) => {
       delete(req.body._parent)
       delete(req.body._id)
 
-      console.log(parent)
-      console.log(req.body)
-      // res.send({ parent, body: req.body })
-      // return 
+      // const errors = me.validation(req.body)
+      // if (errors.length) {
+      //   res.statusCode = 400
+      //   return res.send({ err: 'validation', msg: 'Validation errors', errors })
+      // }
 
       let jsonOutput = {}
 
@@ -63,13 +66,13 @@ const questionController = (models) => {
         jsonOutput = newQuestion
         if (parent && parent.id) {
           return questionService.get({ _id: parent.id })
-          // return questionService.findOneAndUpdate(
-          //   { _id: parent.id }, 
-          //   { $set: { 'options.$[optionIndex].next': newQuestion._id } }, 
-          //   { arrayFilters: [ { optionIndex: parent.optionIndex } ] }
-          // )
         }
         return false
+      }).catch(errors => {
+        console.log('CAUGHT 1 err', errors)
+        res.statusCode = 400
+        res.send({ err: 'validation', msg: 'Validation errors', errors })
+        // return false
       }).then(theParent => {
         if (theParent) {
           const updateData = theParent.toObject()
@@ -81,19 +84,10 @@ const questionController = (models) => {
       }).then(updatedParent => {
         res.send(jsonOutput)
       }).catch(err => {
+        console.log('CAUGHT 2 err', err)
         res.statusCode = 400
         res.send(err)
       })
-
-      // models.question.create(req.body, (err, results) => {
-      //   if (err) {
-          
-      //     res.statusCode = 400
-      //     return res.send({ err: err.code, msg: err.errmsg })
-      //   }
-
-      //   res.send(results)
-      // })
     },
 
     remove: (req, res) => {

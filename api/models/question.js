@@ -1,14 +1,20 @@
+
+const validateQuestionRef = RegExp(/^[a-z-]*$/)
+
 const question = (mongoose) => {
   const Schema = mongoose.Schema
   const questionModelSchema = new Schema({
     ref: {
       type: String,
       unique: true,
-      required: true
+      required: [true, 'A reference is required'],
+      minlength: [2, 'A reference must be at least two characters long'],
+      maxlength: [24, 'A reference must be no longer than 24 characters'],
+      match: [validateQuestionRef, 'A reference must contain only a-z and dashes']
     },
-   title: {
+    title: {
       type: String,
-      required: true
+      required: [true, 'A title is required'],
     },
     hint: String,
     options: [{

@@ -2,17 +2,9 @@ const port = process.env.PORT || 5000
 
 const express = require('express')
 const bodyParser = require('body-parser')
-const mongoose = require('mongoose')
-mongoose.set('useCreateIndex', true)
-mongoose.set('useFindAndModify', false)
-mongoose.connect(process.env.BUYINGFORSCHOOLS_MONGO, { useNewUrlParser: true })
-const db = mongoose.connection
-db.on('error', console.error.bind(console, 'MongoDB connection error:'))
 
-const models = require('./api/models/models')(mongoose)
-
+const models = require('./api/models/models')(process.env.BUYINGFORSCHOOLS_MONGO)
 const questionService = require('./api/services/questionService')(models)
-
 const frameworkController = require('./api/controllers/framework')(models)
 const questionController = require('./api/controllers/question')(models)
 const questionHierarchy = require('./api/controllers/questionHierarchy')(models)
@@ -40,5 +32,6 @@ const server = app.listen(port, () => {
 })
 
 module.exports = {
-  server
+  server,
+  models
 }

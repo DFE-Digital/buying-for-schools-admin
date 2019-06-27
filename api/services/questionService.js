@@ -22,7 +22,7 @@ const questionService = (models = null) => {
   }
 
   const getByOptionWithNext = (nxt) => {
-    return get({options: {"$elemMatch": { next: nxt}}})
+    return get({options: {"$elemMatch": {next: nxt}}})
   }
 
   const getHierarchy = (ref) => {
@@ -78,8 +78,12 @@ const questionService = (models = null) => {
   const create = (data) => {
     return new Promise((resolve, reject) => {
       _models.question.create(data, (err, results) => {
+        // console.log(err.errors.ref.message)
+        const errorMessages = Object.keys(err.errors).map(k => {
+          return { id: k, msg: err.errors[k].message }
+        })
         if (err) {
-          return reject({ err: err.code, msg: err.errmsg })
+          return reject(errorMessages)
         }
 
         return resolve(results)
