@@ -2,6 +2,7 @@ const superagent = require('superagent')
 const server = superagent.agent()
 const expect = require('chai').expect
 const testData = require('./testdata/questions.json')
+const testRecords = {}
 
 process.env.BUYINGFORSCHOOLS_MONGO = process.env.BUYINGFORSCHOOLS_MONGO.replace(/\/findaframeworkforyourschool\?/, '/testing?')
 
@@ -19,7 +20,7 @@ describe('api', () => {
       server
         .post('http://127.0.0.1:5000/api/question')
         .send({
-          ref: 'bond',
+          ref: 'jbond',
           title: 'James Bond'
         })
         .end((err, res) => {
@@ -33,14 +34,14 @@ describe('api', () => {
       server
         .post('http://127.0.0.1:5000/api/question')
         .send({
-          ref: 'bond',
+          ref: 'jbond',
           title: 'James bond films'
         })
         .end((err, res) => {
           expect(res.statusCode).to.equal(400)
-          expect(res.body).to.have.property('err', 11000)
-          expect(res.body).to.have.property('msg')
-          expect(res.body.msg).to.include('duplicate key error collection')
+          expect(res.body).to.have.property('err', 'validation')
+          expect(res.body).to.have.property('msg', 'Validation errors')
+          expect(res.body.errors[0]).to.have.property('id', 'ref')
           done()
         })
     })
@@ -53,7 +54,6 @@ describe('api', () => {
           title: ''
         })
         .end((err, res) => {
-          console.log(res.body)
           expect(res.statusCode).to.equal(400)
           expect(res.body).to.have.property('err', 'validation')
           expect(res.body).to.have.property('msg', 'Validation errors')
@@ -62,30 +62,23 @@ describe('api', () => {
         })
     })
 
-    it('must have a valid ref', done => {
-      const invalidRefs = ['', 'a bond film', 'm4n-with-golden-gun', '#spyfilms']
-      const nextRef = () => {
-        const ref = invalidRefs.shift()
+    const invalidRefs = ['', 'a bond film', 'm4n-with-golden-gun', '#spyfilms']
+    invalidRefs.forEach(ref => {
+      it(`should not create anything with an invalid ref: "${ref}"`, done => {
         server
-          .post('http://127.0.0.1:5000/api/question')
+          .post(`http://127.0.0.1:5000/api/question`)
           .send({
             ref,
             title: `title: ${ref}`
           })
           .end((err, res) => {
-            console.log(res.body)
             expect(res.statusCode).to.equal(400)
             expect(res.body).to.have.property('err', 'validation')
             expect(res.body).to.have.property('msg', 'Validation errors')
             expect(res.body.errors[0]).to.have.property('id', 'ref')
-            if (invalidRefs.length === 0) {
-              done()
-            } else {
-              nextRef()
-            }
+            done()
           })
-      }
-      nextRef()
+      })
     })
 
     it('should create with full data', done => {
@@ -113,7 +106,7 @@ describe('api', () => {
          
           done()
       })
-    })  
+    })
   })
 
   after(() => {

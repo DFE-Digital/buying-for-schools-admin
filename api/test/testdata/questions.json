@@ -1,4 +1,48 @@
 {
+  "bond": {
+    "ref": "bond",
+    "title": "Which bond?",
+    "options": [
+      {
+        "ref": "connery",
+        "title": "Sean Connery"
+      },
+      {
+        "ref": "lazenby",
+        "title": "George Lazenby"
+      },
+      {
+        "ref": "moore",
+        "title": "Roger Moore"
+      },
+      {
+        "ref": "brosnan",
+        "title": "Pierce Brosnan"
+      },
+      {
+        "ref": "craig",
+        "title": "Daniel Craig"
+      }
+    ]
+  },
+  "conneryFilms": {
+    "ref": "connery-films",
+    "title": "Bond films by Connery",
+    "options": [
+      {
+        "ref": "dr-no",
+        "title": "Dr No"
+      },
+      {
+        "ref": "from-russia-with-love",
+        "title": "From Russia with Love"
+      },
+      {
+        "ref": "goldfinger",
+        "title": "Goldfinger"
+      }
+    ]
+  },
   "world": {
     "ref": "world",
     "title": "The World Is Not Enough",
@@ -10,21 +54,21 @@
         "ref": "good",
         "title": "Good",
         "hint": "It was great",
-        "next": "",
+        "next": null,
         "result": []
       },
       {
         "ref": "bad",
         "title": "Bad",
         "hint": "It was not great",
-        "next": "",
+        "next": null,
         "result": []
       },
       {
         "ref": "ugly",
         "title": "ugly",
         "hint": "It was awful",
-        "next": "",
+        "next": null,
         "result": []
       }
     ]

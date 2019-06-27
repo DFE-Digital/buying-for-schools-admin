@@ -17,6 +17,18 @@ const questionService = (models = null) => {
     })
   }
 
+  const save = (doc) => {
+    return new Promise((resolve, reject) => {
+      doc.save((err, result) => {
+        if (err) {
+          return reject(err)
+        }
+
+        return resolve(result)  
+      })
+    })
+  }
+
   const getByRef = (ref) => {
     return get({ ref })
   }
@@ -54,17 +66,24 @@ const questionService = (models = null) => {
     })
   }
 
+  const findUpdateAndSave = (criteria, data) => {
+    return get(criteria).then(doc => {
+      Object.keys(data).forEach(k => {
+        // console.log(`setting ${k} to "${data[k]}"`)
+        doc[k] = data[k]
+      })
+      // console.log(doc)
+      return save(doc)
+    })
+  }
+
   const findOneAndUpdate = (criteria, data, options = {}) => {
-    console.log({criteria, data, options})
+    // console.log(data)
     return new Promise((resolve, reject) => {
-      
-      _models.question.findOneAndUpdate(criteria, data, options, (err, results) => {
-        // console.log({err, results})
+
+      _models.question.findOneAndUpdate(criteria, { '$set': data }, options, (err, results) => {
         if (err) {
-          if (err.code === 11000) {
-            return reject({ err: 'validation', msg: 'Validation errors', errors: [{ id: 'ref', msg: 'Ref must be unique' }] })     
-          }
-          return reject({ err: err.code, msg: err.errmsg })
+          return reject(err)
         }
         if (!results) {
           return resolve({ success: true })
@@ -78,14 +97,9 @@ const questionService = (models = null) => {
   const create = (data) => {
     return new Promise((resolve, reject) => {
       _models.question.create(data, (err, results) => {
-        // console.log(err.errors.ref.message)
-        const errorMessages = Object.keys(err.errors).map(k => {
-          return { id: k, msg: err.errors[k].message }
-        })
         if (err) {
-          return reject(errorMessages)
+          return reject(err)
         }
-
         return resolve(results)
       })
     })
@@ -97,7 +111,9 @@ const questionService = (models = null) => {
     getByOptionWithNext,
     getHierarchy,
     findOneAndUpdate,
-    create
+    findUpdateAndSave,
+    create,
+    save
   }
 }
 
