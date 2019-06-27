@@ -18,7 +18,7 @@ const mapDispatchToProps = (dispatch) => {
   return {
     cancelEdit: () => dispatch(cancelEdit()),
     updateQuestion: (question) => dispatch(updateQuestion(question)),
-    saveNewQuestion: (question) => dispatch(saveNewQuestion(question)),
+    saveNewQuestion: (question, parent) => dispatch(saveNewQuestion(question, parent)),
     questionUpdateErrored: (err) => dispatch(questionUpdateErrored(err))
   }
 }
@@ -45,8 +45,6 @@ export class EditQuestion extends Component {
     let question = null
     if (newData === QUESTION_NEW) {
       question = getBlankQuestion()
-        .set('_id', QUESTION_NEW)
-        .set('_parent', this.props.editing._parent)
     } else {
       question = this.props.questions.find(q => q.get('_id') === this.props.editing.questionID)
     }
@@ -82,8 +80,8 @@ export class EditQuestion extends Component {
 
     if (errors.length) {
       this.props.questionUpdateErrored({data: {errors}})
-    } else if (newQuestion.get('_id') === QUESTION_NEW) {
-      this.props.saveNewQuestion(newQuestion.toJS())
+    } else if (newQuestion.get('_id') === null) {
+      this.props.saveNewQuestion(newQuestion.toJS(), this.props.editing._parent || null)
     } else {
       this.props.updateQuestion(newQuestion.toJS())
     }

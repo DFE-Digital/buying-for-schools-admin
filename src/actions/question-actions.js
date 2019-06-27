@@ -13,8 +13,6 @@ export const QUESTION_NEW = 'QUESTION_NEW'
 export const QUESTION_DELETE = 'QUESTION_DELETE'
 export const QUESTION_DELETING = 'QUESTION_DELETING'
 
-
-
 export const questionsLoaded = data => {
   return {
     type: QUESTIONS_LOADED,
@@ -50,12 +48,12 @@ export const questionUpdateErrored = err => {
   }
 }
 
-export const createNewQuestion = (parentID = null, parentOptionIndex = null) => {
+export const createNewQuestion = (parent = null, parentOptionIndex = null) => {
   return {
     type: QUESTION_NEW,
     questionID: QUESTION_NEW,
     _parent: {
-      id: parentID,
+      parent,
       optionIndex: parentOptionIndex
     },
     optionIndex: null
@@ -72,9 +70,19 @@ export const deleteQuestion = id => dispatch => {
   return dispatch({ type: QUESTION_DELETING })
 }
 
-export const saveNewQuestion = json => dispatch => {
+export const saveNewQuestion = (json, parent) => dispatch => {
   post(questionUrl, json).then(data => {
     dispatch(cancelEdit())
+    
+    if (parent && parent.parent){
+      const parentData = parent.parent.toJS()
+      parentData.options[parent.optionIndex].next = data.data._id
+      console.log(parent.optionIndex, parentData)
+      return put(`${questionUrl}/${parentData._id}`, parentData)
+    }
+
+    return true
+  }).then (updateParentData => {
     return dispatch(getQuestions())
   }).catch(err => {
     return dispatch(questionUpdateErrored(err.error))

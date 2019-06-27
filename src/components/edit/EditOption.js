@@ -28,7 +28,7 @@ export class EditOption extends Component {
       ref: '',
       title: '',
       hint: '',
-      next: '',
+      next: null,
       question: null,
       option: null,
       result: List([]),
@@ -157,7 +157,7 @@ export class EditOption extends Component {
     })
 
     const showFrameworkOptions = this.state.next ? false : true
-    const showQuestionOptions = resultFrameworks ? false : true
+    const showQuestionOptions = resultFrameworks.length === 0
 
     
 

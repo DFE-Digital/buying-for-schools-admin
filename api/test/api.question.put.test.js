@@ -3,19 +3,17 @@ const server = superagent.agent()
 const expect = require('chai').expect
 const testData = require('./testdata/questions.json')
 
-process.env.BUYINGFORSCHOOLS_MONGO = process.env.BUYINGFORSCHOOLS_MONGO.replace(/\/findaframeworkforyourschool\?/, '/testing?')
-
-const app = require('../../server')
+const { helpers } = require('./setup')()
 const testRecords = {}
 
-describe('api', () => {
+describe('api:question:put', () => {
   before((done) => {
-    app.models.question.deleteMany({}, (err) => {
-      app.models.question.create(testData.world, (err, results) => {
-        testRecords.world = results
-        done()
-      })  
-    })  
+    helpers.removeAllRecords('question').then(() => {
+      return helpers.createRecord('question', testData.world)
+    }).then(record => {
+      testRecords.world = record
+      done()
+    })
   })
 
   describe('new question', () => {

@@ -36,7 +36,7 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "test:jshint": "jshint api/**/*.js",
-    "test:api:jest": "node_modules/react-scripts/node_modules/jest/bin/jest.js api/**/*.test.js --coverage"
+    "test:api": "mocha api/test/**/*.test.js --exit"
   },
   "eslintConfig": {
     "extends": "react-app"

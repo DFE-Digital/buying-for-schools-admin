@@ -4,15 +4,11 @@ const expect = require('chai').expect
 const testData = require('./testdata/questions.json')
 const testRecords = {}
 
-process.env.BUYINGFORSCHOOLS_MONGO = process.env.BUYINGFORSCHOOLS_MONGO.replace(/\/findaframeworkforyourschool\?/, '/testing?')
+const { helpers } = require('./setup')()
 
-const app = require('../../server')
-
-describe('api', () => {
+describe('api:question:post', () => {
   before((done) => {
-    app.models.question.deleteMany({}, (err) => {
-      done()
-    })  
+    helpers.removeAllRecords('question').then(() => done())
   })
 
   describe('new question', () => {
@@ -107,9 +103,5 @@ describe('api', () => {
           done()
       })
     })
-  })
-
-  after(() => {
-    app.server.close()
   })
 })

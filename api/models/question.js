@@ -32,6 +32,7 @@ const question = (mongoose) => {
       hint: String,
       // next: String,
       next: {
+        default: null,
         required: false,
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Question'

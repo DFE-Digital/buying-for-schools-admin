@@ -20,11 +20,12 @@
 
 .doption__endoptions {
   text-align: center;
-  display: none;
+  opacity: 0;
+  transition: opacity 0.25s;
 }
 
 .doption:hover>.doption__endoptions {
-  display: block;
+  opacity: 1;
 }
 
 .doption__endbutton {

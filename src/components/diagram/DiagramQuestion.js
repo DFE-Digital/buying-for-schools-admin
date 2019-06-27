@@ -33,7 +33,8 @@ export class DiagramQuestion extends Component {
   }
 
   onCreateNew (optionIndex = null) {
-    this.props.createNewQuestion(this.props.qID, optionIndex)
+    const q = this.props.questions.find(q => q.get('_id') === this.props.qID)
+    this.props.createNewQuestion(q, optionIndex)
   }
 
   addOption (e) {
