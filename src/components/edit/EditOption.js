@@ -5,6 +5,7 @@ import Input from '../form/Input'
 import Select from '../form/Select'
 import { Map, List } from 'immutable'
 import { getAllAncestorIDs } from '../../services/question'
+import './editOption.css'
 
 const mapStateToProps = (state) => {
   return {
@@ -162,7 +163,7 @@ export class EditOption extends Component {
     
 
     return (
-      <div>
+      <div className="editoption">
         <form>
           <h2>Option</h2>
           <Input 
@@ -193,26 +194,36 @@ export class EditOption extends Component {
             onChange={this.handleChangeNext.bind(this)}
           />
 
-          <table>
-            <tbody>
-              {resultFrameworks.map(r => (
-                <tr key={r.id}>
-                  <td>{r.title}</td>
-                  <td><button className="button button--red" onClick={e => this.removeFrameworkOption(r.id)}>Remove</button></td>
+          <div className="editoption__results">
+          <h2 className="govuk-label">Results</h2>
+            <table>
+              <tbody>
+                {resultFrameworks.map(r => (
+                  <tr key={r.id}>
+                    <td>{r.title}</td>
+                    <td><button className="button button--red editoption__resultremove" onClick={e => this.removeFrameworkOption(r.id)}>Remove</button></td>
+                  </tr>
+                ))}
+
+                <tr>
+                  <td>
+                    <Select
+                      className="editoption__resultselect"
+                      id="result"
+                      label="Framework"
+                      value={this.state.frameworkIdToAddToResult}
+                      options={frameworkOptions}
+                      disabled={!showFrameworkOptions}
+                      onChange={this.onChangeFramework.bind(this)}
+                    />
+                  </td>
+                  <td>{this.state.frameworkIdToAddToResult && (
+                    <button className="button button--green editoption__resultadd" onClick={e => this.onAddFrameworkToResult(e, this.state.frameworkIdToAddToResult)}>Add</button>
+                  )}</td>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-          
-          <Select
-            id="result"
-            label="Framework"
-            value={this.state.frameworkIdToAddToResult}
-            options={frameworkOptions}
-            disabled={!showFrameworkOptions}
-            onChange={this.onChangeFramework.bind(this)}
-          />
-          <button className="button button--green" onClick={e => this.onAddFrameworkToResult(e, this.state.frameworkIdToAddToResult)}>Add</button>
+              </tbody>
+            </table>
+          </div>
 
           <input type="submit" value="Save" className="button button--green" onClick={e => this.onSave(e)} />
 

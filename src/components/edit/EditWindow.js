@@ -36,11 +36,12 @@ export class EditWindow extends Component {
 
     return (
       <div className={editWindowClasses.join(' ')}>
-        <button onClick={this.closeEditWindow.bind(this)}>Close</button>
-        
-        <EditQuestion />
-        <EditOption />
-        
+        <div className="editwindow__inner">
+          <button onClick={this.closeEditWindow.bind(this)}>Close</button>
+          
+          <EditQuestion />
+          <EditOption />
+        </div>
       </div>
     )
   }

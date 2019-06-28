@@ -2,7 +2,7 @@ import { QUESTIONS_ERRORED, QUESTIONS_LOADED, QUESTION_EDIT, QUESTION_CANCEL_EDI
 import { List } from 'immutable'
 
 const defaultState = {
-  questions: []
+  questions: List([])
 }
 
 export default (state = defaultState, action) => {

@@ -7,6 +7,7 @@
   display: inline-block;
   font-weight: normal;
   font-size: 12px;
+  cursor: pointer;
 }
 
 .doption h3:hover {
@@ -28,6 +29,10 @@
   opacity: 1;
 }
 
+.doption__endoptions .button {
+  margin-left: 0;
+}
+
 .doption__endbutton {
   font-size: 14px;
 }
@@ -41,6 +46,10 @@
   width: 100%;
   height: 2px;
   background-color: #000;
+}
+
+.doptions--x1 .doption--outer::before {
+  content: none;
 }
 
 .doption--outer::after {

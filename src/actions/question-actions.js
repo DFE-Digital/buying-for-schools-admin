@@ -77,7 +77,6 @@ export const saveNewQuestion = (json, parent) => dispatch => {
     if (parent && parent.parent){
       const parentData = parent.parent.toJS()
       parentData.options[parent.optionIndex].next = data.data._id
-      console.log(parent.optionIndex, parentData)
       return put(`${questionUrl}/${parentData._id}`, parentData)
     }
 

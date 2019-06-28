@@ -73,7 +73,7 @@ export class DiagramQuestion extends Component {
               <button className="dquestion__addoption" onClick={this.addOption.bind(this)}></button>
             </td>
           </tr>
-          <tr className="doptions">
+          <tr className={`doptions doptions--x${options.size}`}>
             {options.map((opt, i) => {
               const optionPath = path.set(qID, i)
               return (

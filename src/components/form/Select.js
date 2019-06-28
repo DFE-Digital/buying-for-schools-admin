@@ -25,7 +25,8 @@ export default class Select extends Component {
   }
 
   render () {
-    const classes = ['govuk-form-group']
+    const classes = this.props.className ? this.props.className.split(' ') : []
+    classes.push('govuk-form-group')
     classes.push('govuk-form-group--' + this.props.id)
     if (this.props.error) {
       classes.push('govuk-form-group--error')

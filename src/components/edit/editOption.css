@@ -1,0 +1,33 @@
+.editoption__results:after {
+
+}
+
+.editoption__resultselect {
+  
+}
+
+.editoption__resultadd {
+  
+}
+
+.editoption__resultselect.govuk-form-group{
+  margin: 0;
+}
+
+.editoption__resultselect.govuk-form-group .govuk-select {
+  font-size: 16px;
+  height: 30px;
+  border-width: 1px;
+}
+
+.editoption__resultselect label {
+  display: none;
+}
+
+.editoption__resultadd {
+  margin: 0;
+}
+
+.editoption__resultremove {
+  margin: 0;
+}

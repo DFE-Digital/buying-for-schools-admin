@@ -3,9 +3,14 @@ body {
   font-family: nta, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  --govuk-colour--blue: #005ea5;
+  --govuk-colour--light-pink: #f499be;
+  --govuk-colour--grey-4: #f8f8f8;
 }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
+

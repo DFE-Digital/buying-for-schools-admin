@@ -1,4 +1,5 @@
 import { Map, List } from 'immutable'
+import { rootQuestionRef } from '../config'
 
 export const getBlankQuestion = () => {
   return Map({
@@ -15,7 +16,7 @@ export const getBlankQuestion = () => {
 export const getAncestors = (questions, qID) => {
   const parents = getParent(questions, qID)
   let ancestry = Map({
-    _id: qID, 
+    _id: qID,
     parents: parents.map(p => getAncestors(questions, p.get('_id')))
   })
   
@@ -40,5 +41,36 @@ export const getAllAncestorIDs = (questions, qID) => {
     return ancestorIDs
   })
   return recur(ancestry)
+}
 
+// export const getAllAncestorRefs = (questions, qID) => {
+//   const ancestorIDs = getAllAncestorIDs(questions, qID) 
+//   return ancestorIDs.map(id => {
+//     const q = questions.find(qq => qq.get('_id') === id)
+//     return q ? q.get('ref') : null
+//   })
+// }
+
+export const getPaths = (questions, qID) => {
+  const rootQ = questions.find(q => q.get('ref') === rootQuestionRef)
+  if (!rootQ) {
+    return []
+  }
+  const paths = []
+  
+  const recur = (q, url = []) => {
+    const urlWithQ = [...url, { _id: q.get('_id'), ref: q.get('ref'), type: 'question'}]
+    const options = q.get('options')
+    options.forEach(opt => {
+      const urlWithOption = [...urlWithQ, { _id: opt.get('_id'), ref: opt.get('ref'), type: 'option'}]
+      paths.push(urlWithOption)
+      const nxt = questions.find(q => q.get('_id') === opt.get('next'))
+      if (nxt) {
+        recur(nxt, urlWithOption)
+      }  
+    })
+    return url
+  }
+  recur(rootQ)
+  return paths
 }

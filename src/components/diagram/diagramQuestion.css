@@ -36,6 +36,7 @@
   background-color: #eee;
   display: inline-block;
   font-weight: normal;
+  cursor: pointer;
 }
 
 .dquestion h2:hover {
@@ -96,6 +97,8 @@
   text-align: center;
   border: none;
   opacity: 0.1;
+  transition: opacity 0.25s;
+  cursor: pointer;
 }
 
 .dquestion:hover .dquestion__addoption {

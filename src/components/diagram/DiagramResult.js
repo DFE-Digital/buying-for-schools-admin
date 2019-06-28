@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { is, List, Map } from 'immutable'
+import './diagramResult.css'
 
 const mapStateToProps = (state) => {
   return {
@@ -38,7 +39,7 @@ export class DiagramResult extends Component {
 
   render () {
     return (
-      <p>{ this.state.framework.get('title')}</p>
+      <div className="dresult">{ this.state.framework.get('title')}</div>
     )
   }
 }

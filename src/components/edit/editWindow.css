@@ -6,7 +6,8 @@
   overflow: hidden;
   background-color: #fff;
   transition: left 0.25s;
-  padding: 20px;
+  /*transition: width 0.25s;*/
+  
   box-sizing: border-box;
   border-width: 0 0 0 1px;
   border-style: solid;
@@ -15,4 +16,14 @@
 
 .editwindow--open {
   left: 50%;
+  width: 50%;
+}
+
+.editwindow__inner {
+  display: none;
+  padding: 20px;
+}
+
+.editwindow--open .editwindow__inner{
+  display: block;
 }
