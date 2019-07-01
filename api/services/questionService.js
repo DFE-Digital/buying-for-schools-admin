@@ -6,6 +6,9 @@ const questionService = (models = null) => {
   }
 
   const clean = data => {
+    if (!data.options) {
+      return data
+    }
     data.options.forEach(opt => {
       if (!opt.next) {
         opt.next = null
@@ -20,7 +23,6 @@ const questionService = (models = null) => {
         if (err) {
           return reject(err)
         }
-
         return resolve(results)
       })  
     })
@@ -32,7 +34,6 @@ const questionService = (models = null) => {
         if (err) {
           return reject(err)
         }
-
         return resolve(result)  
       })
     })
@@ -79,10 +80,8 @@ const questionService = (models = null) => {
     const cleanData = clean(data)
     return get(criteria).then(doc => {
       Object.keys(cleanData).forEach(k => {
-        // console.log(`setting ${k} to "${data[k]}"`)
         doc[k] = data[k]
       })
-      // console.log(doc)
       return save(doc)
     })
   }
@@ -90,7 +89,6 @@ const questionService = (models = null) => {
   const findOneAndUpdate = (criteria, data, options = {}) => {
     const cleanData = clean(data)
     return new Promise((resolve, reject) => {
-
       _models.question.findOneAndUpdate(criteria, { '$set': cleanData }, options, (err, results) => {
         if (err) {
           return reject(err)

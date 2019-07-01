@@ -59,7 +59,7 @@ export class Framework extends Component {
     if (this.state.framework || !this.state.busy) {
 
       return (
-        <div>
+        <div className="govuk-width-container">
           {this.state.error && (
             <h2>Error: {this.state.error}</h2>
           )}

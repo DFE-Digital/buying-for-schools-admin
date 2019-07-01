@@ -103,5 +103,23 @@ describe('api:question:post', () => {
           done()
       })
     })
+
+    it('should handle garbage requests with no data', done => {
+      server.post('http://127.0.0.1:5000/api/question')
+        .send()
+        .end((err, res) => {
+          expect(res.statusCode).to.equal(400)
+          done()
+        })
+    })
+
+    it('should handle garbage requests with wrong headers', done => {
+      server.post('http://127.0.0.1:5000/api/question')
+        .set('accept', 'image/png')
+        .end((err, res) => {
+          expect(res.statusCode).to.equal(400)
+          done()
+        })
+    })
   })
 })

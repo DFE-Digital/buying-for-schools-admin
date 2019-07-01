@@ -1,7 +1,11 @@
+.govuk-width-container.app-width-container {
+  width: 100%;
+  max-width: 100%;
+  margin: 0;
+}
 
-
-body {
-  padding: 20px;
+.govuk-main-wrapper.app-main-wrapper {
+  padding-top: 10px;
 }
 
 table {

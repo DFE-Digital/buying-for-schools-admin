@@ -7,6 +7,7 @@ const models = require('./api/models/models')(process.env.BUYINGFORSCHOOLS_MONGO
 const questionService = require('./api/services/questionService')(models)
 const frameworkController = require('./api/controllers/framework')(models)
 const questionController = require('./api/controllers/question')(models)
+const categoryController = require('./api/controllers/category')(models)
 const questionHierarchy = require('./api/controllers/questionHierarchy')(models)
 
 const app = express()
@@ -23,6 +24,12 @@ app.post('/api/question', questionController.create)
 app.get('/api/question/:questionId', questionController.get)
 app.put('/api/question/:questionId', questionController.put)
 app.delete('/api/question/:questionId', questionController.remove)
+
+app.get('/api/category', categoryController.list)
+app.post('/api/category', categoryController.create)
+app.get('/api/category/:categoryId', categoryController.get)
+app.put('/api/category/:categoryId', categoryController.put)
+app.delete('/api/category/:categoryId', categoryController.remove)
 
 app.get('/api/questionhierarchy/:questionId', questionHierarchy.get)
 

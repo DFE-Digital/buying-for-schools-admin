@@ -1,7 +1,7 @@
-const frameworkController = (models) => {
+const categoryController = (models) => {
   return {
     list: (req, res) => {
-      models.framework.find({}, (err, results) => {
+      models.category.find({}, (err, results) => {
         if (err) {
           return res.send(err)
         }
@@ -10,7 +10,7 @@ const frameworkController = (models) => {
     },
 
     get: (req, res) => {
-      models.framework.findOne({ref: req.params.frameworkId}, (err, results) => {
+      models.category.findOne({_id: req.params.categoryId}, (err, results) => {
         if (err) {
           return res.send(err)
         }
@@ -19,8 +19,8 @@ const frameworkController = (models) => {
     },
 
     put: (req, res) => {
-      const frameworkId = req.params.frameworkId || req.body.ref
-      models.framework.findOneAndUpdate({ref: frameworkId}, req.body, (err, results) => {
+      const categoryId = req.params.categoryId
+      models.category.findOneAndUpdate({_id: categoryId}, req.body, (err, results) => {
         if (err) {
           res.statusCode = 400
           return res.send({ err: err.code, msg: err.errmsg })
@@ -33,7 +33,7 @@ const frameworkController = (models) => {
     },
 
     create: (req, res) => {
-      models.framework.create(req.body, (err, results) => {
+      models.category.create(req.body, (err, results) => {
         if (err) {
           res.statusCode = 400
           return res.send({ err: err.code, msg: err.errmsg })
@@ -43,12 +43,12 @@ const frameworkController = (models) => {
     },
 
     remove: (req, res) => {
-      const frameworkId = req.params.frameworkId
-      models.framework.deleteOne({ ref: frameworkId }, (err, results) => {
+      const categoryId = req.params.categoryId
+      models.category.deleteOne({ _id: categoryId }, (err, results) => {
         res.send(results)
       })
     }
   }
 }
 
-exports = module.exports = frameworkController
+exports = module.exports = categoryController

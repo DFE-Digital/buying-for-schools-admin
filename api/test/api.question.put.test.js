@@ -96,5 +96,23 @@ describe('api:question:put', () => {
           done()
         })
     })
+
+    it('should handle garbage requests with no data', done => {
+      server.put(`http://127.0.0.1:5000/api/question/${testRecords.world._id}`)
+        .send({garbage: 'dfdsaf dafdsa fdsafdsafdsafds'})
+        .end((err, res) => {
+          expect(res.statusCode).to.equal(200)
+          done()
+        })
+    })
+
+    it('should handle garbage requests with wrong headers', done => {
+      server.put(`http://127.0.0.1:5000/api/question/${testRecords.world._id}`)
+        .set('accept', 'image/png')
+        .end((err, res) => {
+          expect(res.statusCode).to.equal(200)
+          done()
+        })
+    })
   })
 })

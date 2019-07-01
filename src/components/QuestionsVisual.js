@@ -3,8 +3,8 @@ import { Link } from 'react-router-dom'
 
 const QuestionsVisual = (props) => {
   return (
-    <div>
-      <h2>Questions</h2>
+    <div className="govuk-width-container">
+      <h1>Questions</h1>
       <table>
         <thead>
           <tr>

@@ -1,12 +1,31 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
+import { connect } from 'react-redux'
 import Input from './form/Input'
+import Select from './form/Select'
+import { List } from 'immutable'
 
-export default class FrameworkForm extends Component {
+import { getCategories } from '../actions/category-actions'
+
+const mapStateToProps = (state) => {
+  return {
+    categories: state.categoryReducer.categories
+  }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    getCategories: () => dispatch(getCategories())
+  }
+}
+
+
+export class FrameworkForm extends Component {
   constructor (props) {
     super(props)
     const f = this.props.framework
     this.state = {
+      categories: List([]),
       ref: '',
       title: '',
       cat: '',
@@ -16,6 +35,10 @@ export default class FrameworkForm extends Component {
       url: '',
       ...f 
     }
+  }
+
+  componentDidMount() {
+    this.props.getCategories()
   }
 
   handleChange(id, value) {
@@ -35,10 +58,22 @@ export default class FrameworkForm extends Component {
   }
 
   render () {
+    const categoryOptions = this.props.categories.map(cat => {
+      return {
+        value: cat.get('_id'),
+        label: cat.get('title')
+      }
+    }).toJS()
+
+    if (!this.state.cat) {
+      console.log(`cat="${this.state.cat}"`, categoryOptions)
+      categoryOptions.unshift({value: '', label: 'Choose a category'})
+
+    }
+
     const labels = {
       'ref': 'Ref',
       'title': 'Title',
-      'cat': 'Category',
       'descr': 'Description',
       'expiry': 'Expiry',
       'supplier': 'Supplier',
@@ -56,6 +91,15 @@ export default class FrameworkForm extends Component {
             />
         ))}
 
+        <Select
+          className=""
+          id="cat"
+          label="Category"
+          value={this.state.cat}
+          options={categoryOptions}
+          onChange={this.handleChange.bind(this)}
+        />
+
         <Link to="/framework" className="button">Cancel</Link>
         <input type="submit" value="Submit" className="button button--green" onClick={e => this.submit(e)} />
         <button className="button button--red" onClick={e => this.delete(e)}>Delete</button>
@@ -63,3 +107,5 @@ export default class FrameworkForm extends Component {
     )
   }
 }
+
+export default connect(mapStateToProps, mapDispatchToProps)(FrameworkForm)

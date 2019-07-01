@@ -8,7 +8,7 @@ const { helpers } = require('./setup')()
 let records = null
 
 
-describe('api:question:get', () => {
+describe('api:question:delete', () => {
   before((done) => {
     helpers.removeAllRecords('question')
     .then(() => helpers.createRecord('question', testData.bond))

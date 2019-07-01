@@ -1,8 +1,19 @@
 import React, { Component } from 'react'
+import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
-import { get } from '../services/io'
+import { getFrameworks } from '../actions/framework-actions'
 
-import { frameworkUrl } from '../config'
+const mapStateToProps = (state) => {
+  return {
+    frameworks: state.frameworkReducer.frameworks
+  }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    getFrameworks: () => dispatch(getFrameworks())
+  }
+}
 
 export class Frameworks extends Component {
   constructor (props) {
@@ -13,15 +24,13 @@ export class Frameworks extends Component {
   }
 
   componentDidMount() {
-    get(frameworkUrl).then(frameworks => {
-      this.setState({frameworks})
-    })
+    this.props.getFrameworks()
   }
 
   render() {
     return (
-      <div>
-        <h2>Frameworks</h2>
+      <div className="govuk-width-container">
+        <h1>Frameworks</h1>
         <table>
           <thead>
             <tr>
@@ -32,12 +41,12 @@ export class Frameworks extends Component {
             </tr>
           </thead>
           <tbody>
-            {this.state.frameworks.map((f) => (
-              <tr key={f.ref}>
-                <td><Link to={`/framework/${f.ref}`}>{f.ref}</Link></td>
-                <td>{f.title}</td>
-                <td>{f.supplier}</td>
-                <td>{f.expiry}</td>
+            {this.props.frameworks.map((f) => (
+              <tr key={f.get('ref')}>
+                <td><Link to={`/framework/${f.get('ref')}`}>{f.get('ref')}</Link></td>
+                <td>{f.get('title')}</td>
+                <td>{f.get('supplier')}</td>
+                <td>{f.get('expiry')}</td>
               </tr>
             ))}
           </tbody>
@@ -49,4 +58,4 @@ export class Frameworks extends Component {
   }
 }
 
-export default Frameworks
+export default connect(mapStateToProps, mapDispatchToProps)(Frameworks)

@@ -59,7 +59,7 @@ export class Question extends Component {
   render() {
     if (this.state.question || !this.state.busy) {
       return (
-        <div>
+        <div className="govuk-width-container">
           <QuestionForm question={this.state.question} save={this.save.bind(this)} delete={this.delete.bind(this)} />
           <QuestionHierarchy question={this.state.question} />
         </div>
