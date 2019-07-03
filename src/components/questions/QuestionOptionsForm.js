@@ -2,8 +2,8 @@ import React, { Component } from 'react'
 import QuestionOptionForm from './QuestionOptionForm'
 import './QuestionOptionsForm.css'
 
-import { get } from '../services/io'
-import { questionUrl } from '../config'
+import { get } from '../../services/io'
+import { questionUrl } from '../../config'
 
 
 export default class QuestionOptionsForm extends Component {

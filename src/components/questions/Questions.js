@@ -1,11 +1,11 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { get } from '../services/io'
-import { questionUrl } from '../config'
+import { get } from '../../services/io'
+import { questionUrl } from '../../config'
 import { List } from 'immutable'
-import { getQuestions, deleteQuestion } from '../actions/question-actions'
-import { getFrameworks } from '../actions/framework-actions'
-import { getPaths } from '../services/question'
+import { getQuestions, deleteQuestion, editQuestion, createNewQuestion } from '../../actions/question-actions'
+import { getFrameworks } from '../../actions/framework-actions'
+import { getPaths } from '../../services/question'
 import QuestionsVisual from './QuestionsVisual'
 import './questions.css'
 
@@ -20,7 +20,9 @@ const mapDispatchToProps = (dispatch) => {
   return {
     getQuestions: () => dispatch(getQuestions()),
     getFrameworks: () => dispatch(getFrameworks()),
-    deleteQuestion: (id) => dispatch(deleteQuestion(id))
+    deleteQuestion: (id) => dispatch(deleteQuestion(id)),
+    editQuestion: (qID, optionIndex) => dispatch(editQuestion(qID, optionIndex)),
+    createNewQuestion: (qID, optionIndex) => dispatch(createNewQuestion(qID, optionIndex))
   }
 }
 
@@ -39,6 +41,15 @@ export class Questions extends Component {
 
   deleteQuestion(id) {
     this.props.deleteQuestion(id)
+  }
+
+  edit (qID, optionIndex = null) {
+    this.props.editQuestion(qID, optionIndex)
+  }
+
+  onCreateNew (optionIndex = null) {
+    const q = this.props.questions.find(q => q.get('_id') === this.props.qID)
+    this.props.createNewQuestion(q, optionIndex)
   }
 
   render() {
@@ -60,10 +71,6 @@ export class Questions extends Component {
         return (last._id === id)
       })
     }
-
-    console.log(findInPaths('5d036c48aec9a546a438a4e6'))
-
-    // console.log(orphans.toJS())
 
     const qlist = this.props.questions.map(q => {      
       return {
@@ -100,7 +107,7 @@ export class Questions extends Component {
       }
     })
 
-    return <QuestionsVisual questionList={qlist} deleteQuestion={this.deleteQuestion} /> 
+    return <QuestionsVisual questionList={qlist} deleteQuestion={this.deleteQuestion} edit={this.edit.bind(this)} /> 
   }
 }
 

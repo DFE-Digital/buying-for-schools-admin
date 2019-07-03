@@ -40,21 +40,20 @@ export class Diagram extends Component {
 
     const diagramQuestionClasses = ['diagram']
     
-    if (this.props.editing) {
-      diagramQuestionClasses.push('diagram--editing')
-    }
+    // if (this.props.editing) {
+    //   diagramQuestionClasses.push('diagram--editing')
+    // }
 
     const rootQuestion = this.props.questions.find(q => q.get('ref') === rootQuestionRef)
     if (!Map.isMap(rootQuestion)) {
       return <p>RootQuestion not found</p>
     }
 
-    const style = { height: window.innerHeight }
+    // const style = { height: window.innerHeight }
 
     return (
       <div className="diagramouter">
-        <EditWindow />
-        <div className={diagramQuestionClasses.join(' ')} id="diagram" style={style}>
+        <div className={diagramQuestionClasses.join(' ')} id="diagram">
           <DiagramQuestion qID={ rootQuestion.get('_id') } />
         </div>
       </div>

@@ -1,3 +1,7 @@
+.app {
+  position: relative;
+}
+
 .govuk-width-container.app-width-container {
   width: 100%;
   max-width: 100%;

@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
-import { get } from '../services/io'
+import { get } from '../../services/io'
 
-import { questionHierarchyUrl } from '../config'
+import { questionHierarchyUrl } from '../../config'
 
 export class QuestionHierarchy extends Component {
   constructor (props) {

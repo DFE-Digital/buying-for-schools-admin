@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import QuestionForm from './QuestionForm'
 import QuestionHierarchy from './QuestionHierarchy'
-import { get, put, remove, post } from '../services/io'
+import { get, put, remove, post } from '../../services/io'
 
 const questionUrl = '/api/question'
 

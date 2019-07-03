@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import Input from './form/Input'
+import Input from '../form/Input'
 
 export default class QuestionOptionForm extends Component {
   constructor (props) {

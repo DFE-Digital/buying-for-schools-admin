@@ -16,7 +16,7 @@ const QuestionsVisual = (props) => {
         <tbody>
           {props.questionList.map(q => (
             <tr key={q.ref}>
-              <td><Link to={`/question/${q._id}`}>{q.ref}</Link></td>
+              <td><span onClick={e => props.edit(q._id)}>{q.ref}</span></td>
               <td>{q.title}</td>
               <td>
                 <table>

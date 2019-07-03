@@ -32,10 +32,11 @@ export class EditWindow extends Component {
       editWindowClasses.push('editwindow--open')
     }
 
+    const style = { height: document.body.clientHeight }
 
 
     return (
-      <div className={editWindowClasses.join(' ')}>
+      <div className={editWindowClasses.join(' ')} style={style} onClick={e => false}>
         <div className="editwindow__inner">
           <button onClick={this.closeEditWindow.bind(this)}>Close</button>
           

@@ -96,6 +96,7 @@ export class EditQuestion extends Component {
     const hasErrors = this.props.updateErrors && this.props.updateErrors.data && this.props.updateErrors.data.errors
     const errorIds = hasErrors ? this.props.updateErrors.data.errors.map(e => e.id) : []
     const errors = hasErrors ? this.props.updateErrors.data.errors : []
+    const options = this.state.question ? this.state.question.get('options') : []
     return (
       <div>
         <form>
@@ -128,6 +129,10 @@ export class EditQuestion extends Component {
             label="Error"
             onChange={this.onChange.bind(this)}  
             />
+
+          { options.map(opt => (
+            <p>{ opt.get('title') }</p>
+          )) }
 
           <input type="submit" value="Save" className="button button--green" onClick={e => this.onSave(e)} />
         </form>

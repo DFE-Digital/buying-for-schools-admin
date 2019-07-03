@@ -9,14 +9,15 @@ import Frameworks from './components/Frameworks'
 import Framework from './components/Framework'
 import Categories from './components/Categories'
 import Category from './components/Category'
-import Questions from './components/Questions'
-import Question from './components/Question'
+import Questions from './components/questions/Questions'
+import Question from './components/questions/Question'
 import Diagram from './components/diagram/Diagram'
+import EditWindow from './components/edit/EditWindow'
 
 function App() {
   return (
     <Router>
-      <div className="App">
+      <div className="app">
         <Nav />
         
         <Route path='/' component={Dashboard} exact />
@@ -27,6 +28,8 @@ function App() {
         <Route path='/question' component={Questions} exact />
         <Route path='/question/:questionId' component={Question} exact />
         <Route path='/diagram' component={Diagram} exact />
+
+        <EditWindow />
       </div>
     </Router>
   );
