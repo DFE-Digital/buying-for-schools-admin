@@ -79,6 +79,13 @@ export const post = (url, data) => {
   }).then(data => {
     const status = theresponse.status
     const ok = theresponse.ok
+    if (!ok) {
+      throw new IoError({
+        data,
+        status,
+        ok
+      })
+    }
     return {
       data,
       status,

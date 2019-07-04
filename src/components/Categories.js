@@ -1,11 +1,12 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
+import { List } from 'immutable'
 import { getCategories } from '../actions/category-actions'
 
 const mapStateToProps = (state) => {
   return {
-    categories: state.categoryReducer.categories
+    categories: state.categoryReducer.categories || List([])
   }
 }
 

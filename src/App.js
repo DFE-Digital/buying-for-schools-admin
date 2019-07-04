@@ -10,14 +10,12 @@ import Framework from './components/Framework'
 import Categories from './components/Categories'
 import Category from './components/Category'
 import Questions from './components/questions/Questions'
-import Question from './components/questions/Question'
 import Diagram from './components/diagram/Diagram'
-import EditWindow from './components/edit/EditWindow'
-import QuestionEditor from './components/questions/QuestionEditor'
+
 import { connect } from 'react-redux'
 import { getQuestions } from './actions/question-actions'
 import { getFrameworks } from './actions/framework-actions'
-
+import QuestionEditor from './components/questions/QuestionEditor'
 import OptionEditor from './components/questions/OptionEditor'
 
 const mapStateToProps = (state) => {
@@ -51,14 +49,9 @@ export class App extends Component {
           <Route path='/category' component={Categories} exact />
           <Route path='/category/:categoryId' component={Category} exact />
           <Route path='/question' component={Questions} exact />
-          <Route path='/question/:questionId' component={Question} exact />
-          <Route path='/diagram' component={Diagram} exact />
-
-          <Route path='/diagram/:questionId' component={QuestionEditor} exact />
-          <Route path='/diagram/:questionId/:optionId' component={OptionEditor} exact />
-
-
-          <EditWindow />
+          <Route path='/question/:questionId' component={QuestionEditor} exact />
+          <Route path='/question/:questionId/:optionId' component={OptionEditor} exact />
+          <Route path='/diagram/:questionId?/:optionId?' component={Diagram} />
         </div>
       </Router>
 

@@ -1,21 +1,20 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
+import { Link } from 'react-router-dom'
 import DiagramOption from './DiagramOption'
 import { Map, List } from 'immutable'
-import { editQuestion, createNewQuestion } from '../../actions/question-actions'
 import './diagramQuestion.css'
 
 const mapStateToProps = (state) => { 
   return {
-    questions: state.questionReducer.questions,
-    frameworks: state.frameworkReducer.frameworks
+    questions: state.questionReducer.questions
   }
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    editQuestion: (qID, optionIndex) => dispatch(editQuestion(qID, optionIndex)),
-    createNewQuestion: (qID, optionIndex) => dispatch(createNewQuestion(qID, optionIndex))
+    // editQuestion: (qID, optionIndex) => dispatch(editQuestion(qID, optionIndex)),
+    // createNewQuestion: (qID, optionIndex) => dispatch(createNewQuestion(qID, optionIndex))
   }
 }
 
@@ -26,21 +25,6 @@ export class DiagramQuestion extends Component {
     this.state = {
       questions: List([])
     }
-  }
-
-  edit (optionIndex = null) {
-    this.props.editQuestion(this.props.qID, optionIndex)
-  }
-
-  onCreateNew (optionIndex = null) {
-    const q = this.props.questions.find(q => q.get('_id') === this.props.qID)
-    this.props.createNewQuestion(q, optionIndex)
-  }
-
-  addOption (e) {
-    const q = this.props.questions.find(q => q.get('_id') === this.props.qID)
-    const options = q.get('options')
-    this.props.editQuestion(this.props.qID, options.size)
   }
 
   render () {
@@ -67,10 +51,10 @@ export class DiagramQuestion extends Component {
         <tbody>
           <tr className="dquestion--outer">
             <td className="dquestion" colSpan={ options.size }>
-              <h2 id={path} onClick={e => this.edit()}>{ title }</h2>
+              <h2 id={path}><Link to={`/diagram/${qID}`}>{ title }</Link></h2>
               { hint && (<span className="dquestion__hint">{ hint }</span>)}
               { err && (<span className="dquestion__err">{err}</span>)}
-              <button className="dquestion__addoption" onClick={this.addOption.bind(this)}></button>
+              <Link className="dquestion__addoption" to={`/diagram/${qID}/new`}></Link>
             </td>
           </tr>
           <tr className={`doptions doptions--x${options.size}`}>
@@ -83,8 +67,7 @@ export class DiagramQuestion extends Component {
                     optionIndex={i} 
                     q={q} 
                     path={optionPath} 
-                    onEdit={this.edit.bind(this)} 
-                    onCreateNew={this.onCreateNew.bind(this)} />
+                    />
                 </td>
             )})}
           </tr>

@@ -3,14 +3,13 @@ import { connect } from 'react-redux'
 import { List } from 'immutable'
 import { getQuestions, deleteQuestion, editQuestion, createNewQuestion } from '../../actions/question-actions'
 import { getFrameworks } from '../../actions/framework-actions'
-import { getPaths } from '../../services/question'
 import QuestionsVisual from './QuestionsVisual'
 import './questions.css'
 
 const mapStateToProps = (state) => {
   return {
     questions: state.questionReducer.questions || List([]),
-    frameworks: state.frameworkReducer.frameworks
+    frameworks: state.frameworkReducer.frameworks || List([])
   }
 }
 
@@ -52,8 +51,8 @@ export class Questions extends Component {
 
   render() {
     
-    const allPaths = getPaths(this.props.questions)
-    console.log(allPaths)
+    // const allPaths = getPaths(this.props.questions)
+    
     // const orphans = this.props.questions.filter(q => {
     //   return allPaths.find(path => {
     //     const last = path[path.length -2]
@@ -105,7 +104,7 @@ export class Questions extends Component {
       }
     })
 
-    return <QuestionsVisual questionList={qlist} deleteQuestion={this.deleteQuestion} edit={this.edit.bind(this)} /> 
+    return <QuestionsVisual questionList={qlist} deleteQuestion={this.deleteQuestion.bind(this)} edit={this.edit.bind(this)} /> 
   }
 }
 

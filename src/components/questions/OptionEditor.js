@@ -5,12 +5,14 @@ import { updateQuestion, saveNewQuestion } from '../../actions/question-actions'
 import Input from '../form/Input'
 import Select from '../form/Select'
 import ErrorSummary from '../form/ErrorSummary'
-import { fromJS, List, Map } from 'immutable'
+import { List, Map } from 'immutable'
+import queryString from 'query-string'
 import { getAllAncestorIDs } from '../../services/question'
-// import './optionEditor.scss'
+import { getBlankOption } from '../../services/question'
 
 const mapStateToProps = (state) => {
   return {
+    updateErrors: state.questionReducer.updateErrors,
     questions: state.questionReducer.questions,
     frameworks: state.frameworkReducer.frameworks
   }
@@ -73,11 +75,20 @@ export class OptionEditor extends Component {
   }
 
   update () {
+    const baseLink = this.props.match.path.substr(0, 9) === '/question' ? '/question' : '/diagram'
     const questionId = this.props.match.params.questionId
     const optionId = this.props.match.params.optionId
     const question = this.props.questions.find(q => q.get('_id') === questionId)
-    const optionIndex = question.get('options').findIndex(o => o.get('_id') === optionId)
-    const option = question.getIn(['options', optionIndex])
+    let optionIndex = question.get('options').findIndex(o => o.get('_id') === optionId)
+    let option
+    if (optionId === 'new') {
+      option = getBlankOption()
+      optionIndex = question.get('options').size
+    } else {
+      option = question.getIn(['options', optionIndex])
+      
+    }
+    
     if (option && Map.isMap(option)) {
       this.setState({ 
         question,
@@ -85,7 +96,8 @@ export class OptionEditor extends Component {
         originalOption: option,
         option,
         optionIndex,
-        nextQuestionOptions: this.getOptionsForTheNextQuestionSelect()
+        nextQuestionOptions: this.getOptionsForTheNextQuestionSelect(),
+        baseLink
       })
     }
   }
@@ -114,7 +126,6 @@ export class OptionEditor extends Component {
   }
 
   onChangeFramework (id, frameworkId) {
-    const resultList = this.state.option.get('result')
     const newResultList = this.state.option.get('result').push(frameworkId)
     const newOption = this.state.option.set('result', newResultList)
     this.setState({ option: newOption })
@@ -128,12 +139,18 @@ export class OptionEditor extends Component {
 
   onSave (e) {
     e.preventDefault()
+    const qId = this.state.question.get('_id')
     const newQuestion = this.state.question.setIn(['options', this.state.optionIndex], this.state.option)
-    this.props.updateQuestion(newQuestion.toJS())
+    
+    this.props.updateQuestion(newQuestion.toJS()).then(data => {
+      if ( this.state.option.get('_id') === 'new') {
+        this.props.history.push(`${this.state.baseLink}/${qId}/${data.options[data.options.length-1]._id}`)
+      }
+    })  
   }
 
   render () {
-    if (!Map.isMap(this.state.option)) {
+    if (!Map.isMap(this.state.option) || !List.isList(this.props.frameworks)) {
       return <h1>Loading</h1>
     }
 
@@ -166,13 +183,26 @@ export class OptionEditor extends Component {
       }
     })
 
+
+
     const showFrameworkOptions = this.state.option.get('next') ? false : true
     const showQuestionOptions = resultFrameworks.length === 0
+
+    const query = queryString.parse(this.props.location.search)
+    const cancelLink = this.props.match.path.substr(0, 9) === '/question' ? '/question' : '/diagram'
+    const returnPath = query.return === 'question' ? `${cancelLink}/${this.state.question.get('_id')}` : cancelLink
+
+    const hasErrors = this.props.updateErrors && this.props.updateErrors.data && this.props.updateErrors.data.errors
+    const errorIds = hasErrors ? this.props.updateErrors.data.errors.map(e => e.id) : []
+    const errors = hasErrors ? this.props.updateErrors.data.errors : []
 
     return (
       <div className="govuk-width-container">
         <form>
           <h2>Option</h2>
+
+          <ErrorSummary errors={errors} />
+
           <Input 
             id="ref"
             value={this.state.option.get('ref')}
@@ -193,7 +223,7 @@ export class OptionEditor extends Component {
             />
           <Select
             id="next"
-            value={this.state.option.get('next')}
+            value={this.state.option.get('next') || ''}
             label="Next question"
             options={this.state.nextQuestionOptions}
             disabled={!showQuestionOptions}
@@ -230,7 +260,7 @@ export class OptionEditor extends Component {
           </div>
 
           <input type="submit" value="Save" className={saveButtonClasses.join(' ')} onClick={e => this.onSave(e)} />
-          <Link to={`/diagram/${this.state.question.get('_id')}`} className="button">Cancel</Link>
+          <Link to={returnPath} className="button">{ hasChanged ? 'Cancel' : 'Back' }</Link>
         </form>
       </div>
     )

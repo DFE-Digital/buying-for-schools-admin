@@ -4,7 +4,8 @@ import { connect } from 'react-redux'
 import { updateQuestion, saveNewQuestion } from '../../actions/question-actions'
 import Input from '../form/Input'
 import ErrorSummary from '../form/ErrorSummary'
-import { fromJS, List, Map } from 'immutable'
+import { List, Map } from 'immutable'
+import { getBlankQuestion } from '../../services/question'
 import './questionEditor.scss'
 
 const mapStateToProps = (state) => {
@@ -56,6 +57,10 @@ export class QuestionEditor extends Component {
     }
 
     const questionId = this.props.match.params.questionId
+    if (questionId === 'new') {
+      return false
+    }
+
     const originalQuestion = this.props.questions.find(q => q.get('_id') === questionId)
     if (!this.state.originalQuestion.equals(originalQuestion)) {
       // has the original question changed as a result of a save?
@@ -72,11 +77,18 @@ export class QuestionEditor extends Component {
 
   update () {
     const questionId = this.props.match.params.questionId
-    const question = this.props.questions.find(q => q.get('_id') === questionId)
+    const baseLink = this.props.match.path.substr(0, 9) === '/question' ? '/question' : '/diagram'
+    let question
+    if (questionId === 'new') {
+      question = getBlankQuestion()
+    } else {
+      question = this.props.questions.find(q => q.get('_id') === questionId)
+    }
     if (question && Map.isMap(question)) {
       this.setState({ 
-        question: fromJS(question),
-        originalQuestion: fromJS(question)
+        question: question,
+        originalQuestion: question,
+        baseLink
       })
     }
   }
@@ -87,8 +99,10 @@ export class QuestionEditor extends Component {
 
   onSave (e) {
     e.preventDefault()
-    if (this.state.question.get('_id') === null) {
-      this.props.saveNewQuestion(this.state.question.toJS())
+    if (this.state.question.get('_id') === 'new') {
+      this.props.saveNewQuestion(this.state.question.toJS()).then(data => {
+        this.props.history.push(`${this.state.baseLink}/${data._id}`)
+      })
     } else {
       this.props.updateQuestion(this.state.question.toJS())
     }
@@ -104,11 +118,10 @@ export class QuestionEditor extends Component {
     if (hasChanged) {
       saveButtonClasses.push('button--green')
     }
-    
+
     const hasErrors = this.props.updateErrors && this.props.updateErrors.data && this.props.updateErrors.data.errors
     const errorIds = hasErrors ? this.props.updateErrors.data.errors.map(e => e.id) : []
     const errors = hasErrors ? this.props.updateErrors.data.errors : []
-    const options = this.state.question ? this.state.question.get('options') : []
     return (
       <div className="questioneditor govuk-width-container">
         <h1 className="questioneditor__title">Question</h1>
@@ -144,12 +157,13 @@ export class QuestionEditor extends Component {
             />
           
           <input type="submit" value="Save" className={saveButtonClasses.join(' ')} onClick={e => this.onSave(e)} />
-
+          <Link to={`${this.state.baseLink}`} className="button">{ hasChanged ? 'Cancel' : 'Back' }</Link>
           <div className="questioneditor__optionlist">
             <h3>Options</h3>
             { this.state.question.get('options').map((opt, i) => (
-              <p key={opt.get('_id')}><Link to={`${this.props.match.url}/${opt.get('_id')}`}>{ opt.get('title') }</Link></p>
+              <p key={opt.get('_id')}><Link to={`${this.props.match.url}/${opt.get('_id')}?return=question`}>{ opt.get('title') }</Link></p>
             )) }
+            <Link to={`${this.state.baseLink}/${this.state.question.get('_id')}/new`} className="button button--green">Add option</Link>
           </div>          
         </form>
       </div>

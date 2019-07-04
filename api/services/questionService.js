@@ -15,6 +15,9 @@ const questionService = (models = null) => {
       if (!opt.next) {
         opt.next = null
       }
+      if (opt._id === 'new') {
+        delete(opt._id)
+      }
     })
     return data
   }

@@ -3,13 +3,24 @@ import { rootQuestionRef } from '../config'
 
 export const getBlankQuestion = () => {
   return Map({
-    _id: null,
+    _id: 'new',
     ref: '',
     title: '',
     hint: '',
     err: '',
     suffix: '',
-    options: []
+    options: List([])
+  })
+}
+
+export const getBlankOption = () => {
+  return Map({
+    _id: 'new',
+    ref: '',
+    title: '',
+    hint: '',
+    next: '',
+    result: List([])
   })
 }
 

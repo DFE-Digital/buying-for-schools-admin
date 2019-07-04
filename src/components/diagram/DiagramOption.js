@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 import DiagramQuestion from './DiagramQuestion'
 import DiagramResult from './DiagramResult'
 import { Map } from 'immutable'
@@ -13,6 +14,7 @@ const DiagramOption = (props) => {
     result: ''
   })
 
+
   const ref = opt.get('ref')
   const title = opt.get('title') || 'undefined'
   const hint = opt.get('hint')
@@ -20,10 +22,12 @@ const DiagramOption = (props) => {
   const result = opt.get('result') || []
   const hasEnd = nxt || result.size
   const path = props.path + '/' + ref
+  const qID = props.q.get('_id')
+  const optId = opt.get('_id')
 
   return (
     <div className="doption">
-      <h3 id={path} onClick={e => props.onEdit(props.optionIndex)}>{ title }</h3>
+      <h3 id={path}><Link to={`/diagram/${qID}/${optId}?return=diagram`}>{ title }</Link></h3>
       { hint && (<span className="doption__hint">{ hint }</span>)}
       { nxt && <DiagramQuestion qID={nxt} path={path} />}
       { result.map( r => (
@@ -31,12 +35,10 @@ const DiagramOption = (props) => {
       )) }
       { !hasEnd && (
         <div className="doption__endoptions">
-          <button onClick={e => props.onEdit(props.optionIndex)} className="button doption__endbutton">Edit</button>
-          <button onClick={e => props.onCreateNew(props.optionIndex)} className="button doption__endbutton">Create new question</button>
+          <Link to={`/diagram/${qID}/${optId}?return=diagram`} className="button doption__endbutton">Edit</Link>
+          <Link to={`/diagram/new?parentId=${qID}&optionId=${optId}`} className="button doption__endbutton">Create new question</Link>
         </div>
-      )}
-
-      
+      )}      
     </div>
   )
 }

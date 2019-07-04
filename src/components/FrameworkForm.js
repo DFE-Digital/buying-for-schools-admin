@@ -9,7 +9,7 @@ import { getCategories } from '../actions/category-actions'
 
 const mapStateToProps = (state) => {
   return {
-    categories: state.categoryReducer.categories
+    categories: state.categoryReducer.categories || List([])
   }
 }
 
