@@ -59,7 +59,7 @@ const questionController = (models) => {
     },
 
     stdErrorResponse: (res, err) => {
-      // console.log(err)
+      console.log(err)
       res.statusCode = 400
       const response = {
         success: false

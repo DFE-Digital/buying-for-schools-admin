@@ -1,5 +1,5 @@
-import React from 'react';
-import { BrowserRouter as Router, Route, NavLink } from 'react-router-dom'
+import React, { Component } from 'react'
+import { BrowserRouter as Router, Route } from 'react-router-dom'
 import './App.css';
 import "../node_modules/govuk-frontend/all.scss"
 
@@ -13,26 +13,57 @@ import Questions from './components/questions/Questions'
 import Question from './components/questions/Question'
 import Diagram from './components/diagram/Diagram'
 import EditWindow from './components/edit/EditWindow'
+import QuestionEditor from './components/questions/QuestionEditor'
+import { connect } from 'react-redux'
+import { getQuestions } from './actions/question-actions'
+import { getFrameworks } from './actions/framework-actions'
 
-function App() {
-  return (
-    <Router>
-      <div className="app">
-        <Nav />
-        
-        <Route path='/' component={Dashboard} exact />
-        <Route path='/framework' component={Frameworks} exact />
-        <Route path='/framework/:frameworkId' component={Framework} exact />
-        <Route path='/category' component={Categories} exact />
-        {<Route path='/category/:categoryId' component={Category} exact />}
-        <Route path='/question' component={Questions} exact />
-        <Route path='/question/:questionId' component={Question} exact />
-        <Route path='/diagram' component={Diagram} exact />
+import OptionEditor from './components/questions/OptionEditor'
 
-        <EditWindow />
-      </div>
-    </Router>
-  );
+const mapStateToProps = (state) => {
+  return {
+    questions: state.questionReducer.questions,
+    frameworks: state.frameworkReducer.frameworks
+  }
 }
 
-export default App;
+const mapDispatchToProps = (dispatch) => {
+  return {
+    getQuestions: () => dispatch(getQuestions()),
+    getFrameworks: () => dispatch(getFrameworks())
+  }
+}
+
+export class App extends Component {
+  componentDidMount() {
+    this.props.getQuestions()
+    this.props.getFrameworks()
+  }
+
+  render () {
+    return (
+      <Router>
+        <div className="app">
+          <Nav />
+          <Route path='/' component={Dashboard} exact />
+          <Route path='/framework' component={Frameworks} exact />
+          <Route path='/framework/:frameworkId' component={Framework} exact />
+          <Route path='/category' component={Categories} exact />
+          <Route path='/category/:categoryId' component={Category} exact />
+          <Route path='/question' component={Questions} exact />
+          <Route path='/question/:questionId' component={Question} exact />
+          <Route path='/diagram' component={Diagram} exact />
+
+          <Route path='/diagram/:questionId' component={QuestionEditor} exact />
+          <Route path='/diagram/:questionId/:optionId' component={OptionEditor} exact />
+
+
+          <EditWindow />
+        </div>
+      </Router>
+
+    )
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(App)

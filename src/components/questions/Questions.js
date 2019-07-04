@@ -1,7 +1,5 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { get } from '../../services/io'
-import { questionUrl } from '../../config'
 import { List } from 'immutable'
 import { getQuestions, deleteQuestion, editQuestion, createNewQuestion } from '../../actions/question-actions'
 import { getFrameworks } from '../../actions/framework-actions'
@@ -53,24 +51,24 @@ export class Questions extends Component {
   }
 
   render() {
-    const nextQuestionsList = []
+    
     const allPaths = getPaths(this.props.questions)
     console.log(allPaths)
-    const orphans = this.props.questions.filter(q => {
-      return allPaths.find(path => {
-        const last = path[path.length -2]
-        console.log(last, last._id === q.get('_id'))
-        return last._id === q.get('_id')
-      })
-    })
+    // const orphans = this.props.questions.filter(q => {
+    //   return allPaths.find(path => {
+    //     const last = path[path.length -2]
+    //     console.log(last, last._id === q.get('_id'))
+    //     return last._id === q.get('_id')
+    //   })
+    // })
 
-    const findInPaths = (id) => {
-      return allPaths.find(path => {
-        const last = path[path.length -2]
-        console.log(last, last._id === id)
-        return (last._id === id)
-      })
-    }
+    // const findInPaths = (id) => {
+    //   return allPaths.find(path => {
+    //     const last = path[path.length -2]
+    //     console.log(last, last._id === id)
+    //     return (last._id === id)
+    //   })
+    // }
 
     const qlist = this.props.questions.map(q => {      
       return {

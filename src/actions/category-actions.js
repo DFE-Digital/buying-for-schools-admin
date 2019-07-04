@@ -1,4 +1,4 @@
-import { get, put, post, remove } from '../services/io'
+import { get } from '../services/io'
 import { fromJS } from 'immutable'
 import { categoryUrl } from '../config'
 

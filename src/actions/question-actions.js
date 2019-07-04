@@ -5,6 +5,9 @@ import { questionUrl } from '../config'
 export const QUESTIONS_LOADING = 'QUESTIONS_LOADING'
 export const QUESTIONS_LOADED = 'QUESTIONS_LOADED'
 export const QUESTIONS_ERRORED = 'QUESTIONS_ERRORED'
+export const QUESTION_LOADING = 'QUESTION_LOADING'
+export const QUESTION_LOADED = 'QUESTION_LOADED'
+export const QUESTION_ERRORED = 'QUESTION_ERRORED'
 export const QUESTION_EDIT = 'QUESTION_EDIT'
 export const QUESTION_CANCEL_EDIT = 'QUESTION_CANCEL_EDIT'
 export const QUESTIONS_SAVING = 'QUESTIONS_SAVING'
@@ -23,6 +26,20 @@ export const questionsLoaded = data => {
 export const questionsErrored = err => {
   return {
     type: QUESTIONS_ERRORED,
+    err
+  }
+}
+
+export const questionLoaded = data => {
+  return {
+    type: QUESTION_LOADED,
+    data
+  }  
+}
+
+export const questionErrored = err => {
+  return {
+    type: QUESTION_ERRORED,
     err
   }
 }
@@ -91,7 +108,7 @@ export const saveNewQuestion = (json, parent) => dispatch => {
 
 export const updateQuestion = json => dispatch => {
   put(`${questionUrl}/${json._id}`, json).then(data => {
-    dispatch(cancelEdit())
+    dispatch(questionUpdateErrored([]))
     return dispatch(getQuestions())
   }).catch(err => {
     return dispatch(questionUpdateErrored(err.error))
@@ -107,3 +124,12 @@ export const getQuestions = () => dispatch => {
   })
   return dispatch({ type: QUESTIONS_LOADING })
 }
+
+// export const getQuestion = (id) => dispatch => {
+//   get(`${questionUrl}/${id}`).then(data => {
+//     return dispatch(questionLoaded(fromJS(data)))
+//   }).catch(err => {
+//     return dispatch(questionErrored(err))
+//   })
+//   return dispatch({ type: QUESTION_LOADING })
+// }

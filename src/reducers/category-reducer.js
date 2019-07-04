@@ -2,7 +2,7 @@ import { CATEGORIES_LOADED, CATEGORIES_ERRORED } from '../actions/category-actio
 import { List } from 'immutable'
 
 const defaultState = {
-  categories: List([])
+  categories: null
 }
 
 export default (state = defaultState, action) => {

@@ -2,7 +2,7 @@ import { FRAMEWORKS_LOADED, FRAMEWORKS_ERRORED } from '../actions/framework-acti
 import { List } from 'immutable'
 
 const defaultState = {
-  frameworks: []
+  frameworks: null
 }
 
 export default (state = defaultState, action) => {

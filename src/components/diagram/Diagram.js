@@ -4,7 +4,6 @@ import { rootQuestionRef } from '../../config'
 import { getQuestions, cancelEdit } from '../../actions/question-actions'
 import { getFrameworks } from '../../actions/framework-actions'
 import DiagramQuestion from './DiagramQuestion'
-import EditWindow from '../edit/EditWindow'
 import { List, Map } from 'immutable'
 import './diagram.css'
 

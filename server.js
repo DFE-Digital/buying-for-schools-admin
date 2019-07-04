@@ -12,6 +12,11 @@ const questionHierarchy = require('./api/controllers/questionHierarchy')(models)
 
 const app = express()
 app.use(bodyParser.json())
+
+// app.get('/api/*', (req, res, next) => {
+//   const timer = setTimeout(next, 500)
+// })
+
 app.get('/api/framework', frameworkController.list)
 app.post('/api/framework', frameworkController.create)
 app.get('/api/framework/:frameworkId', frameworkController.get)

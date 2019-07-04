@@ -6,10 +6,12 @@ const questionService = (models = null) => {
   }
 
   const clean = data => {
+    delete(data.__v)
     if (!data.options) {
       return data
     }
     data.options.forEach(opt => {
+      delete(opt.__v)
       if (!opt.next) {
         opt.next = null
       }
