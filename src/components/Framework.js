@@ -31,20 +31,17 @@ export class Framework extends Component {
     this.setState(newState)
   }
 
-  save (f) {
-    const frameworkId = this.props.match.params.frameworkId
-    this.setState({ busy: true })
-    
-    const action = frameworkId === 'new' ? post : put
-    const url = frameworkId === 'new' ? frameworkUrl: `${frameworkUrl}/${frameworkId}`
-    
-    action(url, f).then(response => {
-      if (response.ok) {
-        this.props.history.push('/framework')
-      } else {
-        this.setState({ error: response.data.msg })
-      }
-    })
+  onSave (e) {
+    e.preventDefault()
+    if (this.state.framework.get('_id') === 'new') {
+      this.props.saveNewFramework(this.state.framework.toJS()).then(data => {
+        if (data._id) {
+          this.props.history.push(`framework/${data._id}`)
+        }
+      })
+    } else {
+      this.props.updateFramework(this.state.framework.toJS())
+    }
   }
 
   delete () {
@@ -63,7 +60,7 @@ export class Framework extends Component {
           {this.state.error && (
             <h2>Error: {this.state.error}</h2>
           )}
-          <FrameworkForm framework={this.state.framework} save={this.save.bind(this)} delete={this.delete.bind(this)} />
+          <FrameworkForm framework={this.state.framework} save={this.onSave.bind(this)} delete={this.delete.bind(this)} />
         </div>
       )
     }

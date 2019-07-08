@@ -86,9 +86,14 @@ export class OptionEditor extends Component {
       optionIndex = question.get('options').size
     } else {
       option = question.getIn(['options', optionIndex])
-      
     }
-    
+
+    // remove frameworks that no longer exist from the option result
+    const filteredResultForExistingFrameworks = option.get('result').filter(r => {
+      return this.props.frameworks.find(f => f._id === r)
+    })
+    option = option.set('result', filteredResultForExistingFrameworks)
+
     if (option && Map.isMap(option)) {
       this.setState({ 
         question,

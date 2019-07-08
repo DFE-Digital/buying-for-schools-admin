@@ -1,4 +1,4 @@
-import { get} from '../services/io'
+import { get, put, post } from '../services/io'
 import { fromJS } from 'immutable'
 import { frameworkUrl } from '../config'
 
@@ -29,6 +29,13 @@ export const frameworksErrored = err => {
   }
 }
 
+export const frameworkUpdateErrored = err => {
+  return {
+    type: FRAMEWORK_UPDATE_ERRORED,
+    err: err
+  }
+}
+
 export const getFrameworks = () => dispatch => {
   get(frameworkUrl).then(data => {
     return dispatch(frameworksLoaded(fromJS(data)))
@@ -36,4 +43,27 @@ export const getFrameworks = () => dispatch => {
     return dispatch(frameworksErrored(err))
   })
   return dispatch({ type: FRAMEWORKS_LOADING })
+}
+
+export const saveNewFramework = (json, parent) => dispatch => {
+  let newData = null
+  dispatch({ type: FRAMEWORK_SAVING })
+  return post(frameworkUrl, json).then(data => {
+    dispatch(frameworkUpdateErrored([]))
+    dispatch(getFrameworks())
+    return data.data
+  }).catch(err => {
+    return dispatch(frameworkUpdateErrored(err.error))
+  })
+}
+
+export const updateFramework = json => dispatch => {
+  dispatch({ type: FRAMEWORK_SAVING })
+  return put(`${frameworkUrl}/${json._id}`, json).then(data => {
+    dispatch(frameworkUpdateErrored([]))
+    dispatch(getFrameworks())
+    return data.data
+  }).catch(err => {
+    return dispatch(frameworkUpdateErrored(err.error))
+  })
 }

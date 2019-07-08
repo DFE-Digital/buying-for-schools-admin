@@ -1,4 +1,4 @@
-import { FRAMEWORKS_LOADED, FRAMEWORKS_ERRORED } from '../actions/framework-actions'
+import { FRAMEWORKS_LOADED, FRAMEWORKS_ERRORED, FRAMEWORK_UPDATE_ERRORED } from '../actions/framework-actions'
 import { List } from 'immutable'
 
 const defaultState = {
@@ -13,6 +13,10 @@ export default (state = defaultState, action) => {
 
     case FRAMEWORKS_ERRORED: {
       return { ...state, frameworks: List([]) }
+    }
+
+    case FRAMEWORK_UPDATE_ERRORED: {
+      return { ...state, updateErrors: action.err }
     }
 
     default: {

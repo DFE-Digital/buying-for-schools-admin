@@ -19,7 +19,7 @@ export class DiagramResult extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      framework:Map({})
+      framework: null
     }
   }
   componentDidMount() {
@@ -38,6 +38,10 @@ export class DiagramResult extends Component {
   }
 
   render () {
+
+    if (this.state.framework === null) {
+      return ''
+    }
     return (
       <div className="dresult">{ this.state.framework.get('title')}</div>
     )

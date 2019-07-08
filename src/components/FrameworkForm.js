@@ -3,13 +3,15 @@ import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import Input from './form/Input'
 import Select from './form/Select'
+import ErrorSummary from './form/ErrorSummary'
 import { List } from 'immutable'
 
 import { getCategories } from '../actions/category-actions'
 
 const mapStateToProps = (state) => {
   return {
-    categories: state.categoryReducer.categories || List([])
+    categories: state.categoryReducer.categories || List([]),
+    updateErrors: state.frameworkReducer.updateErrors
   }
 }
 
@@ -79,8 +81,15 @@ export class FrameworkForm extends Component {
       'supplier': 'Supplier',
       'url': 'URL'
     }
+
+    const hasErrors = this.props.updateErrors && this.props.updateErrors.data && this.props.updateErrors.data.errors
+    const errorIds = hasErrors ? this.props.updateErrors.data.errors.map(e => e.id) : []
+    const errors = hasErrors ? this.props.updateErrors.data.errors : []
+
     return (
       <form>
+        <ErrorSummary errors={errors} />
+
         { Object.keys(labels).map(ref => (
           <Input 
             key={ref}

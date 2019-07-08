@@ -90,20 +90,11 @@ export const deleteQuestion = id => dispatch => {
 export const saveNewQuestion = (json, parent) => dispatch => {
   let newData = null
   dispatch({ type: QUESTIONS_SAVING })
-  return post(questionUrl, json).then(data => {
-    dispatch(cancelEdit())
-    newData = data.data
-    if (parent && parent.parent){
-      const parentData = parent.parent.toJS()
-      parentData.options[parent.optionIndex].next = newData._id
-      return put(`${questionUrl}/${parentData._id}`, parentData)
-    }
-
-    return newData
-  }).then (updateParentData => {
+  const url = (parent) ? `${questionUrl}/${parent.parentId}/${parent.optionId}` : questionUrl
+  return post(url, json).then(data => {
     dispatch(questionUpdateErrored([]))
     dispatch(getQuestions())
-    return newData
+    return data.data
   }).catch(err => {
     return dispatch(questionUpdateErrored(err.error))
   })
@@ -128,12 +119,3 @@ export const getQuestions = () => dispatch => {
   })
   return dispatch({ type: QUESTIONS_LOADING })
 }
-
-// export const getQuestion = (id) => dispatch => {
-//   get(`${questionUrl}/${id}`).then(data => {
-//     return dispatch(questionLoaded(fromJS(data)))
-//   }).catch(err => {
-//     return dispatch(questionErrored(err))
-//   })
-//   return dispatch({ type: QUESTION_LOADING })
-// }

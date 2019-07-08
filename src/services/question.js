@@ -62,6 +62,26 @@ export const getAllAncestorIDs = (questions, qID) => {
 //   })
 // }
 
+export const getQuestionUsage = questions => {
+  const rootQ = questions.find(q => q.get('ref') === rootQuestionRef)
+  if (!rootQ) {
+    return []
+  }
+  let questionIds = {}
+  const recur = (q) => {
+    const qId = q.get('_id')
+    questionIds[qId] = questionIds[qId] ? questionIds[qId] + 1 : 1
+    q.get('options').forEach(opt => {
+      const nextQ = questions.find(qq => qq.get('_id') === opt.get('next'))
+      if (nextQ) {
+        recur(nextQ)
+      }
+    })
+  }
+  recur(rootQ)
+  return questionIds
+}
+
 export const getPaths = (questions, qID) => {
   const rootQ = questions.find(q => q.get('ref') === rootQuestionRef)
   if (!rootQ) {

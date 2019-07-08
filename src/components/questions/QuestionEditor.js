@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
+import queryString from 'query-string'
 import { updateQuestion, saveNewQuestion } from '../../actions/question-actions'
 import Input from '../form/Input'
 import ErrorSummary from '../form/ErrorSummary'
@@ -100,8 +101,12 @@ export class QuestionEditor extends Component {
   onSave (e) {
     e.preventDefault()
     if (this.state.question.get('_id') === 'new') {
-      this.props.saveNewQuestion(this.state.question.toJS()).then(data => {
-        this.props.history.push(`${this.state.baseLink}/${data._id}`)
+      const query = queryString.parse(this.props.location.search)
+      const parent = (query.parentId && query.optionId) ? { parentId: query.parentId, optionId: query.optionId } : null
+      this.props.saveNewQuestion(this.state.question.toJS(), parent).then(data => {
+        if (data._id) {
+          this.props.history.push(`${this.state.baseLink}/${data._id}`)
+        }
       })
     } else {
       this.props.updateQuestion(this.state.question.toJS())

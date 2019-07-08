@@ -1,3 +1,6 @@
+const frameworkService = require('../services/frameworkService')()
+const shared = require('../services/shared')
+
 const frameworkController = (models) => {
   return {
     list: (req, res) => {
@@ -10,35 +13,30 @@ const frameworkController = (models) => {
     },
 
     get: (req, res) => {
-      models.framework.findOne({ref: req.params.frameworkId}, (err, results) => {
-        if (err) {
-          return res.send(err)
+     frameworkService.get({ _id: req.params.frameworkId }).then(q => {
+        if (!q) {
+          return shared.stdErrorResponse(res, { code: 404 })  
         }
-        res.send(results)
+        res.send(q)
+      }).catch(err => {
+        shared.stdErrorResponse(res, err)
       })
     },
 
     put: (req, res) => {
-      const frameworkId = req.params.frameworkId || req.body.ref
-      models.framework.findOneAndUpdate({ref: frameworkId}, req.body, (err, results) => {
-        if (err) {
-          res.statusCode = 400
-          return res.send({ err: err.code, msg: err.errmsg })
-        }
-        if (!results) {
-          return res.send({ success: true })
-        }
+      const frameworkId = req.params.frameworkId || req.body._id
+      frameworkService.findUpdateAndSave({_id: frameworkId}, req.body).then(results => {
         res.send(results)
+      }).catch(err => {
+        shared.stdErrorResponse(res, err)
       })
     },
 
     create: (req, res) => {
-      models.framework.create(req.body, (err, results) => {
-        if (err) {
-          res.statusCode = 400
-          return res.send({ err: err.code, msg: err.errmsg })
-        }
-        res.send(results)
+      frameworkService.create(req.body).then(result => {
+        res.send(result)
+      }).catch(err => {
+        shared.stdErrorResponse(res, err)
       })
     },
 

@@ -5,7 +5,7 @@ import "../node_modules/govuk-frontend/all.scss"
 
 import Nav from './components/Nav'
 import Dashboard from './components/Dashboard'
-import Frameworks from './components/Frameworks'
+import Frameworks from './components/frameworks/Frameworks'
 import Framework from './components/Framework'
 import Categories from './components/Categories'
 import Category from './components/Category'
@@ -17,6 +17,7 @@ import { getQuestions } from './actions/question-actions'
 import { getFrameworks } from './actions/framework-actions'
 import QuestionEditor from './components/questions/QuestionEditor'
 import OptionEditor from './components/questions/OptionEditor'
+import FrameworkEditor from './components/frameworks/FrameworkEditor'
 
 const mapStateToProps = (state) => {
   return {
@@ -45,7 +46,7 @@ export class App extends Component {
           <Nav />
           <Route path='/' component={Dashboard} exact />
           <Route path='/framework' component={Frameworks} exact />
-          <Route path='/framework/:frameworkId' component={Framework} exact />
+          <Route path='/framework/:frameworkId' component={FrameworkEditor} exact />
           <Route path='/category' component={Categories} exact />
           <Route path='/category/:categoryId' component={Category} exact />
           <Route path='/question' component={Questions} exact />

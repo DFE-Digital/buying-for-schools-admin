@@ -72,5 +72,10 @@
         "result": []
       }
     ]
+  },
+  "boatthames": {
+    "ref": "boatthames",
+    "title": "Boat chase on the river Thames",
+    "options": []
   }
 }

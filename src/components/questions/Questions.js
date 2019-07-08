@@ -4,6 +4,7 @@ import { List } from 'immutable'
 import { getQuestions, deleteQuestion, editQuestion, createNewQuestion } from '../../actions/question-actions'
 import { getFrameworks } from '../../actions/framework-actions'
 import QuestionsVisual from './QuestionsVisual'
+import { getQuestionUsage } from '../../services/question'
 import './questions.css'
 
 const mapStateToProps = (state) => {
@@ -50,30 +51,13 @@ export class Questions extends Component {
   }
 
   render() {
-    
-    // const allPaths = getPaths(this.props.questions)
-    
-    // const orphans = this.props.questions.filter(q => {
-    //   return allPaths.find(path => {
-    //     const last = path[path.length -2]
-    //     console.log(last, last._id === q.get('_id'))
-    //     return last._id === q.get('_id')
-    //   })
-    // })
-
-    // const findInPaths = (id) => {
-    //   return allPaths.find(path => {
-    //     const last = path[path.length -2]
-    //     console.log(last, last._id === id)
-    //     return (last._id === id)
-    //   })
-    // }
-
+    const usage = getQuestionUsage(this.props.questions)
     const qlist = this.props.questions.map(q => {      
       return {
         _id: q.get('_id'),
         ref: q.get('ref'),
         title: q.get('title'),
+        usage: usage[q.get('_id')] || 0,
         options: q.get('options').map(o => {
           const opt = {
             _id: o.get('_id'),

@@ -99,13 +99,14 @@ describe('api:question:post', () => {
             expect(resultOpt).to.have.property('result')
             expect(resultOpt.result).to.be.an('array')
           })
-         
+          testRecords.world = res.body
           done()
       })
     })
 
     it('should handle garbage requests with no data', done => {
-      server.post('http://127.0.0.1:5000/api/question')
+      server
+        .post('http://127.0.0.1:5000/api/question')
         .send()
         .end((err, res) => {
           expect(res.statusCode).to.equal(400)
@@ -114,12 +115,41 @@ describe('api:question:post', () => {
     })
 
     it('should handle garbage requests with wrong headers', done => {
-      server.post('http://127.0.0.1:5000/api/question')
+      server
+        .post('http://127.0.0.1:5000/api/question')
         .set('accept', 'image/png')
         .end((err, res) => {
           expect(res.statusCode).to.equal(400)
           done()
         })
+    })
+
+    describe('new question linked to an existing option', () => {
+      it('should be able to create a new question and link it to a previous question', done => {
+        const parentId = testRecords.world._id
+        const optionId = testRecords.world.options[1]._id
+        server
+          .post(`http://127.0.0.1:5000/api/question/${parentId}/${optionId}`)
+          .send(testData.boatthames)
+          .end((err, res) => {
+            testRecords.boatthames = res.body
+            expect(res.statusCode).to.equal(200)
+            expect(res.body).to.have.property('_id')
+            expect(res.body).to.have.property('title', testData.boatthames.title)
+            done()
+          })
+      })
+
+      it('should have updated the parent record\'s option to link to the new question', done => {
+        server
+          .get(`http://127.0.0.1:5000/api/question/${testRecords.world._id}`)
+          .end((err, res) => {
+            expect(res.statusCode).to.equal(200)
+            expect(res.body.options[1].next).to.equal(testRecords.boatthames._id)
+            expect(res.body.options[1].result.length).to.equal(0)
+            done()
+          })  
+      })
     })
   })
 })

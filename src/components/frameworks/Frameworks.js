@@ -1,11 +1,14 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
-import { getFrameworks } from '../actions/framework-actions'
+import { List } from 'immutable'
+import { getFrameworks } from '../../actions/framework-actions'
+import { getFrameworkUsage } from '../../services/framework'
 
 const mapStateToProps = (state) => {
   return {
-    frameworks: state.frameworkReducer.frameworks
+    questions: state.questionReducer.questions || List([]),
+    frameworks: state.frameworkReducer.frameworks || List([])
   }
 }
 
@@ -28,6 +31,8 @@ export class Frameworks extends Component {
   }
 
   render() {
+
+    const usage = getFrameworkUsage(this.props.questions)
     return (
       <div className="govuk-width-container">
         <h1>Frameworks</h1>
@@ -38,15 +43,17 @@ export class Frameworks extends Component {
               <th>Title</th>
               <th>Supplier</th>
               <th>Expiry</th>
+              <th>Usage</th>
             </tr>
           </thead>
           <tbody>
             {this.props.frameworks.map((f) => (
-              <tr key={f.get('ref')}>
-                <td><Link to={`/framework/${f.get('ref')}`}>{f.get('ref')}</Link></td>
+              <tr key={f.get('_id')}>
+                <td><Link to={`/framework/${f.get('_id')}`}>{f.get('ref')}</Link></td>
                 <td>{f.get('title')}</td>
                 <td>{f.get('supplier')}</td>
                 <td>{f.get('expiry')}</td>
+                <td>{usage[f.get('_id')] || 0}</td>
               </tr>
             ))}
           </tbody>

@@ -1,3 +1,5 @@
+const shared = require('./shared')
+
 let _models = null
 
 const questionService = (models = null) => {
@@ -33,23 +35,32 @@ const questionService = (models = null) => {
     })
   }
 
-  const save = (doc) => {
-    return new Promise((resolve, reject) => {
-      doc.save((err, result) => {
-        if (err) {
-          return reject(err)
-        }
-        return resolve(result)  
-      })
-    })
-  }
-
   const getByRef = (ref) => {
     return get({ ref })
   }
 
   const getByOptionWithNext = (nxt) => {
     return get({options: {"$elemMatch": {next: nxt}}})
+  }
+
+
+
+  const linkQuestionToOption = (questionId, parentId, optionId) => {
+    const criteria = { _id: parentId, "options._id": optionId }
+    const updateData = { 
+      "$set": {
+        "options.$.next": questionId,
+        "options.$.result": [],
+      }
+    }
+    return new Promise((resolve, reject) => {
+      _models.question.findOneAndUpdate(criteria, updateData, (err, result) => {
+        if (err) {
+          return reject(err)
+        }
+        return resolve(result)  
+      })
+    })
   }
 
   const getHierarchy = (ref) => {
@@ -87,7 +98,7 @@ const questionService = (models = null) => {
       Object.keys(cleanData).forEach(k => {
         doc[k] = data[k]
       })
-      return save(doc)
+      return shared.save(doc)
     })
   }
 
@@ -127,7 +138,7 @@ const questionService = (models = null) => {
     findOneAndUpdate,
     findUpdateAndSave,
     create,
-    save
+    linkQuestionToOption
   }
 }
 

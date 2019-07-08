@@ -11,6 +11,8 @@ const QuestionsVisual = (props) => {
             <th>Ref</th>
             <th>Title</th>
             <th>Options</th>
+            <th>Usage</th>
+            <th></th>
           </tr>
         </thead>
         <tbody>
@@ -36,8 +38,8 @@ const QuestionsVisual = (props) => {
                   </tbody>
                 </table>
               </td>
+              <td>{q.usage}</td>
               <td><button className="button button--red" onClick={e => props.deleteQuestion(q._id)}>Delete</button></td>
-
             </tr>
           ))}
         </tbody>
