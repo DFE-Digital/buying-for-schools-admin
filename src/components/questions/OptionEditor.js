@@ -90,7 +90,7 @@ export class OptionEditor extends Component {
 
     // remove frameworks that no longer exist from the option result
     const filteredResultForExistingFrameworks = option.get('result').filter(r => {
-      return this.props.frameworks.find(f => f._id === r)
+      return this.props.frameworks.find(f => f.get('_id') === r)
     })
     option = option.set('result', filteredResultForExistingFrameworks)
 
@@ -212,13 +212,15 @@ export class OptionEditor extends Component {
             id="ref"
             value={this.state.option.get('ref')}
             label="Ref"
-            onChange={this.onChange.bind(this)}  
+            onChange={this.onChange.bind(this)}
+            error={errorIds.includes('ref')}
             />
           <Input 
             id="title"
             value={this.state.option.get('title')}
             label="Title"
             onChange={this.onChange.bind(this)}  
+            error={errorIds.includes('title')}
             />
           <Input 
             id="hint"

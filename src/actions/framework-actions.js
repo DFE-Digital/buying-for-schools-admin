@@ -46,7 +46,6 @@ export const getFrameworks = () => dispatch => {
 }
 
 export const saveNewFramework = (json, parent) => dispatch => {
-  let newData = null
   dispatch({ type: FRAMEWORK_SAVING })
   return post(frameworkUrl, json).then(data => {
     dispatch(frameworkUpdateErrored([]))

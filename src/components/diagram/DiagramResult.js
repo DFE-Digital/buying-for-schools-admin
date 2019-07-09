@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { is, List, Map } from 'immutable'
+import { is, List } from 'immutable'
 import './diagramResult.css'
 
 const mapStateToProps = (state) => {

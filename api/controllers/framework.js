@@ -33,6 +33,14 @@ const frameworkController = (models) => {
     },
 
     create: (req, res) => {
+      const data = {...req.body}
+      // delete(data._id)
+      // models.framework.create(data, (err, results) => {
+      //   if (err) {
+      //     return res.send(err)
+      //   }
+      //   res.send(results)
+      // })
       frameworkService.create(req.body).then(result => {
         res.send(result)
       }).catch(err => {

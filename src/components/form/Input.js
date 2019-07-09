@@ -29,7 +29,7 @@ export default class Input extends Component {
       <div className={classes.join(' ')}>
         <fieldset className="govuk-fieldset">
           <label className="govuk-label" htmlFor={this.props.id}>{this.props.label}</label>
-          
+          {this.props.hint && <span id={`${this.props.id}-hint`} class="govuk-hint">{this.props.hint}</span>}
           <input 
             type="text" 
             name={this.props.id}

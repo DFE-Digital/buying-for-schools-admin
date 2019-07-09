@@ -15,16 +15,23 @@ const framework = (mongoose) => {
       type: String,
       required: [true, 'A title is required']
     },
-    supplier: String,
+    provider: {
+      default: null,
+      required: false,
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Provider'
+    },
     url: String,
     cat: {
-      required: true,
+      default: null,
+      required: false,
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Category'
     },
     descr: String,
     expiry: Date
   })
+
   return  mongoose.model('framework', FrameworkModelSchema )
 }
 

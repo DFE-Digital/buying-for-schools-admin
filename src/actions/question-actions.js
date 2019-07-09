@@ -88,7 +88,6 @@ export const deleteQuestion = id => dispatch => {
 }
 
 export const saveNewQuestion = (json, parent) => dispatch => {
-  let newData = null
   dispatch({ type: QUESTIONS_SAVING })
   const url = (parent) ? `${questionUrl}/${parent.parentId}/${parent.optionId}` : questionUrl
   return post(url, json).then(data => {

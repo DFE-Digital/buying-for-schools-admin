@@ -1,21 +1,20 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
-import queryString from 'query-string'
 import { updateFramework, saveNewFramework } from '../../actions/framework-actions'
 import Input from '../form/Input'
 import Select from '../form/Select'
 import ErrorSummary from '../form/ErrorSummary'
 import { List, Map } from 'immutable'
 import { getBlankFramework } from '../../services/framework'
-import { getCategories } from '../../actions/category-actions'
-// import './frameworkEditor.scss'
+
 
 const mapStateToProps = (state) => {
   return {
     categories: state.categoryReducer.categories || List([]),
     updateErrors: state.frameworkReducer.updateErrors,
-    frameworks: state.frameworkReducer.frameworks
+    frameworks: state.frameworkReducer.frameworks,
+    providers: state.providerReducer.providers || List([]),
   }
 }
 
@@ -23,7 +22,6 @@ const mapDispatchToProps = (dispatch) => {
   return {
     updateFramework: (framework) => dispatch(updateFramework(framework)),
     saveNewFramework: (framework, parent = null) => dispatch(saveNewFramework(framework, parent)),
-    getCategories: () => dispatch(getCategories())
   }
 }
 
@@ -39,7 +37,6 @@ export class FrameworkEditor extends Component {
   }
 
   componentDidMount () {
-    this.props.getCategories()
     if (this.needsUpdate()) {
       this.update() 
     }
@@ -104,7 +101,6 @@ export class FrameworkEditor extends Component {
   onSave (e) {
     e.preventDefault()
     if (this.state.framework.get('_id') === 'new') {
-      const query = queryString.parse(this.props.location.search)
       this.props.saveNewFramework(this.state.framework.toJS()).then(data => {
         if (data._id) {
           this.props.history.push(`/framework/${data._id}`)
@@ -129,6 +125,17 @@ export class FrameworkEditor extends Component {
 
     if (!this.state.framework.get('cat')) {
       categoryOptions.unshift({value: '', label: 'Choose a category'})
+    }
+
+    const providerOptions = this.props.providers.map(pro => {
+      return {
+        value: pro.get('_id'),
+        label: pro.get('title')
+      }
+    }).toJS()
+
+    if (!this.state.framework.get('provider')) {
+      providerOptions.unshift({value: '', label: 'Choose a provider'})
     }
 
     const hasChanged = !this.state.framework.equals(this.state.originalFramework)
@@ -175,19 +182,21 @@ export class FrameworkEditor extends Component {
             />
 
           <Input 
-            id="supplier"
-            value={this.state.framework.get('supplier')}
-            label="Supplier"
-            onChange={this.onChange.bind(this)}
-            />
-          <Input 
             id="url"
             value={this.state.framework.get('url')}
             label="URL"
             onChange={this.onChange.bind(this)}  
             />
+
           <Select
-            className=""
+            id="provider"
+            value={this.state.framework.get('provider')}
+            label="Provider"
+            options={providerOptions}
+            onChange={this.onChange.bind(this)}
+          />
+
+          <Select
             id="cat"
             label="Category"
             value={this.state.framework.get('cat')}

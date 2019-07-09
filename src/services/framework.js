@@ -1,4 +1,4 @@
-import { Map, List } from 'immutable'
+import { Map } from 'immutable'
 import { rootQuestionRef } from '../config'
 
 export const getBlankFramework = () => {
@@ -16,8 +16,6 @@ export const getFrameworkUsage = questions => {
   }
   let frameworkIds = {}
   const recur = (q) => {
-    const qId = q.get('_id')
-    
     q.get('options').forEach(opt => {
       const result = opt.get('result') || []
       result.forEach(fId => {

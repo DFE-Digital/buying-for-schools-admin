@@ -22,6 +22,9 @@ const Nav = props => {
         <li className="govuk-tabs__list-item" role="presentation">
           <NavLink className="govuk-tabs__tab" activeClassName="govuk-tabs__tab--selected" to="/category">Category</NavLink>
         </li>
+        <li className="govuk-tabs__list-item" role="presentation">
+          <NavLink className="govuk-tabs__tab" activeClassName="govuk-tabs__tab--selected" to="/provider">Provider</NavLink>
+        </li>
       </ul>
     </nav>
   )

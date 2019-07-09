@@ -1,0 +1,61 @@
+import { get, put, post } from '../services/io'
+import { fromJS } from 'immutable'
+import { providerUrl } from '../config'
+
+export const PROVIDERS_LOADING = 'PROVIDERS_LOADING'
+export const PROVIDERS_LOADED = 'PROVIDERS_LOADED'
+export const PROVIDERS_ERRORED = 'PROVIDERS_ERRORED'
+export const PROVIDER_SAVING = 'PROVIDER_SAVING'
+export const PROVIDER_UPDATE_ERRORED = 'PROVIDER_UPDATE_ERRORED'
+
+export const providersLoaded = data => {
+  return {
+    type: PROVIDERS_LOADED,
+    data
+  }  
+}
+
+export const providersErrored = err => {
+  return {
+    type: PROVIDERS_ERRORED,
+    err
+  }
+}
+
+export const providerUpdateErrored = err => {
+  return {
+    type: PROVIDER_UPDATE_ERRORED,
+    err: err
+  }
+}
+
+export const getProviders = () => dispatch => {
+  get(providerUrl).then(data => {
+    return dispatch(providersLoaded(fromJS(data)))
+  }).catch(err => {
+    return dispatch(providersErrored(err))
+  })
+  return dispatch({ type: PROVIDERS_LOADING })
+}
+
+export const saveNewProvider = (json, parent) => dispatch => {
+  dispatch({ type: PROVIDER_SAVING })
+  return post(providerUrl, json).then(data => {
+    dispatch(providerUpdateErrored([]))
+    dispatch(getProviders())
+    return data.data
+  }).catch(err => {
+    return dispatch(providerUpdateErrored(err.error))
+  })
+}
+
+export const updateProvider = json => dispatch => {
+  dispatch({ type: PROVIDER_SAVING })
+  return put(`${providerUrl}/${json._id}`, json).then(data => {
+    dispatch(providerUpdateErrored([]))
+    dispatch(getProviders())
+    return data.data
+  }).catch(err => {
+    return dispatch(providerUpdateErrored(err.error))
+  })
+}
