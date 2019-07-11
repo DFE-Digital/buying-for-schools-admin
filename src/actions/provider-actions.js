@@ -1,6 +1,7 @@
 import { get, put, post, remove } from '../services/io'
 import { fromJS } from 'immutable'
 import { providerUrl } from '../config'
+import { DIALOG_SHOW } from './dialog-actions'
 
 export const PROVIDERS_LOADING = 'PROVIDERS_LOADING'
 export const PROVIDERS_LOADED = 'PROVIDERS_LOADED'
@@ -8,6 +9,7 @@ export const PROVIDERS_ERRORED = 'PROVIDERS_ERRORED'
 export const PROVIDER_SAVING = 'PROVIDER_SAVING'
 export const PROVIDER_UPDATE_ERRORED = 'PROVIDER_UPDATE_ERRORED'
 export const PROVIDER_DELETING = 'PROVIDER_DELETING'
+
 
 export const providersLoaded = data => {
   return {
@@ -58,6 +60,28 @@ export const updateProvider = json => dispatch => {
     return data.data
   }).catch(err => {
     return dispatch(providerUpdateErrored(err.error))
+  })
+}
+
+export const confirmDeleteProvider = provider => dispatch => {
+  dispatch({
+    type: DIALOG_SHOW,
+    data: {
+      title: 'Delete provider',
+      msg: [`Are you sure you want to delete provider: \'${provider.get('title')}\'?`, 'This cannot be undone!'],
+      buttons: [
+        {
+          text: 'Yes, delete',
+          color: 'red',
+          action: deleteProvider(provider.get('_id'))
+        },
+        {
+          text: 'No',
+          color: 'green',
+          action: null
+        }
+      ]
+    }
   })
 }
 

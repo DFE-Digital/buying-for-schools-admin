@@ -1,8 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { List } from 'immutable'
-import { getQuestions, deleteQuestion, editQuestion, createNewQuestion } from '../../actions/question-actions'
-import { getFrameworks } from '../../actions/framework-actions'
+import { confirmDeleteQuestion, createNewQuestion } from '../../actions/question-actions'
 import QuestionsVisual from './QuestionsVisual'
 import { getQuestionUsage } from '../../services/question'
 import './questions.css'
@@ -16,8 +15,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    deleteQuestion: (id) => dispatch(deleteQuestion(id)),
-    // editQuestion: (qID, optionIndex) => dispatch(editQuestion(qID, optionIndex)),
+    deleteQuestion: (q) => dispatch(confirmDeleteQuestion(q)),
     createNewQuestion: (qID, optionIndex) => dispatch(createNewQuestion(qID, optionIndex))
   }
 }
@@ -28,10 +26,6 @@ export class Questions extends Component {
     this.state = {
       questions: List([])
     }
-  }
-
-  deleteQuestion(id) {
-    this.props.deleteQuestion(id)
   }
 
   edit (qID, optionIndex = null) {
@@ -51,6 +45,7 @@ export class Questions extends Component {
         ref: q.get('ref'),
         title: q.get('title'),
         usage: usage[q.get('_id')] || 0,
+        original: q,
         options: q.get('options').map(o => {
           const opt = {
             _id: o.get('_id'),
@@ -81,7 +76,7 @@ export class Questions extends Component {
       }
     })
 
-    return <QuestionsVisual questionList={qlist} deleteQuestion={this.deleteQuestion.bind(this)} edit={this.edit.bind(this)} /> 
+    return <QuestionsVisual questionList={qlist} deleteQuestion={this.props.deleteQuestion.bind(this)} /> 
   }
 }
 

@@ -39,14 +39,13 @@ const QuestionsVisual = (props) => {
                 </table>
               </td>
               <td>{q.usage}</td>
-              <td><button className="button button--red" onClick={e => props.deleteQuestion(q._id)}>Delete</button></td>
+              <td><button className="button button--red" onClick={e => props.deleteQuestion(q.original)}>Delete</button></td>
             </tr>
           ))}
         </tbody>
       </table>
 
       <Link to="/question/new" className="button button--green">New Question</Link>
-      <Link to="/" className="button">Back</Link>
     </div>
   )
 } 

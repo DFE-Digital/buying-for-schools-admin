@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { List } from 'immutable'
-import { getFrameworks, deleteFramework } from '../../actions/framework-actions'
+import { confirmDeleteFramework } from '../../actions/framework-actions'
 import { getFrameworkUsage } from '../../services/framework'
 
 import './frameworks.css'
@@ -18,7 +18,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    deleteFramework: id => dispatch(deleteFramework(id))
+    deleteFramework: framework => dispatch(confirmDeleteFramework(framework))
   }
 }
 
@@ -68,13 +68,12 @@ export class Frameworks extends Component {
                 <td>{f.get('provider')}</td>
                 <td>{f.getIn(['_info', 'displayDate'])}</td>
                 <td>{usage[f.get('_id')] || 0}</td>
-                <td><button className="button button--red" onClick={e => this.props.deleteFramework(f.get('_id'))}>Delete</button></td>
+                <td><button className="button button--red" onClick={e => this.props.deleteFramework(f)}>Delete</button></td>
               </tr>
             ))}
           </tbody>
         </table>
         <Link to="/framework/new" className="button button--green">New Framework</Link>
-        <Link to="/" className="button">Back</Link>
       </div>
     )
   }

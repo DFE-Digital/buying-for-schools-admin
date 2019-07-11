@@ -81,14 +81,6 @@ export const getExpiryStatus = expiryBlock => {
   }
 }
 
-const getExpiryMessage = expiryBlock => {
-  if (expiryBlock === null) {
-    return ''
-  }
-
-  return expiryBlock === 0 ? 'EXPIRED' : `< ${expiryBlock} months`
-}
-
 export const getFrameworkInfo = framework => {
   const exp = framework.get('expiry')
   const mom = moment(exp)

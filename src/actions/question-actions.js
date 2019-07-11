@@ -1,6 +1,7 @@
 import { get, put, post, remove } from '../services/io'
 import { fromJS } from 'immutable'
 import { questionUrl } from '../config'
+import { DIALOG_SHOW } from './dialog-actions'
 
 export const QUESTIONS_LOADING = 'QUESTIONS_LOADING'
 export const QUESTIONS_LOADED = 'QUESTIONS_LOADED'
@@ -76,6 +77,29 @@ export const createNewQuestion = (parent = null, parentOptionIndex = null) => {
     optionIndex: null
   }
 }
+
+export const confirmDeleteQuestion = question => dispatch => {
+  dispatch({
+    type: DIALOG_SHOW,
+    data: {
+      title: 'Delete question',
+      msg: [`Are you sure you want to delete question: \'${question.get('title')}\'?`, 'This cannot be undone!'],
+      buttons: [
+        {
+          text: 'Yes, delete',
+          color: 'red',
+          action: deleteQuestion(question.get('_id'))
+        },
+        {
+          text: 'No',
+          color: 'green',
+          action: null
+        }
+      ]
+    }
+  })
+}
+
 
 export const deleteQuestion = id => dispatch => {
   remove(`${questionUrl}/${id}`).then(() => {

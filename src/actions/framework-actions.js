@@ -1,7 +1,7 @@
 import { get, put, post, remove } from '../services/io'
 import { fromJS } from 'immutable'
 import { frameworkUrl } from '../config'
-
+import { DIALOG_SHOW } from './dialog-actions'
 
 export const FRAMEWORKS_LOADING = 'FRAMEWORKS_LOADING'
 export const FRAMEWORKS_LOADED = 'FRAMEWORKS_LOADED'
@@ -35,6 +35,28 @@ export const frameworkUpdateErrored = err => {
     type: FRAMEWORK_UPDATE_ERRORED,
     err: err
   }
+}
+
+export const confirmDeleteFramework = framework => dispatch => {
+  dispatch({
+    type: DIALOG_SHOW,
+    data: {
+      title: 'Delete framework',
+      msg: [`Are you sure you want to delete framework: \'${framework.get('title')}\'?`, 'This cannot be undone!'],
+      buttons: [
+        {
+          text: 'Yes, delete',
+          color: 'red',
+          action: deleteFramework(framework.get('_id'))
+        },
+        {
+          text: 'No',
+          color: 'green',
+          action: null
+        }
+      ]
+    }
+  })
 }
 
 export const deleteFramework = id => dispatch => {

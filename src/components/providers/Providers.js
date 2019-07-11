@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { List } from 'immutable'
-import { getProviders, deleteProvider } from '../../actions/provider-actions'
+import { confirmDeleteProvider } from '../../actions/provider-actions'
 
 const mapStateToProps = (state) => {
   return {
@@ -12,7 +12,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    deleteProvider: (id) => dispatch(deleteProvider(id))
+    deleteProvider: (provider) => dispatch(confirmDeleteProvider(provider))
   }
 }
 
@@ -37,17 +37,16 @@ export class Providers extends Component {
             </tr>
           </thead>
           <tbody>
-            {this.props.providers.map((f) => (
-              <tr key={f.get('_id')}>
-                <td><Link to={`/provider/${f.get('_id')}`}>{f.get('initials')}</Link></td>
-                <td>{f.get('title')}</td>
-                <td><button className="button button--red" onClick={e => this.props.deleteProvider(f.get('_id'))}>Delete</button></td>
+            {this.props.providers.map((p) => (
+              <tr key={p.get('_id')}>
+                <td><Link to={`/provider/${p.get('_id')}`}>{p.get('initials')}</Link></td>
+                <td>{p.get('title')}</td>
+                <td><button className="button button--red" onClick={e => this.props.deleteProvider(p)}>Delete</button></td>
               </tr>
             ))}
           </tbody>
         </table>
         <Link to="/provider/new" className="button button--green">New Provider</Link>
-        <Link to="/" className="button">Back</Link>
       </div>
     )
   }

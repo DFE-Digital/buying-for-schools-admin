@@ -4,6 +4,7 @@ import questionReducer from './reducers/question-reducer'
 import frameworkReducer from './reducers/framework-reducer'
 import categoryReducer from './reducers/category-reducer'
 import providerReducer from './reducers/provider-reducer'
+import dialogReducer from './reducers/dialog-reducer'
 // import aggregationReducer from './reducers/aggregation-reducer'
 
 
@@ -28,7 +29,8 @@ export const store = createStore(
     questionReducer,
     frameworkReducer,
     categoryReducer,
-    providerReducer
+    providerReducer,
+    dialogReducer
   }),
   applyMiddleware(thunk)
 )

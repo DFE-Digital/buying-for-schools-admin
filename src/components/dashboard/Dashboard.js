@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { List } from 'immutable'
-import moment from 'moment'
 import FrameworkExpiryList from '../frameworks/FrameworkExpiryList'
 
 const mapStateToProps = (state) => {
@@ -20,12 +19,6 @@ const mapDispatchToProps = (dispatch) => {
 export class Dashboard extends Component {
 
   render () {
-
-    // console.log('getExpiryBlock', getExpiryBlock(moment().add(2, 'month')))
-
-    // console.log(this.props.frameworks.toJS())
-    
-
     return (
       <div className="dashboard govuk-width-container">
         <h1>Dashboard</h1>

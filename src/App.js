@@ -6,8 +6,7 @@ import "../node_modules/govuk-frontend/all.scss"
 import Nav from './components/Nav'
 import Dashboard from './components/dashboard/Dashboard'
 import Frameworks from './components/frameworks/Frameworks'
-import Categories from './components/Categories'
-import Category from './components/Category'
+import Categories from './components/category/Categories'
 import Providers from './components/providers/Providers'
 import Questions from './components/questions/Questions'
 import Diagram from './components/diagram/Diagram'
@@ -21,7 +20,9 @@ import QuestionEditor from './components/questions/QuestionEditor'
 import OptionEditor from './components/questions/OptionEditor'
 import FrameworkEditor from './components/frameworks/FrameworkEditor'
 import ProviderEditor from './components/providers/ProviderEditor'
-import { List } from 'immutable'
+import CategoryEditor from './components/category/CategoryEditor'
+import Dialog from './components/dialog/Dialog'
+import Header from './components/Header'
 
 const mapStateToProps = (state) => {
   return {
@@ -56,20 +57,27 @@ export class App extends Component {
   render () {
     return (
       <Router>
-        <div className="app">
-          <Nav />
-          <Route path='/' component={Dashboard} exact />
-          <Route path='/framework' component={Frameworks} exact />
-          <Route path='/framework/:frameworkId' component={FrameworkEditor} exact />
-          <Route path='/category' component={Categories} exact />
-          <Route path='/category/:categoryId' component={Category} exact />
-          <Route path='/provider' component={Providers} exact />
-          <Route path='/provider/:providerId' component={ProviderEditor} exact />
-          <Route path='/question' component={Questions} exact />
-          <Route path='/question/:questionId' component={QuestionEditor} exact />
-          <Route path='/question/:questionId/:optionId' component={OptionEditor} exact />
-          <Route path='/diagram/:questionId?/:optionId?' component={Diagram} />
+        <Header />  
+        <div className="govuk-width-container app-width-container">
+          <main className="govuk-main-wrapper app-main-wrapper" id="main-content" role="main">
+            <div className="app">
+              <Nav />
+              <Route path='/' component={Dashboard} exact />
+              <Route path='/framework' component={Frameworks} exact />
+              <Route path='/framework/:frameworkId' component={FrameworkEditor} exact />
+              <Route path='/category' component={Categories} exact />
+              <Route path='/category/:categoryId' component={CategoryEditor} exact />
+              <Route path='/provider' component={Providers} exact />
+              <Route path='/provider/:providerId' component={ProviderEditor} exact />
+              <Route path='/question' component={Questions} exact />
+              <Route path='/question/:questionId' component={QuestionEditor} exact />
+              <Route path='/question/:questionId/:optionId' component={OptionEditor} exact />
+              <Route path='/diagram/:questionId?/:optionId?' component={Diagram} />
+              
+            </div>
+          </main>
         </div>
+        <Dialog />
       </Router>
     )
   }

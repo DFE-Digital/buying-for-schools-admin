@@ -26,6 +26,10 @@ export default props => {
       classes.push('frameworkexpirylist__row--expirywarning')
       break
     }
+
+    default: {
+      
+    }
   }
 
   return (
