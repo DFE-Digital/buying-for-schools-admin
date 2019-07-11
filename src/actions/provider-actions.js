@@ -1,4 +1,4 @@
-import { get, put, post } from '../services/io'
+import { get, put, post, remove } from '../services/io'
 import { fromJS } from 'immutable'
 import { providerUrl } from '../config'
 
@@ -7,6 +7,7 @@ export const PROVIDERS_LOADED = 'PROVIDERS_LOADED'
 export const PROVIDERS_ERRORED = 'PROVIDERS_ERRORED'
 export const PROVIDER_SAVING = 'PROVIDER_SAVING'
 export const PROVIDER_UPDATE_ERRORED = 'PROVIDER_UPDATE_ERRORED'
+export const PROVIDER_DELETING = 'PROVIDER_DELETING'
 
 export const providersLoaded = data => {
   return {
@@ -58,4 +59,13 @@ export const updateProvider = json => dispatch => {
   }).catch(err => {
     return dispatch(providerUpdateErrored(err.error))
   })
+}
+
+export const deleteProvider = id => dispatch => {
+  remove(`${providerUrl}/${id}`).then(() => {
+    return dispatch(getProviders())
+  }).catch(err => {
+    return dispatch(providerUpdateErrored(err.error))
+  })
+  return dispatch({ type: PROVIDER_DELETING })
 }

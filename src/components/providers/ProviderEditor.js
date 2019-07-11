@@ -82,7 +82,7 @@ export class ProviderEditor extends Component {
     } else {
       provider = this.props.providers.find(q => q.get('_id') === providerId)
     }
-    console.log(provider)
+    
     if (provider && Map.isMap(provider)) {
       this.setState({ 
         provider: provider,
@@ -109,7 +109,6 @@ export class ProviderEditor extends Component {
   }
 
   render () {
-    console.log(this.state.provider)
     if (!Map.isMap(this.state.provider)) {
       return <h1>Loading</h1>
     }

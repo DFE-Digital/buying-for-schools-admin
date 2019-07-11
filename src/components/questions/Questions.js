@@ -16,10 +16,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    getQuestions: () => dispatch(getQuestions()),
-    getFrameworks: () => dispatch(getFrameworks()),
     deleteQuestion: (id) => dispatch(deleteQuestion(id)),
-    editQuestion: (qID, optionIndex) => dispatch(editQuestion(qID, optionIndex)),
+    // editQuestion: (qID, optionIndex) => dispatch(editQuestion(qID, optionIndex)),
     createNewQuestion: (qID, optionIndex) => dispatch(createNewQuestion(qID, optionIndex))
   }
 }
@@ -30,11 +28,6 @@ export class Questions extends Component {
     this.state = {
       questions: List([])
     }
-  }
-
-  componentDidMount() {
-    this.props.getQuestions()
-    this.props.getFrameworks()
   }
 
   deleteQuestion(id) {

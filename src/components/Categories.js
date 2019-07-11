@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { List } from 'immutable'
-import { getCategories } from '../actions/category-actions'
+import { getCategories, deleteCategory } from '../actions/category-actions'
 
 const mapStateToProps = (state) => {
   return {
@@ -12,7 +12,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    getCategories: () => dispatch(getCategories())
+    deleteCategory: (id) => dispatch(deleteCategory(id))
   }
 }
 
@@ -24,10 +24,6 @@ export class Categories extends Component {
     }
   }
 
-  componentDidMount() {
-    this.props.getCategories()
-  }
-
   render() {
     return (
       <div className="govuk-width-container">
@@ -35,15 +31,15 @@ export class Categories extends Component {
         <table>
           <thead>
             <tr>
-              <th>ID</th>
               <th>Title</th>
+              <th></th>
             </tr>
           </thead>
           <tbody>
             {this.props.categories.map((f) => (
               <tr key={f.get('_id')}>
-                <td><Link to={`/category/${f.get('_id')}`}>{f.get('_id')}</Link></td>
-                <td>{f.get('title')}</td>
+                <td><Link to={`/category/${f.get('_id')}`}>{f.get('title')}</Link></td>
+                <td><button className="button button--red" onClick={e => this.props.deleteCategory(f.get('_id'))}>Delete</button></td>
               </tr>
             ))}
           </tbody>

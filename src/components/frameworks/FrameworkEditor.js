@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import { updateFramework, saveNewFramework } from '../../actions/framework-actions'
 import Input from '../form/Input'
 import Select from '../form/Select'
+import TextArea from '../form/TextArea'
 import ErrorSummary from '../form/ErrorSummary'
 import { List, Map } from 'immutable'
 import { getBlankFramework } from '../../services/framework'
@@ -100,15 +101,48 @@ export class FrameworkEditor extends Component {
 
   onSave (e) {
     e.preventDefault()
-    if (this.state.framework.get('_id') === 'new') {
-      this.props.saveNewFramework(this.state.framework.toJS()).then(data => {
+    const f = this.state.framework.delete('_info')
+    if (f.get('_id') === 'new') {
+      this.props.saveNewFramework(f.toJS()).then(data => {
         if (data._id) {
           this.props.history.push(`/framework/${data._id}`)
         }
       })
     } else {
-      this.props.updateFramework(this.state.framework.toJS())
+      this.props.updateFramework(f.toJS())
     }
+  }
+
+  getCategoryOptions () {
+    const currentCat = this.state.framework.get('cat')
+    const categoryOptions = this.props.categories.map(cat => {
+      return {
+        value: cat.get('_id'),
+        label: cat.get('title')
+      }
+    }).sortBy(c => c.label)
+
+    if (!categoryOptions.find(c => c.value === currentCat)) {
+      return categoryOptions.unshift({value: '', label: 'Choose a category'})
+    }
+
+    return categoryOptions
+  }
+
+  getProviderOptions () {
+    const currentProvider = this.state.framework.get('provider')
+    const providerOptions = this.props.providers.map(pro => {
+      return {
+        value: pro.get('_id'),
+        label: `${pro.get('initials')} (${pro.get('title')})`
+      }
+    }).sortBy(c => c.label)
+
+    if (!providerOptions.find(p => p.value === currentProvider)) {
+      return providerOptions.unshift({value: '', label: 'Choose a provider'})
+    }
+
+    return providerOptions
   }
 
   render () {
@@ -116,27 +150,8 @@ export class FrameworkEditor extends Component {
       return <h1>Loading</h1>
     }
 
-    const categoryOptions = this.props.categories.map(cat => {
-      return {
-        value: cat.get('_id'),
-        label: cat.get('title')
-      }
-    }).toJS()
-
-    if (!this.state.framework.get('cat')) {
-      categoryOptions.unshift({value: '', label: 'Choose a category'})
-    }
-
-    const providerOptions = this.props.providers.map(pro => {
-      return {
-        value: pro.get('_id'),
-        label: pro.get('title')
-      }
-    }).toJS()
-
-    if (!this.state.framework.get('provider')) {
-      providerOptions.unshift({value: '', label: 'Choose a provider'})
-    }
+    const categoryOptions = this.getCategoryOptions()
+    const providerOptions = this.getProviderOptions()
 
     const hasChanged = !this.state.framework.equals(this.state.originalFramework)
     const saveButtonClasses = ['button']
@@ -168,7 +183,7 @@ export class FrameworkEditor extends Component {
             onChange={this.onChange.bind(this)}
             error={errorIds.includes('title')}
             />
-          <Input 
+          <TextArea 
             id="descr"
             value={this.state.framework.get('descr')}
             label="Description"

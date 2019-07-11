@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { List } from 'immutable'
-import { getProviders } from '../../actions/provider-actions'
+import { getProviders, deleteProvider } from '../../actions/provider-actions'
 
 const mapStateToProps = (state) => {
   return {
@@ -12,7 +12,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    getProviders: () => dispatch(getProviders())
+    deleteProvider: (id) => dispatch(deleteProvider(id))
   }
 }
 
@@ -24,10 +24,6 @@ export class Providers extends Component {
     }
   }
 
-  componentDidMount() {
-    this.props.getProviders()
-  }
-
   render() {
     return (
       <div className="govuk-width-container">
@@ -37,6 +33,7 @@ export class Providers extends Component {
             <tr>
               <th>Initials</th>
               <th>Title</th>
+              <th></th>
             </tr>
           </thead>
           <tbody>
@@ -44,6 +41,7 @@ export class Providers extends Component {
               <tr key={f.get('_id')}>
                 <td><Link to={`/provider/${f.get('_id')}`}>{f.get('initials')}</Link></td>
                 <td>{f.get('title')}</td>
+                <td><button className="button button--red" onClick={e => this.props.deleteProvider(f.get('_id'))}>Delete</button></td>
               </tr>
             ))}
           </tbody>

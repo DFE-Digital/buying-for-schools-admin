@@ -4,7 +4,7 @@ import './App.css';
 import "../node_modules/govuk-frontend/all.scss"
 
 import Nav from './components/Nav'
-import Dashboard from './components/Dashboard'
+import Dashboard from './components/dashboard/Dashboard'
 import Frameworks from './components/frameworks/Frameworks'
 import Categories from './components/Categories'
 import Category from './components/Category'
@@ -21,11 +21,14 @@ import QuestionEditor from './components/questions/QuestionEditor'
 import OptionEditor from './components/questions/OptionEditor'
 import FrameworkEditor from './components/frameworks/FrameworkEditor'
 import ProviderEditor from './components/providers/ProviderEditor'
+import { List } from 'immutable'
 
 const mapStateToProps = (state) => {
   return {
-    // questions: state.questionReducer.questions,
-    // frameworks: state.frameworkReducer.frameworks
+    // questions: state.questionReducer.questions || List([]),
+    // frameworks: state.frameworkReducer.frameworks || List([]),
+    // providers: state.providerReducer.providers || List([]),
+    // categories: state.categoryReducer.categories || List([])
   }
 }
 
@@ -44,6 +47,10 @@ export class App extends Component {
     this.props.getFrameworks()
     this.props.getProviders()
     this.props.getCategories()
+  }
+
+  componentDidUpdate(prevProps) {
+    console.log('componentDidUpdate', prevProps)
   }
 
   render () {

@@ -29,11 +29,6 @@ const mapDispatchToProps = (dispatch) => {
 
 export class Diagram extends Component {
 
-  componentDidMount() {
-    this.props.getQuestions()
-    this.props.getFrameworks()
-  }
-
   render() {
     if (!List.isList(this.props.questions)) {
       return (

@@ -1,4 +1,4 @@
-import { get } from '../services/io'
+import { get, remove } from '../services/io'
 import { fromJS } from 'immutable'
 import { categoryUrl } from '../config'
 
@@ -25,6 +25,22 @@ export const categoriesErrored = err => {
     type: CATEGORIES_ERRORED,
     err
   }
+}
+
+export const categoryUpdateErrored = err => {
+  return {
+    type: CATEGORY_UPDATE_ERRORED,
+    err: err
+  }
+}
+
+export const deleteCategory = id => dispatch => {
+  remove(`${categoryUrl}/${id}`).then(() => {
+    return dispatch(getCategories())
+  }).catch(err => {
+    return dispatch(categoryUpdateErrored(err.error))
+  })
+  return dispatch({ type: CATEGORY_DELETING })
 }
 
 export const getCategories = () => dispatch => {

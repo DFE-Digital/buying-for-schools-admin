@@ -50,7 +50,7 @@ const frameworkController = (models) => {
 
     remove: (req, res) => {
       const frameworkId = req.params.frameworkId
-      models.framework.deleteOne({ ref: frameworkId }, (err, results) => {
+      models.framework.deleteOne({ _id: frameworkId }, (err, results) => {
         res.send(results)
       })
     }

@@ -1,6 +1,7 @@
-import { get, put, post } from '../services/io'
+import { get, put, post, remove } from '../services/io'
 import { fromJS } from 'immutable'
 import { frameworkUrl } from '../config'
+
 
 export const FRAMEWORKS_LOADING = 'FRAMEWORKS_LOADING'
 export const FRAMEWORKS_LOADED = 'FRAMEWORKS_LOADED'
@@ -34,6 +35,15 @@ export const frameworkUpdateErrored = err => {
     type: FRAMEWORK_UPDATE_ERRORED,
     err: err
   }
+}
+
+export const deleteFramework = id => dispatch => {
+  remove(`${frameworkUrl}/${id}`).then(() => {
+    return dispatch(getFrameworks())
+  }).catch(err => {
+    return dispatch(frameworkUpdateErrored(err.error))
+  })
+  return dispatch({ type: FRAMEWORK_DELETING })
 }
 
 export const getFrameworks = () => dispatch => {

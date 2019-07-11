@@ -7,6 +7,11 @@ body {
   --govuk-colour--blue: #005ea5;
   --govuk-colour--light-pink: #f499be;
   --govuk-colour--grey-4: #f8f8f8;
+  --govuk-colour--red: #b10e1e;
+  --govuk-colour--bright-red: #df3034;
+  --govuk-colour--orange: #f47738;
+  --govuk-colour--yellow: #ffbf47;
+  --govuk-colour--light-green: #85994b;
 }
 
 code {
