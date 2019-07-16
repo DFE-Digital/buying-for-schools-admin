@@ -3,7 +3,7 @@ const port = process.env.PORT || 5000
 const express = require('express')
 const bodyParser = require('body-parser')
 
-const models = require('./api/models/models')(process.env.BUYINGFORSCHOOLS_MONGO)
+const models = require('./api/models/models')(process.env.S107D01_MONGO_01)
 const questionService = require('./api/services/questionService')(models)
 const frameworkService = require('./api/services/frameworkService')(models)
 const frameworkController = require('./api/controllers/framework')(models)

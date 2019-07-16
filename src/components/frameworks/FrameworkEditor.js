@@ -8,6 +8,7 @@ import TextArea from '../form/TextArea'
 import ErrorSummary from '../form/ErrorSummary'
 import { List, Map } from 'immutable'
 import { getBlankFramework } from '../../services/framework'
+import ReactMarkdown from 'react-markdown'
 
 
 const mapStateToProps = (state) => {
@@ -218,6 +219,15 @@ export class FrameworkEditor extends Component {
             options={categoryOptions}
             onChange={this.onChange.bind(this)}
           />
+          <TextArea 
+            id="body"
+            value={this.state.framework.get('body')}
+            label="Body"
+            onChange={this.onChange.bind(this)}
+            />
+
+          <ReactMarkdown source={this.state.framework.get('body')} />
+
           <input type="submit" value="Save" className={saveButtonClasses.join(' ')} onClick={e => this.onSave(e)} />
           <Link to="/framework" className="button">{ hasChanged ? 'Cancel' : 'Back' }</Link>    
         </form>

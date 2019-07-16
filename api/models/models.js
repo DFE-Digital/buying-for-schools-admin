@@ -11,6 +11,6 @@ exports = module.exports = (connectionString) => {
     framework: require('./framework.js')(mongoose),
     question: require('./question.js')(mongoose),
     category: require('./category.js')(mongoose),
-    provider: require('./provider.js')(mongoose),
+    provider: require('./provider.js')(mongoose)
   }
 }

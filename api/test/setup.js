@@ -8,7 +8,7 @@ exports = module.exports = () => {
     return setup
   }
 
-  process.env.BUYINGFORSCHOOLS_MONGO = process.env.BUYINGFORSCHOOLS_MONGO.replace(/\/findaframeworkforyourschool\?/, '/testing?')
+  process.env.S107D01_MONGO_01 = process.env.S107D01_MONGO_01.replace(/\/s107d01-mongo-01\?/, '/testing?')
   const app = require('../../server')
   const helpers = require('./helpers')(app)
   setup.app = app
@@ -16,7 +16,3 @@ exports = module.exports = () => {
   return setup
 }
 
-// after(() => {
-//   setup.app.server.close()
-  
-// })

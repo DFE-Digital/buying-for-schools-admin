@@ -23,3 +23,8 @@
   color: #000;
   background-color: var(--govuk-colour--yellow);
 }
+
+
+.govuk-form-group--body textarea.govuk-textarea {
+  min-height: 300px;
+}

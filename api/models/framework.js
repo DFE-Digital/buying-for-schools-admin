@@ -19,16 +19,17 @@ const framework = (mongoose) => {
       default: null,
       required: false,
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'Provider'
+      ref: 'provider'
     },
     url: String,
     cat: {
       default: null,
       required: false,
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'Category'
+      ref: 'category'
     },
     descr: String,
+    body: String,
     expiry: Date
   })
 

@@ -15,6 +15,10 @@ describe('api:question:delete', () => {
     .then(() => helpers.createRecord('question', testData.conneryFilms))
     .then(() => helpers.createRecord('question', testData.world))
     .then(() => done())
+    .catch(err => {
+      console.log(err)
+      done()
+    })
   })
 
   it('should be able to delete a specific record', done => {

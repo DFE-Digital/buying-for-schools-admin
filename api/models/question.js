@@ -35,7 +35,7 @@ const question = (mongoose) => {
         default: null,
         required: false,
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Question'
+        ref: 'question'
       },
       result: []
     }],
