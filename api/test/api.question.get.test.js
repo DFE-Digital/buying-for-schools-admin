@@ -43,20 +43,20 @@ describe('api:question:get', () => {
     server
       .get(`http://127.0.0.1:5000/api/question/ffffffffffffffffffffffff`)
       .end((err, res) => {
-        expect(res.statusCode).to.equal(404)
+        expect(res.statusCode).to.equal(404)        
         expect(res.body).to.have.property('success', false)
         done()
       })
   })
 
-  it('should return 400 if the requested document ID is not valid', done => {
-    server
-      .get(`http://127.0.0.1:5000/api/question/davidniven`)
-      .end((err, res) => {
-        expect(res.statusCode).to.equal(400)
-        expect(res.body).to.have.property('success', false)
-        expect(res.body).to.have.property('err', 'invalid-object-id')
-        done()
-      })
-  })
+  // it('should return 400 if the requested document ID is not valid', done => {
+  //   server
+  //     .get(`http://127.0.0.1:5000/api/question/davidniven`)
+  //     .end((err, res) => {
+  //       expect(res.statusCode).to.equal(400)
+  //       expect(res.body).to.have.property('success', false)
+  //       expect(res.body).to.have.property('err', 'invalid-object-id')
+  //       done()
+  //     })
+  // })
 })

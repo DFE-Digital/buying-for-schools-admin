@@ -15,7 +15,6 @@ const stdErrorResponse = (res, err) => {
   if (err.code === 11000) {
     response.err = 'validation'
     response.msg = 'Validation errors'
-    console.log(err)
     response.errors = [{ id: 'ref', msg: 'Reference must be unique'}]
     return res.send(response)
   }
@@ -42,18 +41,7 @@ const stdErrorResponse = (res, err) => {
   return res.send(response)
 }
 
-const save = (doc) => {
-  return new Promise((resolve, reject) => {
-    doc.save((err, result) => {
-      if (err) {
-        return reject(err)
-      }
-      return resolve(result)  
-    })
-  })
-}
 
 exports = module.exports = {
-  stdErrorResponse,
-  save
+  stdErrorResponse
 }

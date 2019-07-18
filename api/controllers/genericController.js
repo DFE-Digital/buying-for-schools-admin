@@ -1,55 +1,37 @@
-const shared = require('../services/shared')
+const shared = require('./shared')
 
-const genericController = (model) => {
-  const modelName = model.modelName
+const genericController = (dataSource, modelName) => { 
+  const routeParamName = `${modelName}Id`
   return {
     list: (req, res) => {
-      model.find({}, (err, results) => {
-        if (err) {
-          return shared.stdErrorResponse(res, err)
-        }
-        res.send(results)
-      })
+      dataSource[modelName].list()
+      .then(results => res.send(results))
+      .catch(err => shared.stdErrorResponse(res, err))
     },
 
     get: (req, res) => {
-      model.findOne({_id: req.params[`${modelName}Id`]}, (err, results) => {
-        if (err) {
-          return shared.stdErrorResponse(res, err)
-        }
-        res.send(results)
-      })
+      dataSource[modelName].get(req.params[routeParamName])
+      .then(results => res.send(results))
+      .catch(err => shared.stdErrorResponse(res, err))
     },
 
     put: (req, res) => {
-      const documentId = req.params[`${modelName}Id`]
-      model.findOneAndUpdate({_id: documentId}, req.body, (err, results) => {
-        if (err) {
-          return shared.stdErrorResponse(res, err)
-        }
-        if (!results) {
-          return res.send({ success: true })
-        }
-        res.send(results)
-      })
+      const id = req.params[routeParamName] || req.body._id
+      dataSource[modelName].put(id, req.body)
+      .then(results => res.send(results))
+      .catch(err => shared.stdErrorResponse(res, err))
     },
 
     create: (req, res) => {
-      const data = req.body
-      delete(data._id)
-      model.create(data, (err, results) => {
-        if (err) {
-          return shared.stdErrorResponse(res, err)
-        }
-        res.send(results)
-      })
+      dataSource[modelName].create(req.body)
+      .then(results => res.send(results))
+      .catch(err => shared.stdErrorResponse(res, err))
     },
 
     remove: (req, res) => {
-      const documentId = req.params[`${modelName}Id`]
-      model.deleteOne({ _id: documentId }, (err, results) => {
-        res.send(results)
-      })
+      dataSource[modelName].remove(req.params[routeParamName])
+      .then(results => res.send(results))
+      .catch(err => shared.stdErrorResponse(res, err))
     }
   }
 }

@@ -1,6 +1,10 @@
+const shortid = require('shortid')
+
 let recordCache = {}
 
 exports = module.exports = (dataSource) => {
+  const { db } = dataSource
+
   const wait = (ms) => {
     return new Promise(resolve => {      
       setTimeout(resolve, ms)
@@ -9,22 +13,16 @@ exports = module.exports = (dataSource) => {
 
   const createRecord = (model, data) => {
     return new Promise((resolve, reject) => {
-      dataSource.models[model].create(data, (err, result) => {
-        if (err) {
-          // console.log(err)
-          return reject(err)
-        }
-        recordCache[result.ref] = result.toObject()
-        resolve(result)
-      })
+      const newData = {...data, _id: shortid.generate()}
+      db.get(model).push(newData).write()
+      return resolve(newData)
     })
   }
 
   const removeAllRecords = (model) => {
     return new Promise(resolve => {
-      dataSource.models[model].deleteMany({}, (err) => {
-        resolve()
-      })
+      db.set(model, []).write()
+      return resolve()
     })
   }
 
@@ -37,12 +35,8 @@ exports = module.exports = (dataSource) => {
 
   const dropCollection = (collectionName) => {
     return new Promise((resolve, reject) => {  
-      dataSource.models[collectionName].collection.drop((err, res) => {
-        if (err) {
-          return reject(err)
-        }
-        return resolve(res)
-      })
+      // no need for lowdb
+      return resolve()
     })
   }
 
