@@ -18,7 +18,6 @@ const lowdbAdaptorGeneric = (db, modelName) => {
       }
       return resolve(result)
     })
-    
   }
   
   const put = (id, data) => p(db.get(modelName).find({ _id: id }).assign(data).write())
@@ -29,7 +28,10 @@ const lowdbAdaptorGeneric = (db, modelName) => {
     return p(newData)
   }
  
-  const remove = (id) => p(db.get(modelName).remove(record => record._id === id).write())
+  const remove = (id) => {
+    return get(id)
+    .then(() => p(db.get(modelName).remove(record => record._id === id).write()))
+  }
 
   return {
     clean,

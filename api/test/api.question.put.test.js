@@ -16,7 +16,7 @@ describe('api:question:put', () => {
     })
   })
 
-  describe('new question', () => {
+  describe('update question', () => {
     it('should be able to update the title', done => {
       server
         .put(`http://127.0.0.1:5000/api/question/${testRecords.world._id}`)
@@ -29,8 +29,6 @@ describe('api:question:put', () => {
           done()
         })
     })
-
-
 
     it('should not update to a blank title', done => {
       server
@@ -46,8 +44,6 @@ describe('api:question:put', () => {
           done()
         })
     })
-
-    return
 
     const invalidRefs = ['', 'a bond film', 'm4n-with-golden-gun', '#spyfilms']
     invalidRefs.forEach(ref => {
@@ -68,15 +64,17 @@ describe('api:question:put', () => {
       })
     })
 
-    
+
     invalidRefs.forEach(ref => {
       it(`should not update to an invalid option ref: "${ref}"`, done => {
+        
         const testOptions = [...testData.world.options]
         testOptions[0] = {...testOptions[0], ref}
         server
           .put(`http://127.0.0.1:5000/api/question/${testRecords.world._id}`)
           .send({ options: testOptions })
           .end((err, res) => {
+        
             expect(res.statusCode).to.equal(400)
             expect(res.body).to.have.property('err', 'validation')
             expect(res.body).to.have.property('msg', 'Validation errors')

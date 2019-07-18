@@ -8,7 +8,7 @@ const lowdbAdaptorQuestion = (db) => {
   const generic = lowdbAdaptorGeneric(db, 'question')
 
   const clean = data => {
-    data.title = data.title.trim
+    data.title = data.title ? data.title.trim() : ''
     if (!data.options) {
       data.options = []
     }
@@ -28,6 +28,22 @@ const lowdbAdaptorQuestion = (db) => {
     if (!data.ref || !validateQuestionRef.test(data.ref)) {
       return { errors: {ref: 'A reference must contain only a-z and dashes'}}
     }
+
+    for (let i in data.options) {
+      const opt = data.options[i]
+      const retval = { errors: {}}
+
+      if (!opt.ref  || !validateQuestionRef.test(opt.ref)) {
+        retval.errors[`options.${i}.ref`] = 'A reference must contain only a-z and dashes'
+        return retval
+      }
+      if (!opt.title) {
+        retval.errors[`options.${i}.title`] = 'A title is required'
+        return retval
+      }
+      i++
+    }
+
     return true
   }
 
@@ -39,9 +55,9 @@ const lowdbAdaptorQuestion = (db) => {
       if (existing) {
         return reject({ code: 11000 })
       }
-      const errors = validation(data).errors
-      if ( errors ) {
-        return reject(errors)
+      const val = validation(data)
+      if ( val.errors ) {
+        return reject(val)
       }
 
       resolve(generic.create(data))
@@ -50,28 +66,26 @@ const lowdbAdaptorQuestion = (db) => {
 
   const put = (id, data) => {
     return new Promise((resolve, reject) => {
-      data = clean(data)
+      
 
-      const existing = db.get('question').find({ ref: data.ref }).value()
-      if (existing && existing._id !== id) {
-        return reject({ code: 11000 })
+      const existing = db.get('question').find({ _id: id }).value()
+      const newdata = clean({...existing, ...data})
+      if (data.ref && existing.ref !== data.ref ) {
+        const withThatRef = db.get('question').find({ ref: data.ref }).value()
+        if (withThatRef) {
+          return reject({ code: 11000 })
+        }
+      }
+      const val = validation(newdata)
+
+      if ( val.errors ) {
+        // console.log(val)
+        return reject(val)
       }
 
-      const errors = validation(data).errors
-      if ( errors ) {
-        return reject(errors)
-      }
-
-      resolve(generic.put(id, data))
+      resolve(generic.put(id, newdata))
     })
   }
-  // const create = (data) => {
-  //   const newData = {...data, _id: shortid.generate()}
-  //   db.get(modelName).push(newData).write()
-  //   return p(newData)
-  // }
- 
-  // const remove = (id) => p(db.get(modelName).remove(record => record._id === id).write())
 
   const linkToOption = (question, parentId, optionId) => {
     if (!parentId || !optionId) {

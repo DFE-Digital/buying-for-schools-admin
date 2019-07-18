@@ -1,6 +1,5 @@
 
 const stdErrorResponse = (res, err) => {
-  // console.log(err)
   res.statusCode = 400
   const response = {
     success: false
@@ -37,7 +36,7 @@ const stdErrorResponse = (res, err) => {
 
 
 
-  console.log(err)
+  console.log('stdErrorResponse', err)
   return res.send(response)
 }
 

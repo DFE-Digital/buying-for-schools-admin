@@ -21,13 +21,11 @@ describe('api:question:delete', () => {
     })
   })
 
-  it('should be able to delete a specific record', done => {
+  it('should be able to delete a specific record', done => {   
     const id = helpers.recordCache.bond._id
-
     server
       .delete(`http://127.0.0.1:5000/api/question/${id}`)
       .end((err, res) => {
-        console.log(res.body)
         expect(res.statusCode).to.equal(200)
         done()
       })
@@ -35,11 +33,9 @@ describe('api:question:delete', () => {
 
  it('should return 404 if the record does not exist', done => {
     const id = helpers.recordCache.bond._id
-
     server
       .delete(`http://127.0.0.1:5000/api/question/${id}`)
       .end((err, res) => {
-        console.log(res.body)
         expect(res.statusCode).to.equal(404)
         done()
       })

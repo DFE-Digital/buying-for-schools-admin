@@ -15,6 +15,7 @@ exports = module.exports = (dataSource) => {
     return new Promise((resolve, reject) => {
       const newData = {...data, _id: shortid.generate()}
       db.get(model).push(newData).write()
+      recordCache[newData.ref] = newData
       return resolve(newData)
     })
   }
