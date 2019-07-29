@@ -1,0 +1,19 @@
+{
+  "loans": {
+    "ref": "loans",
+    "title": "Evil loans for world domination"
+  },
+  "weapons": {
+    "ref": "weapons",
+    "title": "For all your weapon needs in spy operations"
+  },
+  "builders": {
+    "ref": "builders",
+    "title": "Building of evil lairs of all sizes",
+    "url": "https://evilbuildings.example.com",
+    "descr": "Provides all megalomaniacs with all required building services from rocket launching faux volcano bases to converted oil rigs.",
+    "body": "## Offers ##\n- all building services\n- self destruct button on all installations\n- numerous facilities to provide Bond a painful elaborate death whilst at the same time giving him time to escape\n\n## Benefits ##\n- work to tight deadlines on pain of death (piranha fish)\n- mobile app to keep track of progress\n- disposable henchmen recruited and trained to operate base",
+    "expiry": "2099-04-01T00:00:00.000Z"
+  }
+}
+

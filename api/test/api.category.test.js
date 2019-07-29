@@ -1,27 +1,27 @@
 const superagent = require('superagent')
 const server = superagent.agent()
 const expect = require('chai').expect
-const testData = require('./testdata/providers.json')
+const testData = require('./testdata/categories.json')
 const testRecords = {}
 
 const { helpers } = require('./setup')()
 let records = null
 
 
-describe('api:provider', () => {
+describe('api:category', () => {
   before((done) => {
-    helpers.removeAllRecords('provider')
-    .then(() => helpers.createRecord('provider', testData.qbranch))
-    .then(() => helpers.createRecord('provider', testData.spectre))
-    .then(() => helpers.createRecord('provider', testData.commandeered))
+    helpers.removeAllRecords('category')
+    .then(() => helpers.createRecord('category', testData.baddies))
+    .then(() => helpers.createRecord('category', testData.vehicles))
+    .then(() => helpers.createRecord('category', testData.sidekicks))
     .then(() => done())
   })
 
   
   describe('get', () => {
-    it('should be able to get a list of all providers in the database', done => {
+    it('should be able to get a list of all categories in the database', done => {
       server
-      .get('http://127.0.0.1:5000/api/provider')
+      .get('http://127.0.0.1:5000/api/category')
       .end((err, res) => {
         records = res.body
         expect(res.statusCode).to.equal(200)
@@ -30,22 +30,21 @@ describe('api:provider', () => {
       })
     })
 
-    it('should be able to get a specific provider by its id', done => {
+    it('should be able to get a specific category by its id', done => {
       const id = records[1]._id
       server
-        .get(`http://127.0.0.1:5000/api/provider/${id}`)
+        .get(`http://127.0.0.1:5000/api/category/${id}`)
         .end((err, res) => {
           expect(res.statusCode).to.equal(200)
           expect(res.body).to.have.property('_id', id)
-          expect(res.body).to.have.property('initials', 'baddies')
-          expect(res.body).to.have.property('title', 'Spectre\'s evil supplies ltd')
+          expect(res.body).to.have.property('title', 'Bond vehicles, cars, planes, helicopters etc')
           done()
         })
     })
 
     it('should return 404 if the document does not exist', done => {
       server
-        .get(`http://127.0.0.1:5000/api/provider/ffffffffffffffffffffffff`)
+        .get(`http://127.0.0.1:5000/api/category/ffffffffffffffffffffffff`)
         .end((err, res) => {
           expect(res.statusCode).to.equal(404)        
           expect(res.body).to.have.property('success', false)
@@ -57,12 +56,12 @@ describe('api:provider', () => {
   describe('post', () => {  
     it('should create with minimum data', done => {
       server
-        .post('http://127.0.0.1:5000/api/provider')
+        .post('http://127.0.0.1:5000/api/category')
         .send({
-          initials: 'eb',
-          title: 'Evil Billionaires club'
+          title: 'Bond Girls'
         })
         .end((err, res) => {
+          console.log(res.body)
           expect(res.statusCode).to.equal(200)
           expect(res.body).to.have.property('_id')
           done()
@@ -71,9 +70,8 @@ describe('api:provider', () => {
 
     it('cannot have a blank title', done => {
       server
-        .post('http://127.0.0.1:5000/api/provider')
+        .post('http://127.0.0.1:5000/api/category')
         .send({
-          initials: 'blank',
           title: ''
         })
         .end((err, res) => {
@@ -87,17 +85,15 @@ describe('api:provider', () => {
   })
 
   describe('put', () => {
-    it('should be able to update provider record', done => {
+    it('should be able to update category record', done => {
       const id = records[1]._id
       server
-        .put(`http://127.0.0.1:5000/api/provider/${id}`)
+        .put(`http://127.0.0.1:5000/api/category/${id}`)
         .send({
-          initials: 'spectre',
           title: 'Spectre Corp'
         })
         .end((err, res) => {
           expect(res.statusCode).to.equal(200)
-          expect(res.body).to.have.property('initials', 'spectre')
           expect(res.body).to.have.property('title', 'Spectre Corp')
           done()
         })
@@ -106,7 +102,7 @@ describe('api:provider', () => {
     it('should not update to a blank title', done => {
       const id = records[1]._id
       server
-        .put(`http://127.0.0.1:5000/api/provider/${id}`)
+        .put(`http://127.0.0.1:5000/api/category/${id}`)
         .send({
           title: ''
         })
@@ -121,10 +117,10 @@ describe('api:provider', () => {
   })
 
   describe('delete', () => {
-    it('should be able to delete a provider', done => {
+    it('should be able to delete a category', done => {
       const id = records[0]._id
       server
-        .delete(`http://127.0.0.1:5000/api/provider/${id}`)
+        .delete(`http://127.0.0.1:5000/api/category/${id}`)
         .end((err, res) => {
           expect(res.statusCode).to.equal(200)
           done()
@@ -134,7 +130,7 @@ describe('api:provider', () => {
     it('should return 404 if the record no longer exists', done => {
       const id = records[0]._id
       server
-        .delete(`http://127.0.0.1:5000/api/provider/${id}`)
+        .delete(`http://127.0.0.1:5000/api/category/${id}`)
         .end((err, res) => {
           expect(res.statusCode).to.equal(404)
           done()

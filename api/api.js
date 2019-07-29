@@ -10,6 +10,7 @@ const api = config => {
   const questionController = require('./controllers/question')(dataSource)
   const categoryController = require('./controllers/genericController')(dataSource, 'category')
   const providerController = require('./controllers/genericController')(dataSource, 'provider')
+  const structureController = require('./controllers/structure')(dataSource, 'structure')
 
   const app = express()
   app.use(bodyParser.json())
@@ -38,6 +39,8 @@ const api = config => {
   app.get('/api/provider/:providerId', providerController.get)
   app.put('/api/provider/:providerId', providerController.put)
   app.delete('/api/provider/:providerId', providerController.remove)
+
+  app.get('/api/structure', structureController.list)
 
   return app
 }

@@ -1,5 +1,6 @@
 const util = require('util')
 const validateQuestionRef = RegExp(/^[a-z-]*$/)
+const isObject = obj => obj === Object(obj)
 
 const mongodocAdaptor = options => {
   const model = require('./model')(options.connectionString)
@@ -13,6 +14,133 @@ const mongodocAdaptor = options => {
         return resolve(doc)
       })
     })
+  }
+
+  const createLiveDoc = (doc) => {
+    doc.status = 'LIVE'
+    return new Promise((resolve, reject) => {
+      model.create(doc, (err, result) => {
+        if (err) {
+          console.log(err)
+          return reject(err)
+        }
+        return resolve(result)
+      })
+    })
+  }
+
+  const getIDs = doc => {
+    const idList = {
+      category: {},
+      provider: {},
+      framework: {},
+      question: {}
+    }
+
+    doc.category.forEach(c => {
+      idList.category[c._id.toString()] = c.title
+    })
+
+    doc.provider.forEach(p => {
+      idList.provider[p._id.toString()] = p.title
+    })
+
+    doc.framework.forEach(f => {
+      idList.framework[f._id.toString()] = f.ref
+    })
+
+    doc.question.forEach(q => {
+      idList.question[q._id.toString()] = q.ref
+    })
+
+    return idList
+  }
+
+  const findNewId = (oldids, newids, id) => {
+    if (!id) {
+      return null
+    }
+    const idString = id.toString()
+    const oldValue = oldids[idString]
+    return Object.keys(newids).find(k => newids[k] === oldValue)
+  }
+
+  const updateRefs = (oldids, newids, newLiveDoc) => {
+    newLiveDoc.framework.forEach(f => {
+      f.cat = findNewId(oldids.category, newids.category, f.cat)
+      f.provider = findNewId(oldids.provider, newids.provider, f.provider)
+    })
+
+    newLiveDoc.question.forEach(q => {
+      q.options.forEach(opt => {
+        opt.next = findNewId(oldids.question, newids.question, opt.next)
+        opt.result = opt.result.map(res => findNewId(oldids.framework, newids.framework, res))
+      })
+    })
+    return Promise.resolve(newLiveDoc)
+  }
+
+  const pushLive = () => {
+    let currentDraftDoc
+    let stripped
+    let oldids
+    let newLiveDoc
+    return getRecord()
+    .then(d => currentDraftDoc = d.toObject())
+    .then(() => oldids = getIDs(currentDraftDoc))
+    .then(() => stripped = stripIDs(currentDraftDoc))
+    .then(() => createLiveDoc(stripped))
+    .then(d => newLiveDoc = d)
+    .then(() => newids = getIDs(newLiveDoc))
+    .then(() => updateRefs(oldids, newids, newLiveDoc))
+    .then(() => save(newLiveDoc))
+    
+    // .then(d => newLiveDoc = d)
+    // .then(() => updateRefs(currentDraftDocStripped, newLiveDoc))
+  }
+
+  const stripIDs = doc => {
+    const newdoc = {
+      category: [],
+      provider: [],
+      framework: [],
+      question: []
+    }
+
+    newdoc.category = doc.category.map(c => {
+      const newCat = {...c}
+      delete(newCat._id)
+      delete(newCat.__v)
+      return newCat
+    })
+
+    newdoc.provider = doc.provider.map(p => {
+      const newProv = {...p}
+      delete(newProv._id)
+      delete(newProv.__v)
+      return newProv
+    })
+
+    newdoc.framework = doc.framework.map(f => {
+      const newFra = {...f}
+      delete(newFra._id)
+      delete(newFra.__v)
+      return newFra
+    })
+
+    newdoc.question = doc.question.map(q => {
+      const newQ = {...q}
+      delete(newQ._id)
+      delete(newQ.__v)
+      newQ.options = newQ.options.map(opt => {
+        const newOpt = {...opt}
+        delete(newOpt._id)
+        delete(newOpt.__v)
+        return newOpt
+      })
+      return newQ
+    })
+    return newdoc
   }
 
   const save = (doc) => {
@@ -59,11 +187,10 @@ const mongodocAdaptor = options => {
   }
 
   const ensureRefIsUniqueAndValid = (modelName, doc, data, id = null) => {
-    if (modelName === 'supplier' || modelName === 'provider') {
+    if (modelName === 'category' || modelName === 'provider') {
       return Promise.resolve(doc)
     }
     const existing = doc[modelName].find(item => item.ref === data.ref)
-    // console.log(modelName, data, id, existing)
     if (existing && existing._id.toString() !== id) {
       return Promise.reject({ code: 11000 })
     }
@@ -155,7 +282,6 @@ const mongodocAdaptor = options => {
         .then(() => save(doc))
         .then(updatedDoc => {
           const updatedItem = updatedDoc[modelName].find(p => p._id.toString() === id)
-          // console.log('updated', updatedItem, data)
           return updatedItem
         })
       },
@@ -199,12 +325,17 @@ const mongodocAdaptor = options => {
     }
   }
 
+  const structure = {
+    list: pushLive
+  }
+
   return {
     framework,
     question,
     provider: generic('provider'),
     category: generic('category'),
-    model
+    model,
+    structure
   }
 }
 

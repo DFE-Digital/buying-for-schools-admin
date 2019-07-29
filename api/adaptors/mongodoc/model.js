@@ -15,13 +15,11 @@ const structure = (connectionString) => {
   const structureModelSchema = new Schema({
     status: {
       type: String,
-      enum: ['DRAFT', 'LIVE', 'ARCHIVED'],
       default: 'ARCHIVED'
     },
     framework: [{
       ref: {
         type: String,
-        unique: true,
         required: [true, 'A reference is required'],
         minlength: [2, 'A reference must be at least two characters long'],
         maxlength: [24, 'A reference must be no longer than 24 characters'],
@@ -51,7 +49,6 @@ const structure = (connectionString) => {
     question: [{
       ref: {
         type: String,
-        unique: true,
         required: [true, 'A reference is required'],
         minlength: [2, 'A reference must be at least two characters long'],
         maxlength: [24, 'A reference must be no longer than 24 characters'],

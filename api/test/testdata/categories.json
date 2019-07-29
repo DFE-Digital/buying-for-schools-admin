@@ -1,0 +1,14 @@
+{
+  "baddies": {
+    "title": "Villain leaders"
+  },
+  "vehicles": {
+    "title": "Bond vehicles, cars, planes, helicopters etc"
+  },
+  "sidekicks": {
+    "title": "Sidekicks - eg Odd Job, Nik Nak, Jaws"
+  },
+  "construction": {
+    "title": "Construction"
+  }
+}
