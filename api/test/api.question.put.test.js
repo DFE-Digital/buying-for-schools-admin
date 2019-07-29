@@ -64,7 +64,6 @@ describe('api:question:put', () => {
       })
     })
 
-
     invalidRefs.forEach(ref => {
       it(`should not update to an invalid option ref: "${ref}"`, done => {
         
@@ -74,7 +73,6 @@ describe('api:question:put', () => {
           .put(`http://127.0.0.1:5000/api/question/${testRecords.world._id}`)
           .send({ options: testOptions })
           .end((err, res) => {
-        
             expect(res.statusCode).to.equal(400)
             expect(res.body).to.have.property('err', 'validation')
             expect(res.body).to.have.property('msg', 'Validation errors')

@@ -41,7 +41,6 @@ describe('api:question:post', () => {
           done()
         })
     })
-    
 
     it('cannot have a blank title', done => {
       server
@@ -58,6 +57,7 @@ describe('api:question:post', () => {
           done()
         })
     })
+
 
     const invalidRefs = ['', 'a bond film', 'm4n-with-golden-gun', '#spyfilms']
     invalidRefs.forEach(ref => {

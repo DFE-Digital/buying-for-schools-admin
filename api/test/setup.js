@@ -12,13 +12,20 @@ exports = module.exports = () => {
 
   let dataSource
   let helpers
-  const source = 'lowdb'
+  const source = 'mongodoc'
 
   switch (source) {
     case 'mongo': {
       const connectionString = process.env.S107D01_MONGO_01.replace(/\/s107d01-mongo-01\?/, '/testing?')
       dataSource = require('../adaptors/mongo/mongoAdaptor')({ connectionString })
       helpers = require('./helpers')(dataSource)
+      break
+    }
+
+    case 'mongodoc': {
+      const connectionString = process.env.S107D01_MONGO_01.replace(/\/s107d01-mongo-01\?/, '/testing?')
+      dataSource = require('../adaptors/mongodoc/mongodocAdaptor')({ connectionString })
+      helpers = require('./helpers.mongodoc')(dataSource)
       break
     }
 
