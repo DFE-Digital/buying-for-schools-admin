@@ -1,11 +1,12 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { is, List } from 'immutable'
+import { is, List, Map } from 'immutable'
 import './diagramResult.css'
 
 const mapStateToProps = (state) => {
   return {
     frameworks: state.frameworkReducer.frameworks || List(),
+    providers: state.providerReducer.providers || List([]),
   }
 }
 
@@ -42,8 +43,9 @@ export class DiagramResult extends Component {
     if (this.state.framework === null) {
       return ''
     }
+    const provider = this.props.providers.find(p => p.get('_id') === this.state.framework.get('provider')) || Map({})
     return (
-      <div className="dresult">{ this.state.framework.get('title')}</div>
+      <div className="dresult">{ this.state.framework.get('title')} <span>{ provider.get('initials') }</span></div>
     )
   }
 }

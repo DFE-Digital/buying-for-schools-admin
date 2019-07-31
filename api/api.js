@@ -41,6 +41,9 @@ const api = config => {
   app.delete('/api/provider/:providerId', providerController.remove)
 
   app.get('/api/structure', structureController.list)
+  app.post('/api/structure', structureController.post)
+  app.put('/api/structure/:structureId', structureController.put)
+  app.delete('/api/structure/:structureId', structureController.remove)
 
   return app
 }

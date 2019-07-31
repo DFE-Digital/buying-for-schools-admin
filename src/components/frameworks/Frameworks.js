@@ -26,7 +26,7 @@ export class Frameworks extends Component {
 
   render() {
 
-    console.log(this.props.frameworks.toJS())
+    // console.log(this.props.frameworks.toJS())
 
     const usage = getFrameworkUsage(this.props.questions)
 

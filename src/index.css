@@ -19,3 +19,6 @@ code {
     monospace;
 }
 
+select {
+  width: 100%;
+}

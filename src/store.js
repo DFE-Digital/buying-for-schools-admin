@@ -5,6 +5,7 @@ import frameworkReducer from './reducers/framework-reducer'
 import categoryReducer from './reducers/category-reducer'
 import providerReducer from './reducers/provider-reducer'
 import dialogReducer from './reducers/dialog-reducer'
+import structureReducer from './reducers/structure-reducer'
 // import aggregationReducer from './reducers/aggregation-reducer'
 
 
@@ -30,7 +31,8 @@ export const store = createStore(
     frameworkReducer,
     categoryReducer,
     providerReducer,
-    dialogReducer
+    dialogReducer,
+    structureReducer
   }),
   applyMiddleware(thunk)
 )

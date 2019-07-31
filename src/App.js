@@ -20,12 +20,15 @@ import QuestionEditor from './components/questions/QuestionEditor'
 import OptionEditor from './components/questions/OptionEditor'
 import FrameworkEditor from './components/frameworks/FrameworkEditor'
 import ProviderEditor from './components/providers/ProviderEditor'
+import Management from './components/management/Management'
+import ManagementEditor from './components/management/ManagementEditor'
 import CategoryEditor from './components/category/CategoryEditor'
 import Dialog from './components/dialog/Dialog'
 import Header from './components/Header'
 
 const mapStateToProps = (state) => {
   return {
+    structure: state.structureReducer
     // questions: state.questionReducer.questions || List([]),
     // frameworks: state.frameworkReducer.frameworks || List([]),
     // providers: state.providerReducer.providers || List([]),
@@ -51,7 +54,14 @@ export class App extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    console.log('componentDidUpdate', prevProps)
+    // console.log('Now:', this.props.structure, 'Prev:', prevProps.structure)
+    if (this.props.structure.draftId !== prevProps.structure.draftId) {
+      console.log('RELOAD EVERYTHING')
+      this.props.getQuestions()
+      this.props.getFrameworks()
+      this.props.getProviders()
+      this.props.getCategories()   
+    }
   }
 
   render () {
@@ -73,7 +83,8 @@ export class App extends Component {
               <Route path='/question/:questionId' component={QuestionEditor} exact />
               <Route path='/question/:questionId/:optionId' component={OptionEditor} exact />
               <Route path='/diagram/:questionId?/:optionId?' component={Diagram} />
-              
+              <Route path='/structure' component={Management} exact />
+              <Route path='/structure/:structureId' component={ManagementEditor} exact />
             </div>
           </main>
         </div>

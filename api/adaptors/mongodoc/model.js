@@ -15,14 +15,22 @@ const structure = (connectionString) => {
   const structureModelSchema = new Schema({
     status: {
       type: String,
-      default: 'ARCHIVED'
+      default: 'DRAFT'
+    },
+    published: {
+      date: Date,
+      note: String
+    },
+    archived: {
+      date: Date,
+      note: String
     },
     framework: [{
       ref: {
         type: String,
         required: [true, 'A reference is required'],
         minlength: [2, 'A reference must be at least two characters long'],
-        maxlength: [24, 'A reference must be no longer than 24 characters'],
+        // maxlength: [32, 'A reference must be no longer than 32 characters'],
         match: [validateFrameworkRef, 'A reference must contain only a-z and dashes']
       },
       title: {
@@ -51,7 +59,7 @@ const structure = (connectionString) => {
         type: String,
         required: [true, 'A reference is required'],
         minlength: [2, 'A reference must be at least two characters long'],
-        maxlength: [24, 'A reference must be no longer than 24 characters'],
+        maxlength: [32, 'A reference must be no longer than 32 characters'],
         match: [validateQuestionRef, 'A reference must contain only a-z and dashes']
       },
       title: {
@@ -64,7 +72,7 @@ const structure = (connectionString) => {
           type: String,
           required: [true, 'A reference is required'],
           minlength: [2, 'A reference must be at least two characters long'],
-          maxlength: [24, 'A reference must be no longer than 24 characters'],
+          maxlength: [32, 'A reference must be no longer than 32 characters'],
           match: [validateQuestionRef, 'A reference must contain only a-z and dashes']
         }, 
         title: {
@@ -100,7 +108,8 @@ const structure = (connectionString) => {
         required: [true, 'A title is required'],
       }
     }]
-    
+  },{
+    timestamps: true
   })
   return  mongoose.model( 'structure', structureModelSchema )
 }
