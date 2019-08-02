@@ -70,13 +70,7 @@ const mongodocAdaptorGeneric = model => {
       return Promise.resolve(doc)
     }
     const existing = doc[modelName].find(item => item.ref === data.ref)
-    // console.log(doc[modelName].filter(item => item.ref === data.ref).length)
     if (existing && existing._id.toString() !== id) {
-      // console.log(modelName)
-      // console.log(id)
-      // console.log(existing._id.toString())
-      // console.log(existing)
-      // console.log(existing._id.toString())
       return Promise.reject({ code: 11000 })
     }
 

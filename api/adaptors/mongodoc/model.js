@@ -30,7 +30,6 @@ const structure = (connectionString) => {
         type: String,
         required: [true, 'A reference is required'],
         minlength: [2, 'A reference must be at least two characters long'],
-        // maxlength: [32, 'A reference must be no longer than 32 characters'],
         match: [validateFrameworkRef, 'A reference must contain only a-z and dashes']
       },
       title: {
@@ -80,7 +79,6 @@ const structure = (connectionString) => {
           required: [true, 'A title is required'],
         },  
         hint: String,
-        // next: String,
         next: {
           default: null,
           required: false,

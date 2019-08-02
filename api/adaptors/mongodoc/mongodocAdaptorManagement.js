@@ -232,27 +232,6 @@ const mongodocAdaptorManagement = model => {
         })
       })
     }
-
-    // pushLive: () => {
-    //   let currentDraftDoc
-    //   let stripped
-    //   let oldids
-    //   let newLiveDoc
-    //   let newids
-    //   let currentLiveDoc
-    //   return shared.getRecord('LIVE')
-    //   .then(d => currentLiveDoc = d)
-    //   .then(() => shared.getRecord())
-    //   .then(d => currentDraftDoc = d.toObject())
-    //   .then(() => oldids = getIDs(currentDraftDoc))
-    //   .then(() => stripped = stripIDs(currentDraftDoc))
-    //   .then(() => createLiveDoc(stripped))
-    //   .then(d => newLiveDoc = d)
-    //   .then(() => newids = getIDs(newLiveDoc))
-    //   .then(() => updateRefs(oldids, newids, newLiveDoc))
-    //   .then(() => shared.save(newLiveDoc))
-    //   .then(() => archive(currentLiveDoc))
-    // }
   }
 
   return {
