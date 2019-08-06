@@ -1,7 +1,5 @@
-const express = require('express')
-const bodyParser = require('body-parser')
 
-const api = config => {
+const api = (app, config) => {
   
   // const dataSource = require('./adaptors/mongo/mongoAdaptor')({ connectionString: process.env.S107D01_MONGO_01 })
   const { dataSource } = config//require('./adaptors/lowdb/lowdbAdaptor')({ path: './_data.json' })
@@ -11,9 +9,6 @@ const api = config => {
   const categoryController = require('./controllers/genericController')(dataSource, 'category')
   const providerController = require('./controllers/genericController')(dataSource, 'provider')
   const structureController = require('./controllers/structure')(dataSource, 'structure')
-
-  const app = express()
-  app.use(bodyParser.json())
 
   app.get('/api/framework', frameworkController.list)
   app.post('/api/framework', frameworkController.create)

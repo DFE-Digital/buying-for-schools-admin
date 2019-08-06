@@ -1,20 +1,20 @@
+const fs = require('fs')
+const express = require('express')
+const bodyParser = require('body-parser')
+const serveStatic = require('serve-static')
 const path = require('path')
 const port = process.env.PORT || 5000
-const api = require('./api/api')
-const fs = require('fs')
-const connectionString = process.env.S107D01_MONGO_01 || process.env.MONGO //.replace(/\/s107d01-mongo-01\?/, '/testing?')
-const config = {
-  // dataSource: require('./api/adaptors/mongo/mongoAdaptor')({ connectionString: process.env.S107D01_MONGO_01 })
-  // dataSource: require('./api/adaptors/lowdb/lowdbAdaptor')({ path: './_data.json' })
-  dataSource: require('./api/adaptors/mongodoc/mongodocAdaptor')({ connectionString })
-}
 
-const app = api(config)
+const app = express()
+app.use(bodyParser.json())
 
-const serveStatic = require('serve-static')
+// const api = require('./api/api')
+// const config = {
+//   dataSource: require('./api/adaptors/mongodoc/mongodocAdaptor')({ connectionString: process.env.MONGO })
+// }
+// api(app, config)
 
 if (fs.existsSync(path.join(__dirname, 'build/index.html'))) {
-  console.log('exists')
   app.use(serveStatic('build/', { index: ['index.html'] }))
   app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, 'build/index.html'))
