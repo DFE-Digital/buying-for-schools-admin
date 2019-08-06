@@ -12,8 +12,8 @@
   },
   "jshintConfig": {
     "asi": true,
-    "esversion": 6,
-    "maxcomplexity": 6
+    "esversion": 9,
+    "maxcomplexity": 7
   },
   "dependencies": {
     "body-parser": "^1.19.0",
@@ -46,11 +46,6 @@
   "eslintConfig": {
     "extends": "react-app"
   },
-  "jshintConfig": {
-    "asi": true,
-    "esversion": 9,
-    "maxcomplexity": 7
-  },
   "browserslist": {
     "production": [
       ">0.2%",
@@ -71,6 +66,7 @@
     "mocha": "^6.1.4",
     "node-env-run": "^3.0.2",
     "nodemon": "^1.19.1",
+    "serve-static": "^1.14.1",
     "superagent": "^5.1.0"
   }
 }
