@@ -101,6 +101,13 @@ const structure = (connectionString) => {
       }
     }],
     category: [{
+      ref: {
+        type: String,
+        required: [true, 'A reference is required'],
+        minlength: [2, 'A reference must be at least two characters long'],
+        maxlength: [32, 'A reference must be no longer than 32 characters'],
+        match: [validateQuestionRef, 'A reference must contain only a-z and dashes']
+      },
       title: {
         type: String,
         required: [true, 'A title is required'],

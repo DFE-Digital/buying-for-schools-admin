@@ -129,6 +129,14 @@ export class CategoryEditor extends Component {
         <form className="categoryeditor__category">
           <ErrorSummary errors={errors} />
 
+           <Input 
+            id="ref"
+            value={this.state.category.get('ref')}
+            label="Ref"
+            onChange={this.onChange.bind(this)}
+            error={errorIds.includes('ref')}
+            />
+
           <Input 
             id="title"
             value={this.state.category.get('title')}

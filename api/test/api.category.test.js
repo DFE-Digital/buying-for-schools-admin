@@ -58,10 +58,10 @@ describe('api:category', () => {
       server
         .post('http://127.0.0.1:5000/api/category')
         .send({
+          ref: 'girls',
           title: 'Bond Girls'
         })
         .end((err, res) => {
-          console.log(res.body)
           expect(res.statusCode).to.equal(200)
           expect(res.body).to.have.property('_id')
           done()
@@ -72,6 +72,7 @@ describe('api:category', () => {
       server
         .post('http://127.0.0.1:5000/api/category')
         .send({
+          ref: 'blank',
           title: ''
         })
         .end((err, res) => {

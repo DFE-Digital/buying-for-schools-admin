@@ -31,15 +31,17 @@ export class Categories extends Component {
         <table>
           <thead>
             <tr>
+              <th>Ref</th>
               <th>Title</th>
               <th></th>
             </tr>
           </thead>
           <tbody>
-            {this.props.categories.map((p) => (
-              <tr key={p.get('_id')}>
-                <td><Link to={`/category/${p.get('_id')}`}>{p.get('title')}</Link></td>
-                <td><button className="button button--red" onClick={e => this.props.deleteCategory(p)}>Delete</button></td>
+            {this.props.categories.map(c => (
+              <tr key={c.get('_id')}>
+                <td>{c.get('ref')}</td>
+                <td><Link to={`/category/${c.get('_id')}`}>{c.get('title')}</Link></td>
+                <td><button className="button button--red" onClick={e => this.props.deleteCategory(c)}>Delete</button></td>
               </tr>
             ))}
           </tbody>

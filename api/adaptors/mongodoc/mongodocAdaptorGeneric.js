@@ -66,7 +66,7 @@ const mongodocAdaptorGeneric = model => {
   }
 
   const ensureRefIsUniqueAndValid = (modelName, doc, data, id = null) => {
-    if (modelName === 'category' || modelName === 'provider') {
+    if (modelName === 'provider') {
       return Promise.resolve(doc)
     }
     const existing = doc[modelName].find(item => item.ref === data.ref)

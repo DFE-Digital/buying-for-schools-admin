@@ -36,15 +36,20 @@
     "shortid": "^2.2.14"
   },
   "scripts": {
-    "start": "nodemon server.js & react-scripts start",
+    "start": "node server.js",
+    "start:dev": "nodemon server.js & react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject",
+    "test": "npm run test:jshint && npm run test:api",
     "test:jshint": "jshint api/**/*.js",
     "test:api": "mocha api/test/**/*.test.js --exit"
   },
   "eslintConfig": {
     "extends": "react-app"
+  },
+  "jshintConfig": {
+    "asi": true,
+    "esversion": 9,
+    "maxcomplexity": 7
   },
   "browserslist": {
     "production": [
