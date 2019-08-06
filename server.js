@@ -8,11 +8,11 @@ const port = process.env.PORT || 5000
 const app = express()
 app.use(bodyParser.json())
 
-// const api = require('./api/api')
-// const config = {
-//   dataSource: require('./api/adaptors/mongodoc/mongodocAdaptor')({ connectionString: process.env.MONGO })
-// }
-// api(app, config)
+const api = require('./api/api')
+const config = {
+  dataSource: require('./api/adaptors/mongodoc/mongodocAdaptor')({ connectionString: process.env.MONGO })
+}
+api(app, config)
 
 if (fs.existsSync(path.join(__dirname, 'build/index.html'))) {
   app.use(serveStatic('build/', { index: ['index.html'] }))
