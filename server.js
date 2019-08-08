@@ -2,7 +2,7 @@ const http = require('http')
 const port = process.env.PORT || 8080
 
 const requestHandler = (request, response) => {
-  const msg = process.env.MESSAGE || 'poo'
+  const msg = process.env.MESSAGE || 'doh'
   response.end(`Hello Node.js Server! ${msg}`)
 }
 
