@@ -1,2 +1,5 @@
 node_modules
 npm-debug.log
+build
+_data.json
+_db-dev-to-test.sh

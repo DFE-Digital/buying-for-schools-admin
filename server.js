@@ -4,9 +4,12 @@ const bodyParser = require('body-parser')
 const serveStatic = require('serve-static')
 const path = require('path')
 const port = process.env.PORT || 8000
+const auth = require('./api/auth')
 
 const app = express()
 app.use(bodyParser.json())
+
+auth(app)
 
 const haveConnectionDetails = !!process.env.MONGO
 const haveBuildDirectory = fs.existsSync(path.join(__dirname, 'build/index.html'))

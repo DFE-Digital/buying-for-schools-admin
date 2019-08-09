@@ -1,4 +1,3 @@
-
 const api = (app, config) => {
   
   // const dataSource = require('./adaptors/mongo/mongoAdaptor')({ connectionString: process.env.S107D01_MONGO_01 })
