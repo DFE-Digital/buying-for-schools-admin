@@ -1,7 +1,6 @@
 const validateFrameworkRef = RegExp(/^[a-z-]*$/)
 const validateQuestionRef = RegExp(/^[a-z-]*$/)
 
-
 const mongoose = require('mongoose')
 
 const structure = (connectionString) => {
@@ -51,7 +50,11 @@ const structure = (connectionString) => {
       },
       descr: String,
       body: String,
-      expiry: Date
+      expiry: Date,
+      links: [{
+        text: String,
+        url: String
+      }]
     }],
     question: [{
       ref: {
@@ -63,7 +66,7 @@ const structure = (connectionString) => {
       },
       title: {
         type: String,
-        required: [true, 'A title is required'],
+        required: [true, 'A title is required']
       },
       hint: String,
       options: [{
@@ -73,11 +76,11 @@ const structure = (connectionString) => {
           minlength: [2, 'A reference must be at least two characters long'],
           maxlength: [32, 'A reference must be no longer than 32 characters'],
           match: [validateQuestionRef, 'A reference must contain only a-z and dashes']
-        }, 
+        },
         title: {
           type: String,
-          required: [true, 'A title is required'],
-        },  
+          required: [true, 'A title is required']
+        },
         hint: String,
         next: {
           default: null,
@@ -93,7 +96,7 @@ const structure = (connectionString) => {
     provider: [{
       title: {
         type: String,
-        required: [true, 'A title is required'],
+        required: [true, 'A title is required']
       },
       initials: {
         type: String,
@@ -110,13 +113,13 @@ const structure = (connectionString) => {
       },
       title: {
         type: String,
-        required: [true, 'A title is required'],
+        required: [true, 'A title is required']
       }
     }]
-  },{
+  }, {
     timestamps: true
   })
-  return  mongoose.model( 'structure', structureModelSchema )
+  return mongoose.model('structure', structureModelSchema)
 }
 
 exports = module.exports = structure

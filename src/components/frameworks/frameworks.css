@@ -28,3 +28,11 @@
 .govuk-form-group--body textarea.govuk-textarea {
   min-height: 300px;
 }
+
+.frameworkeditor_links td label {
+  display: none;
+}
+
+.frameworkeditor_links td .govuk-form-group {
+  margin-bottom: 0;
+}

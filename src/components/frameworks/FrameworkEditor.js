@@ -100,6 +100,25 @@ export class FrameworkEditor extends Component {
     this.setState({ framework: this.state.framework.set(id, value) })
   }
 
+  onChangeLink (id, value) {
+    const i = Number(id.substr(8))
+    const key = id.substr(4,3) === 'txt' ? 'text' : 'url'
+    // console.log(key, i, value)
+    this.setState({ framework: this.state.framework.setIn(['links', i, key], value)})
+  }
+
+  addLink (e) {
+    e.preventDefault()
+    const newLinks = this.state.framework.get('links').push(Map({ text: '', url: ''}))
+    this.setState({ framework: this.state.framework.set('links', newLinks) })
+  }
+
+  onRemoveLink (e, i) {
+    e.preventDefault()
+    const newLinks = this.state.framework.get('links').delete(i)
+    this.setState({ framework: this.state.framework.set('links', newLinks) }) 
+  }
+
   onSave (e) {
     e.preventDefault()
     const f = this.state.framework.delete('_info')
@@ -145,6 +164,8 @@ export class FrameworkEditor extends Component {
 
     return providerOptions
   }
+
+  
 
   render () {
     if (!Map.isMap(this.state.framework)) {
@@ -226,7 +247,46 @@ export class FrameworkEditor extends Component {
             onChange={this.onChange.bind(this)}
             />
 
-          <ReactMarkdown source={this.state.framework.get('body')} />
+          <div className="frameworkeditor_links">
+            <h2 className="govuk-label">Associated links</h2>
+            <p>These are displayed in the righthand side column of the framework page</p>
+            <table>
+              <thead>
+                <tr>
+                  <th><label className="govuk-label" for="linkurl-0">Text</label></th>
+                  <th><label className="govuk-label" for="linktxt-0">URL</label></th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                { this.state.framework.get('links').map((l, i) => (
+                  <tr key={`link-${i}`}>
+                    <td>
+                      <Input 
+                        id={`linktxt-${i}`}
+                        value={l.get('text')}
+                        label="Text"
+                        onChange={this.onChangeLink.bind(this)}  
+                        />
+                    </td>
+                    <td>
+                      <Input 
+                        id={`linkurl-${i}`}
+                        value={l.get('url')}
+                        label="URL"
+                        onChange={this.onChangeLink.bind(this)}  
+                        />
+                    </td>
+                    <td>
+                      <button className="button" onClick={e => this.onRemoveLink(e, i)}>Remove</button>
+                    </td>          
+                  </tr>  
+                )) }
+              </tbody>
+            </table>
+            <button className="button" onClick={e => this.addLink(e)}>Add link</button>
+          </div>
+          {/*<ReactMarkdown source={this.state.framework.get('body')} />*/}
 
           <input type="submit" value="Save" className={saveButtonClasses.join(' ')} onClick={e => this.onSave(e)} />
           <Link to="/framework" className="button">{ hasChanged ? 'Cancel' : 'Back' }</Link>    

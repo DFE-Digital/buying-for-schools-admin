@@ -37,6 +37,7 @@ export default class Input extends Component {
             className="govuk-input"
             value={this.state.value} 
             onChange={this.onChange.bind(this)}
+            disabled={this.props.disabled}
           />
         </fieldset>
       </div>

@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import queryString from 'query-string'
 import { updateQuestion, saveNewQuestion } from '../../actions/question-actions'
 import Input from '../form/Input'
+import Select from '../form/Select'
 import ErrorSummary from '../form/ErrorSummary'
 import { List, Map } from 'immutable'
 import { getBlankQuestion } from '../../services/question'
@@ -113,6 +114,12 @@ export class QuestionEditor extends Component {
     }
   }
 
+  removeOption (e, i) {
+    e.preventDefault()
+    const newQuestion = this.state.question.deleteIn(['options', i])
+    this.setState({ question: newQuestion })
+  }
+
   render () {
     if (!Map.isMap(this.state.question)) {
       return <h1>Loading</h1>
@@ -127,6 +134,16 @@ export class QuestionEditor extends Component {
     const hasErrors = this.props.updateErrors && this.props.updateErrors.data && this.props.updateErrors.data.errors
     const errorIds = hasErrors ? this.props.updateErrors.data.errors.map(e => e.id) : []
     const errors = hasErrors ? this.props.updateErrors.data.errors : []
+    const suffixOptions = [
+      {
+        label: '...',
+        value: '0'
+      },
+      {
+        label: 'Help with meter types',
+        value: 'includes/meter-type.njk'
+      }
+    ]
     return (
       <div className="questioneditor govuk-width-container">
         <h1 className="questioneditor__title">Question</h1>
@@ -140,7 +157,9 @@ export class QuestionEditor extends Component {
             label="Ref"
             onChange={this.onChange.bind(this)}
             error={errorIds.includes('ref')}
+            disabled={this.state.question.get('ref') === 'type'}
             />
+        
           <Input 
             id="title"
             value={this.state.question.get('title')}
@@ -160,14 +179,35 @@ export class QuestionEditor extends Component {
             label="Error"
             onChange={this.onChange.bind(this)}  
             />
+
+          <Select
+            className="equestioneditor__suffixselect"
+            id="suffix"
+            label="Suffix template"
+            value={this.state.question.get('suffix')}
+            options={suffixOptions}
+            onChange={this.onChange.bind(this)}
+            />
           
           <input type="submit" value="Save" className={saveButtonClasses.join(' ')} onClick={e => this.onSave(e)} />
           <Link to={`${this.state.baseLink}`} className="button">{ hasChanged ? 'Cancel' : 'Back' }</Link>
           <div className="questioneditor__optionlist">
             <h3>Options</h3>
-            { this.state.question.get('options').map((opt, i) => (
-              <p key={opt.get('_id')}><Link to={`${this.props.match.url}/${opt.get('_id')}?return=question`}>{ opt.get('title') }</Link></p>
-            )) }
+
+            <table>
+              <tbody>
+                { this.state.question.get('options').map((opt, i) => (
+                <tr key={opt.get('_id')}>
+                  <td>
+                    <Link to={`${this.props.match.url}/${opt.get('_id')}?return=question`}>{ opt.get('title') }</Link>
+                  </td>
+                  <td>
+                    <button className="button button--small button--red" onClick={e => this.removeOption(e, i)}>Remove</button>
+                  </td>
+                </tr>
+                )) }
+              </tbody>
+            </table>
             <Link to={`${this.state.baseLink}/${this.state.question.get('_id')}/new`} className="button button--green">Add option</Link>
           </div>          
         </form>

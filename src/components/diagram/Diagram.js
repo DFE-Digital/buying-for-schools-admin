@@ -50,7 +50,7 @@ export class Diagram extends Component {
       editWindowClasses.push('editwindow--open')
     }
 
-    // const style = { height: document.body.clientHeight }
+    // const style = { height: document.body.offsetHeight }
     return (
       <div className="diagramouter">
         <div className={diagramQuestionClasses.join(' ')} id="diagram">

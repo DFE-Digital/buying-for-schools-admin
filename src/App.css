@@ -37,6 +37,18 @@ td, th {
   border-radius: 2px;
   cursor: pointer;
   display: inline-block;
+  box-sizing: border-box;
+  height: 30px;
+}
+
+td .button {
+  margin: 0;
+}
+
+.button--small {
+  padding: 0px 10px;
+  font-size: 13px;
+  height: 20px;
 }
 
 .button + .button {
