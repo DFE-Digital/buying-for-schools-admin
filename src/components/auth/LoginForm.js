@@ -1,54 +1,63 @@
-import React from 'react'
+import React, { Component } from 'react'
 
 import Input from '../form/Input'
 import ErrorSummary from '../form/ErrorSummary'
 
-const Login = (props) => {
-  const values = { user: '', pass: ''}
-  const onChange = (id, value) => {
-    values[id] = value
+class Login extends Component {
+  constructor (props) {
+    super(props)
+    this.state = {
+      values: { user: '', pass: ''}
+    }
   }
 
-  const onSubmit = (e) => {
+  onChange (id, value) {
+    const newValues = { ...this.state.values }
+    newValues[id] = value
+    this.setState({ values: newValues})
+  }
+
+  onSubmit (e) {
     e.preventDefault()
-    console.log(values)
-    props.login(values.user, values.pass)
+    this.props.login(this.state.values.user, this.state.values.pass)
   }
 
-  const hasErrors = Array.isArray(props.errors)
-  const errorIds = hasErrors ? props.errors.map(e => e.id) : []
-  const errors = hasErrors ? props.errors : []
+  render() {
+    const hasErrors = Array.isArray(this.props.errors)
+    const errorIds = hasErrors ? this.props.errors.map(e => e.id) : []
+    const errors = hasErrors ? this.props.errors : []
 
-  return (
-    <div className="dashboard govuk-width-container">
-      <h1>Log in</h1>
-      <form className="frameworkeditor__framework">
-        <ErrorSummary errors={props.errors} />
+    return (
+      <div className="dashboard govuk-width-container">
+        <h1>Log in</h1>
+        <form className="frameworkeditor__framework">
+          <ErrorSummary errors={this.props.errors} />
 
-        <Input 
-          id="user"
-          value=""
-          label="User"
-          onChange={onChange}
-          error={errorIds.includes('user')}
-          />
-        <Input 
-          id="pass"
-          value=""
-          label="Password"
-          onChange={onChange}
-          error={errorIds.includes('pass')}
-          />
+          <Input 
+            id="user"
+            value={this.state.values.user}
+            label="User"
+            onChange={this.onChange.bind(this)}
+            error={errorIds.includes('user')}
+            />
+          <Input 
+            id="pass"
+            value={this.state.values.pass}
+            label="Password"
+            onChange={this.onChange.bind(this)}
+            error={errorIds.includes('pass')}
+            />
 
-        <input 
-          type="submit" 
-          value="Submit" 
-          className="button" 
-          onClick={onSubmit} 
-          />
-      </form>
-    </div>
-  )
+          <input 
+            type="submit" 
+            value="Submit" 
+            className="button" 
+            onClick={this.onSubmit.bind(this)} 
+            />
+        </form>
+      </div>
+    )
+  }
 }
 
 export default Login

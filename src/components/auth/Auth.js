@@ -30,11 +30,12 @@ export class DiagramResult extends Component {
   }
 
   login (user, pass) {
+    
     this.props.login(user, pass)    
   }
 
   render () {
-    
+
     if (this.props.token) {
       return (
         <div>
