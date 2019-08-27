@@ -6,8 +6,8 @@ import categoryReducer from './reducers/category-reducer'
 import providerReducer from './reducers/provider-reducer'
 import dialogReducer from './reducers/dialog-reducer'
 import structureReducer from './reducers/structure-reducer'
+import authReducer from './reducers/auth-reducer'
 // import aggregationReducer from './reducers/aggregation-reducer'
-
 
 // const logger = args => {
 //   const { getState } = args
@@ -32,7 +32,8 @@ export const store = createStore(
     categoryReducer,
     providerReducer,
     dialogReducer,
-    structureReducer
+    structureReducer,
+    authReducer
   }),
   applyMiddleware(thunk)
 )

@@ -10,12 +10,11 @@ export const PROVIDER_SAVING = 'PROVIDER_SAVING'
 export const PROVIDER_UPDATE_ERRORED = 'PROVIDER_UPDATE_ERRORED'
 export const PROVIDER_DELETING = 'PROVIDER_DELETING'
 
-
 export const providersLoaded = data => {
   return {
     type: PROVIDERS_LOADED,
     data
-  }  
+  }
 }
 
 export const providersErrored = err => {
@@ -33,12 +32,11 @@ export const providerUpdateErrored = err => {
 }
 
 export const getProviders = () => dispatch => {
-  get(providerUrl).then(data => {
+  return get(providerUrl).then(data => {
     return dispatch(providersLoaded(fromJS(data)))
   }).catch(err => {
     return dispatch(providersErrored(err))
   })
-  return dispatch({ type: PROVIDERS_LOADING })
 }
 
 export const saveNewProvider = (json, parent) => dispatch => {

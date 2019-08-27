@@ -21,7 +21,7 @@ export const questionsLoaded = data => {
   return {
     type: QUESTIONS_LOADED,
     data
-  }  
+  }
 }
 
 export const questionsErrored = err => {
@@ -35,7 +35,7 @@ export const questionLoaded = data => {
   return {
     type: QUESTION_LOADED,
     data
-  }  
+  }
 }
 
 export const questionErrored = err => {
@@ -56,7 +56,7 @@ export const editQuestion = (questionID, optionIndex = null) => {
 export const cancelEdit = () => {
   return {
     type: QUESTION_CANCEL_EDIT
-  } 
+  }
 }
 
 export const questionUpdateErrored = err => {
@@ -100,7 +100,6 @@ export const confirmDeleteQuestion = question => dispatch => {
   })
 }
 
-
 export const deleteQuestion = id => dispatch => {
   remove(`${questionUrl}/${id}`).then(() => {
     dispatch(cancelEdit())
@@ -135,10 +134,9 @@ export const updateQuestion = json => dispatch => {
 }
 
 export const getQuestions = () => dispatch => {
-  get(questionUrl).then(data => {
+  return get(questionUrl).then(data => {
     return dispatch(questionsLoaded(fromJS(data)))
   }).catch(err => {
     return dispatch(questionsErrored(err))
   })
-  return dispatch({ type: QUESTIONS_LOADING })
 }

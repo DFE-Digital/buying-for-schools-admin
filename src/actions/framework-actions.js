@@ -14,13 +14,11 @@ export const FRAMEWORK_NEW = 'FRAMEWORK_NEW'
 export const FRAMEWORK_DELETE = 'FRAMEWORK_DELETE'
 export const FRAMEWORK_DELETING = 'FRAMEWORK_DELETING'
 
-
-
 export const frameworksLoaded = data => {
   return {
     type: FRAMEWORKS_LOADED,
     data
-  }  
+  }
 }
 
 export const frameworksErrored = err => {
@@ -69,12 +67,11 @@ export const deleteFramework = id => dispatch => {
 }
 
 export const getFrameworks = () => dispatch => {
-  get(frameworkUrl).then(data => {
+  return get(frameworkUrl).then(data => {
     return dispatch(frameworksLoaded(fromJS(data)))
   }).catch(err => {
     return dispatch(frameworksErrored(err))
   })
-  return dispatch({ type: FRAMEWORKS_LOADING })
 }
 
 export const saveNewFramework = (json, parent) => dispatch => {

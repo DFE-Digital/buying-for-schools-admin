@@ -10,12 +10,11 @@ export const CATEGORY_SAVING = 'CATEGORY_SAVING'
 export const CATEGORY_UPDATE_ERRORED = 'CATEGORY_UPDATE_ERRORED'
 export const CATEGORY_DELETING = 'CATEGORY_DELETING'
 
-
 export const categoriesLoaded = data => {
   return {
     type: CATEGORIES_LOADED,
     data
-  }  
+  }
 }
 
 export const categoriesErrored = err => {
@@ -33,12 +32,11 @@ export const categoryUpdateErrored = err => {
 }
 
 export const getCategories = () => dispatch => {
-  get(categoryUrl).then(data => {
+  return get(categoryUrl).then(data => {
     return dispatch(categoriesLoaded(fromJS(data)))
   }).catch(err => {
     return dispatch(categoriesErrored(err))
   })
-  return dispatch({ type: CATEGORIES_LOADING })
 }
 
 export const saveNewCategory = (json, parent) => dispatch => {

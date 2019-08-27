@@ -1,42 +1,49 @@
-export const ioCache = {
-  get: {}
+import { getCookie, setCookie } from './utils'
+import { cookieName } from '../config'
+
+const ioConf = {}
+
+const cookieToken = getCookie(cookieName)
+if (cookieToken) {
+  ioConf.token = cookieToken
 }
 
 const IoError = function (err) {
-   this.error = err
-   this.msg = 'io error'
+  this.error = err
+  this.msg = 'io error'
 }
 
+export const setToken = token => {
+  setCookie(cookieName, token)
+  ioConf.token = token
+}
 
-export const get = (url, fromCache) => {
+export const getHeaders = () => {
+  const headers = {
+    'Content-Type': 'application/json'
+  }
+  if (ioConf.token) {
+    headers['Authorization-token'] = ioConf.token
+  }
+  return headers
+}
 
+export const get = (url) => {
   return new Promise((resolve, reject) => {
-    if (fromCache) {
-      const cached = ioCache.get[url]
-      if (cached) {
-        return resolve(cached)
-      }
-    }
-
-    fetch(url).then(response => {
+    fetch(url, { headers: getHeaders() }).then(response => {
       if (!response.ok) {
         return reject(response.status)
       }
-      return response.json()
-    }).then(data => {
-      ioCache.get[url] = data
-      return resolve(data)
+      return resolve(response.json())
     })
   })
 }
 
-export const put = (url, data) => { 
+export const put = (url, data) => {
   const opts = {
     method: 'PUT',
     body: JSON.stringify(data),
-    headers: {
-      'Content-Type': 'application/json'
-    }
+    headers: getHeaders()
   }
   let theresponse = null
 
@@ -61,14 +68,11 @@ export const put = (url, data) => {
   })
 }
 
-
-export const post = (url, data) => { 
+export const post = (url, data) => {
   const opts = {
     method: 'POST',
     body: JSON.stringify(data),
-    headers: {
-      'Content-Type': 'application/json'
-    }
+    headers: getHeaders()
   }
 
   let theresponse = null
@@ -97,9 +101,7 @@ export const post = (url, data) => {
 export const remove = (url) => {
   const opts = {
     method: 'DELETE',
-    headers: {
-      'Content-Type': 'application/json'
-    }
+    headers: getHeaders()
   }
 
   let theresponse = null

@@ -4,5 +4,7 @@ export const categoryUrl = '/api/category'
 export const providerUrl = '/api/provider'
 export const structureUrl = '/api/structure'
 export const questionHierarchyUrl = '/api/questionhierarchy'
+export const auth = '/auth'
 
 export const rootQuestionRef = 'type'
+export const cookieName = 'authorizationtoken'
