@@ -21,6 +21,7 @@ export default class Input extends Component {
 
   render () {
     const classes = ['govuk-form-group']
+    
     classes.push('govuk-form-group--' + this.props.id)
     if (this.props.error) {
       classes.push('govuk-form-group--error')
@@ -31,7 +32,7 @@ export default class Input extends Component {
           <label className="govuk-label" htmlFor={this.props.id}>{this.props.label}</label>
           {this.props.hint && <span id={`${this.props.id}-hint`} class="govuk-hint">{this.props.hint}</span>}
           <input 
-            type="text" 
+            type={this.props.type || 'text'}
             name={this.props.id}
             id={this.props.id}
             className="govuk-input"

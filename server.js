@@ -4,36 +4,56 @@ const bodyParser = require('body-parser')
 const serveStatic = require('serve-static')
 const path = require('path')
 const port = process.env.PORT || 8000
-// const auth = require('./api/auth')
+const mongodoc = require('./api/adaptors/mongodoc/mongodocAdaptor')
+const api = require('./api/api')
+const errors = require('./errors')
 
 const app = express()
 app.use(bodyParser.json())
 
-// auth(app)
-
 const haveConnectionDetails = !!process.env.MONGO
 const haveBuildDirectory = fs.existsSync(path.join(__dirname, 'build/index.html'))
+const haveUsers = process.env.USERS && process.env.USERS.length >= 16
+const haveSecret = process.env.AUTHSECRET && process.env.AUTHSECRET.length >= 16
 
-if (haveConnectionDetails) {
-  const api = require('./api/api')
-  const config = {
-    dataSource: require('./api/adaptors/mongodoc/mongodocAdaptor')({ connectionString: process.env.MONGO })
+
+const go = async () => {
+  const noGoErrors = []
+  if (!haveUsers) {
+    noGoErrors.push(errors.USERS_ERROR)
   }
-  api(app, config)
-} else {
-  app.get('/api/*', (req, res) => res.send({ haveConnectionDetails }))
+
+  if (!haveSecret) {
+    noGoErrors.push(errors.AUTHSECRET_ERROR)
+  }
+
+  if (!haveConnectionDetails) {
+    noGoErrors.push(errors.MONGO_ERROR)
+  }
+
+  if (noGoErrors.length) {
+    throw(new Error(noGoErrors))
+  }
+
+  const dataSource = await mongodoc({ connectionString: process.env.MONGO })
+  api(app, dataSource)
+
+  if (haveBuildDirectory) {
+    app.use(serveStatic('build/', { index: ['index.html'] }))
+    app.get('*', (req, res) => {
+      res.sendFile(path.join(__dirname, 'build/index.html'))
+    })
+  } 
 }
 
-if (haveBuildDirectory) {
-  app.use(serveStatic('build/', { index: ['index.html'] }))
-  app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, 'build/index.html'))
+go()
+  .catch(e => {
+    errors.log(e.message.split())
   })
-} else {
-  app.get('*', (req, res) => res.send({ haveConnectionDetails, haveBuildDirectory, port }))
-}
+  .finally(() => {
+    app.get('/api/*', (req, res) => res.status(500).send('Error - check config'))
+    const server = app.listen(port, () => {
+      console.log('Magic happens on port ' + port)
+    })
+  })
 
-const server = app.listen(port, () => {
-  console.log('Magic happens on port ' + port)
-  console.log({ haveConnectionDetails, haveBuildDirectory, port })
-})

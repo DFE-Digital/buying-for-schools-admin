@@ -43,6 +43,7 @@ class Login extends Component {
           <Input 
             id="pass"
             value={this.state.values.pass}
+            type="password"
             label="Password"
             onChange={this.onChange.bind(this)}
             error={errorIds.includes('pass')}

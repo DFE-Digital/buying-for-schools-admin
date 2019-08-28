@@ -1,7 +1,4 @@
-const api = (app, config) => {
-  // const dataSource = require('./adaptors/mongo/mongoAdaptor')({ connectionString: process.env.S107D01_MONGO_01 })
-  const { dataSource } = config// require('./adaptors/lowdb/lowdbAdaptor')({ path: './_data.json' })
-
+const api = (app, dataSource) => {
   const frameworkController = require('./controllers/framework')(dataSource)
   const questionController = require('./controllers/question')(dataSource)
   const categoryController = require('./controllers/genericController')(dataSource, 'category')
