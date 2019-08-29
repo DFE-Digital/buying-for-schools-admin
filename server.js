@@ -6,7 +6,7 @@ const path = require('path')
 const port = process.env.PORT || 8000
 const mongodoc = require('./api/adaptors/mongodoc/mongodocAdaptor')
 const api = require('./api/api')
-const errors = require('./errors')
+const errors = require('./api/errors')
 
 const app = express()
 app.use(bodyParser.json())

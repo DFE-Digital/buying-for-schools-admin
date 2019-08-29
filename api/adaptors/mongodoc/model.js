@@ -1,4 +1,4 @@
-const errors = require('../../../errors')
+const errors = require('../../errors')
 
 const validateFrameworkRef = RegExp(/^[a-z-]*$/)
 const validateQuestionRef = RegExp(/^[a-z-]*$/)
