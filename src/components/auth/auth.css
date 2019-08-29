@@ -1,4 +1,14 @@
-.auth__logout {
-  text-align: right;
+.auth {
   display: block;
+  position: relative;
+}
+
+.auth__logout {
+  position: absolute;
+  top: -15px;
+  right: 0;
+  background-color: #f8f8f8;
+  color: #0b0c0c;
+  text-decoration: none;
+  padding: 2px 5px;
 }

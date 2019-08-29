@@ -39,7 +39,7 @@ export class DiagramResult extends Component {
     if (this.props.token) {
       return (
         <div>
-          <Link to="/" onClick={this.props.logout} className="auth__logout govuk-width-container">Logout</Link>
+          <span className="govuk-width-container auth"><Link to="/" onClick={this.props.logout} className="auth__logout">Logout</Link></span>
           <Nav />
           { this.props.children }
         </div>
