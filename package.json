@@ -18,11 +18,9 @@
   "dependencies": {
     "body-parser": "^1.19.0",
     "express": "^4.17.1",
-    "express-basic-auth": "^1.2.0",
     "govuk-frontend": "^2.13.0",
     "immutable": "^4.0.0-rc.12",
     "jsonwebtoken": "^8.5.1",
-    "lowdb": "^1.0.0",
     "md5": "^2.2.1",
     "moment": "^2.24.0",
     "mongoose": "^5.5.13",
@@ -30,14 +28,12 @@
     "query-string": "^6.8.1",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
-    "react-markdown": "^4.1.0",
     "react-redux": "^7.1.0",
     "react-router-dom": "^5.0.1",
     "react-scripts": "3.0.1",
     "redux": "^4.0.1",
     "redux-thunk": "^2.3.0",
-    "serve-static": "^1.14.1",
-    "shortid": "^2.2.14"
+    "serve-static": "^1.14.1"
   },
   "scripts": {
     "start": "node server.js",
@@ -45,7 +41,7 @@
     "build": "react-scripts build",
     "test": "npm run test:jshint && npm run test:api",
     "test:jshint": "jshint api/**/*.js",
-    "test:api": "mocha api/test/**/*.test.js --exit"
+    "test:api": "mocha api/test/*.test.js --exit"
   },
   "eslintConfig": {
     "extends": "react-app"

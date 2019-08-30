@@ -4,17 +4,19 @@ const expect = require('chai').expect
 const testData = require('./testdata/categories.json')
 const testRecords = {}
 
-const { helpers } = require('./setup')()
+const setup = require('./setup')
 let records = null
+let authtoken
 
 
 describe('api:category', () => {
-  before((done) => {
-    helpers.removeAllRecords('category')
-    .then(() => helpers.createRecord('category', testData.baddies))
-    .then(() => helpers.createRecord('category', testData.vehicles))
-    .then(() => helpers.createRecord('category', testData.sidekicks))
-    .then(() => done())
+  before(async () => {
+    const setupDone = await setup()
+    await setupDone.helpers.removeAllRecords('category')
+    await setupDone.helpers.createRecord('category', testData.baddies)
+    await setupDone.helpers.createRecord('category', testData.vehicles)
+    await setupDone.helpers.createRecord('category', testData.sidekicks)
+    authtoken = await setupDone.getToken()
   })
 
   
@@ -22,6 +24,7 @@ describe('api:category', () => {
     it('should be able to get a list of all categories in the database', done => {
       server
       .get('http://127.0.0.1:5000/api/category')
+      .set('authorization-token', authtoken)
       .end((err, res) => {
         records = res.body
         expect(res.statusCode).to.equal(200)
@@ -34,6 +37,7 @@ describe('api:category', () => {
       const id = records[1]._id
       server
         .get(`http://127.0.0.1:5000/api/category/${id}`)
+        .set('authorization-token', authtoken)
         .end((err, res) => {
           expect(res.statusCode).to.equal(200)
           expect(res.body).to.have.property('_id', id)
@@ -45,6 +49,7 @@ describe('api:category', () => {
     it('should return 404 if the document does not exist', done => {
       server
         .get(`http://127.0.0.1:5000/api/category/ffffffffffffffffffffffff`)
+        .set('authorization-token', authtoken)
         .end((err, res) => {
           expect(res.statusCode).to.equal(404)        
           expect(res.body).to.have.property('success', false)
@@ -57,6 +62,7 @@ describe('api:category', () => {
     it('should create with minimum data', done => {
       server
         .post('http://127.0.0.1:5000/api/category')
+        .set('authorization-token', authtoken)
         .send({
           ref: 'girls',
           title: 'Bond Girls'
@@ -71,6 +77,7 @@ describe('api:category', () => {
     it('cannot have a blank title', done => {
       server
         .post('http://127.0.0.1:5000/api/category')
+        .set('authorization-token', authtoken)
         .send({
           ref: 'blank',
           title: ''
@@ -90,6 +97,7 @@ describe('api:category', () => {
       const id = records[1]._id
       server
         .put(`http://127.0.0.1:5000/api/category/${id}`)
+        .set('authorization-token', authtoken)
         .send({
           title: 'Spectre Corp'
         })
@@ -104,6 +112,7 @@ describe('api:category', () => {
       const id = records[1]._id
       server
         .put(`http://127.0.0.1:5000/api/category/${id}`)
+        .set('authorization-token', authtoken)
         .send({
           title: ''
         })
@@ -122,6 +131,7 @@ describe('api:category', () => {
       const id = records[0]._id
       server
         .delete(`http://127.0.0.1:5000/api/category/${id}`)
+        .set('authorization-token', authtoken)
         .end((err, res) => {
           expect(res.statusCode).to.equal(200)
           done()
@@ -132,6 +142,7 @@ describe('api:category', () => {
       const id = records[0]._id
       server
         .delete(`http://127.0.0.1:5000/api/category/${id}`)
+        .set('authorization-token', authtoken)
         .end((err, res) => {
           expect(res.statusCode).to.equal(404)
           done()

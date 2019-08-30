@@ -4,17 +4,23 @@ const expect = require('chai').expect
 const testData = require('./testdata/questions.json')
 const testRecords = {}
 
-const { helpers } = require('./setup')()
+const setup = require('./setup')
+let records = null
+let authtoken
+
 
 describe('api:question:post', () => {
-  before((done) => {
-    helpers.removeAllRecords('question').then(() => done())
+  before(async () => {
+    const setupDone = await setup()
+    await setupDone.helpers.removeAllRecords('question')
+    authtoken = await setupDone.getToken()
   })
 
   describe('new question', () => {
     it('should create with minimum data', done => {
       server
         .post('http://127.0.0.1:5000/api/question')
+        .set('authorization-token', authtoken)
         .send({
           ref: 'jbond',
           title: 'James Bond'
@@ -29,6 +35,7 @@ describe('api:question:post', () => {
     it('must have a unique ref', done => {
       server
         .post('http://127.0.0.1:5000/api/question')
+        .set('authorization-token', authtoken)
         .send({
           ref: 'jbond',
           title: 'James bond films'
@@ -45,6 +52,7 @@ describe('api:question:post', () => {
     it('cannot have a blank title', done => {
       server
         .post('http://127.0.0.1:5000/api/question')
+        .set('authorization-token', authtoken)
         .send({
           ref: 'jamesbond',
           title: ''
@@ -64,6 +72,7 @@ describe('api:question:post', () => {
       it(`should not create anything with an invalid ref: "${ref}"`, done => {
         server
           .post(`http://127.0.0.1:5000/api/question`)
+          .set('authorization-token', authtoken)
           .send({
             ref,
             title: `title: ${ref}`
@@ -81,6 +90,7 @@ describe('api:question:post', () => {
     it('should create with full data', done => {
       server
         .post('http://127.0.0.1:5000/api/question')
+        .set('authorization-token', authtoken)
         .send(testData.world)
         .end((err, res) => {
           expect(res.statusCode).to.equal(200)
@@ -108,6 +118,7 @@ describe('api:question:post', () => {
     it('should handle garbage requests with no data', done => {
       server
         .post('http://127.0.0.1:5000/api/question')
+        .set('authorization-token', authtoken)
         .send()
         .end((err, res) => {
           expect(res.statusCode).to.equal(400)
@@ -118,6 +129,7 @@ describe('api:question:post', () => {
     it('should handle garbage requests with wrong headers', done => {
       server
         .post('http://127.0.0.1:5000/api/question')
+        .set('authorization-token', authtoken)
         .set('accept', 'image/png')
         .end((err, res) => {
           expect(res.statusCode).to.equal(400)
@@ -132,6 +144,7 @@ describe('api:question:post', () => {
 
         server
           .post(`http://127.0.0.1:5000/api/question/${parentId}/${optionId}`)
+          .set('authorization-token', authtoken)
           .send(testData.boatthames)
           .end((err, res) => {
             testRecords.boatthames = res.body
@@ -145,6 +158,7 @@ describe('api:question:post', () => {
       it('should have updated the parent record\'s option to link to the new question', done => {
         server
           .get(`http://127.0.0.1:5000/api/question/${testRecords.world._id}`)
+          .set('authorization-token', authtoken)
           .end((err, res) => {
             expect(res.statusCode).to.equal(200)
             expect(res.body.options[1].next).to.equal(testRecords.boatthames._id)

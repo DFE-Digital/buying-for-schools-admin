@@ -4,27 +4,27 @@ const expect = require('chai').expect
 const testData = require('./testdata/questions.json')
 const testRecords = {}
 
-const { helpers } = require('./setup')()
+const setup = require('./setup')
 let records = null
-
+let authtoken
+let helpers
 
 describe('api:question:delete', () => {
-  before((done) => {
-    helpers.removeAllRecords('question')
-    .then(() => helpers.createRecord('question', testData.bond))
-    .then(() => helpers.createRecord('question', testData.conneryFilms))
-    .then(() => helpers.createRecord('question', testData.world))
-    .then(() => done())
-    .catch(err => {
-      console.log(err)
-      done()
-    })
+  before(async () => {
+    const setupDone = await setup()
+    helpers = setupDone.helpers
+    await helpers.removeAllRecords('question')
+    await helpers.createRecord('question', testData.bond)
+    await helpers.createRecord('question', testData.conneryFilms)
+    await helpers.createRecord('question', testData.world)
+    authtoken = await setupDone.getToken()
   })
 
   it('should be able to delete a specific record', done => {   
     const id = helpers.recordCache.bond._id
     server
       .delete(`http://127.0.0.1:5000/api/question/${id}`)
+      .set('authorization-token', authtoken)
       .end((err, res) => {
         expect(res.statusCode).to.equal(200)
         done()
@@ -35,6 +35,7 @@ describe('api:question:delete', () => {
     const id = helpers.recordCache.bond._id
     server
       .delete(`http://127.0.0.1:5000/api/question/${id}`)
+      .set('authorization-token', authtoken)
       .end((err, res) => {
         expect(res.statusCode).to.equal(404)
         done()

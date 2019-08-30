@@ -3,23 +3,24 @@ const server = superagent.agent()
 const expect = require('chai').expect
 const testData = require('./testdata/questions.json')
 
-const { helpers } = require('./setup')()
 const testRecords = {}
+const setup = require('./setup')
+let records = null
+let authtoken
 
 describe('api:question:put', () => {
-  before((done) => {
-    helpers.removeAllRecords('question').then(() => {
-      return helpers.createRecord('question', testData.world)
-    }).then(record => {
-      testRecords.world = record
-      done()
-    })
+  before(async () => {
+    const setupDone = await setup()
+    await setupDone.helpers.removeAllRecords('question')
+    testRecords.world = await setupDone.helpers.createRecord('question', testData.world)
+    authtoken = await setupDone.getToken()
   })
 
   describe('update question', () => {
     it('should be able to update the title', done => {
       server
         .put(`http://127.0.0.1:5000/api/question/${testRecords.world._id}`)
+        .set('authorization-token', authtoken)
         .send({
           title: 'A James Bond film'
         })
@@ -33,6 +34,7 @@ describe('api:question:put', () => {
     it('should not update to a blank title', done => {
       server
         .put(`http://127.0.0.1:5000/api/question/${testRecords.world._id}`)
+        .set('authorization-token', authtoken)
         .send({
           title: ''
         })
@@ -50,6 +52,7 @@ describe('api:question:put', () => {
       it(`should not update to an invalid ref: "${ref}"`, done => {
         server
           .put(`http://127.0.0.1:5000/api/question/${testRecords.world._id}`)
+          .set('authorization-token', authtoken)
           .send({
             ref,
             title: `title: ${ref}`
@@ -71,6 +74,7 @@ describe('api:question:put', () => {
         testOptions[0] = {...testOptions[0], ref}
         server
           .put(`http://127.0.0.1:5000/api/question/${testRecords.world._id}`)
+          .set('authorization-token', authtoken)
           .send({ options: testOptions })
           .end((err, res) => {
             expect(res.statusCode).to.equal(400)
@@ -87,6 +91,7 @@ describe('api:question:put', () => {
       testOptions[1] = {...testOptions[1], title: ''}
       server
         .put(`http://127.0.0.1:5000/api/question/${testRecords.world._id}`)
+        .set('authorization-token', authtoken)
         .send({ options: testOptions })
         .end((err, res) => {
           expect(res.statusCode).to.equal(400)
@@ -98,7 +103,9 @@ describe('api:question:put', () => {
     })
 
     it('should handle garbage requests with no data', done => {
-      server.put(`http://127.0.0.1:5000/api/question/${testRecords.world._id}`)
+      server
+        .put(`http://127.0.0.1:5000/api/question/${testRecords.world._id}`)
+        .set('authorization-token', authtoken)
         .send({garbage: 'dfdsaf dafdsa fdsafdsafdsafds'})
         .end((err, res) => {
           expect(res.statusCode).to.equal(200)
@@ -108,6 +115,7 @@ describe('api:question:put', () => {
 
     it('should handle garbage requests with wrong headers', done => {
       server.put(`http://127.0.0.1:5000/api/question/${testRecords.world._id}`)
+        .set('authorization-token', authtoken)
         .set('accept', 'image/png')
         .end((err, res) => {
           expect(res.statusCode).to.equal(200)
