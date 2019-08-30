@@ -8,7 +8,7 @@ import TextArea from '../form/TextArea'
 import ErrorSummary from '../form/ErrorSummary'
 import { List, Map } from 'immutable'
 import { getBlankFramework } from '../../services/framework'
-import ReactMarkdown from 'react-markdown'
+
 
 
 const mapStateToProps = (state) => {

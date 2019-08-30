@@ -20,22 +20,12 @@ const mapDispatchToProps = (dispatch) => {
   }
 }
 
-export class DiagramResult extends Component {
-  componentDidMount () {
-
-  }
-
-  componentDidUpdate (prevProps) {
-
-  }
-
-  login (user, pass) {
-    
+export class Auth extends Component {
+  login (user, pass) {    
     this.props.login(user, pass)    
   }
 
   render () {
-
     if (this.props.token) {
       return (
         <div>
@@ -50,4 +40,4 @@ export class DiagramResult extends Component {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(DiagramResult)
+export default connect(mapStateToProps, mapDispatchToProps)(Auth)

@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { List } from 'immutable'
 import FrameworkExpiryList from '../frameworks/FrameworkExpiryList'
-import Management from '../management/Management'
 
 const mapStateToProps = (state) => {
   return {

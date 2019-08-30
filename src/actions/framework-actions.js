@@ -40,7 +40,7 @@ export const confirmDeleteFramework = framework => dispatch => {
     type: DIALOG_SHOW,
     data: {
       title: 'Delete framework',
-      msg: [`Are you sure you want to delete framework: \'${framework.get('title')}\'?`, 'This cannot be undone!'],
+      msg: [`Are you sure you want to delete framework: '${framework.get('title')}'?`, 'This cannot be undone!'],
       buttons: [
         {
           text: 'Yes, delete',

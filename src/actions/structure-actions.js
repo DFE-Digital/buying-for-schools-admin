@@ -1,7 +1,6 @@
 import { get, put, post, remove } from '../services/io'
 import { fromJS } from 'immutable'
 import { structureUrl } from '../config'
-import { DIALOG_SHOW } from './dialog-actions'
 
 export const STRUCTURES_LOADING = 'STRUCTURES_LOADING'
 export const STRUCTURES_LOADED = 'STRUCTURES_LOADED'

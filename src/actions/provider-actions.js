@@ -66,7 +66,7 @@ export const confirmDeleteProvider = provider => dispatch => {
     type: DIALOG_SHOW,
     data: {
       title: 'Delete provider',
-      msg: [`Are you sure you want to delete provider: \'${provider.get('title')}\'?`, 'This cannot be undone!'],
+      msg: [`Are you sure you want to delete provider: '${provider.get('title')}'?`, 'This cannot be undone!'],
       buttons: [
         {
           text: 'Yes, delete',

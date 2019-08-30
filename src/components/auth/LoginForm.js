@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-
 import Input from '../form/Input'
 import ErrorSummary from '../form/ErrorSummary'
 
@@ -25,7 +24,6 @@ class Login extends Component {
   render() {
     const hasErrors = Array.isArray(this.props.errors)
     const errorIds = hasErrors ? this.props.errors.map(e => e.id) : []
-    const errors = hasErrors ? this.props.errors : []
 
     return (
       <div className="dashboard govuk-width-container">

@@ -105,3 +105,22 @@ Static asset items which are used by the front end, eg fonts, favicon etc.
 ### /src ###
 
 Source code for the React front end.
+
+
+## Data structure ##
+
+The data structure in Mongo (Cosmos) is a little unsual for a number of reasons.
+
+Each entry in the DB is one version of the entire data of the site, so one record contains all the frameworks, questions, answers, provider and category information.
+
+This is due mostly to the pricing of Micro$oft Cosmos, each collection (table) is priced separately and regardless of quantity of data stored incurs a cost disproportionate to the scale of the thing itself. Also the fact that there is expected to be **NO DEV SUPPORT** for this project after going live.
+
+It is only possible due to the small scale of the app, typical content is forecast to be only approx.40 frameworks and a similar number of questions to determine a recommendation.
+
+There are however benefits to storing all the data in one record: it is easy to keep _DRAFT_ , _LIVE_ and _ARCHIVE_ versions separate and revert or promote different versions of the site. Doing this means that changes can be pushed to LIVE without requiring any tech/dev resource being available.
+
+Being a JSON based structure there is no issue when it comes to querying the data no matter how deep it may be nested.
+
+The infrastructure is such that the test env of the service will access the database and consume the newest record with ```js status: 'DRAFT' ``` while the production env will access the same database and use the record with ```js status: 'LIVE' ```, although it is recognised that having test and prod envs accessing the same database is not ideal, without dev/tech support to push changes up through the env hierarchy there are no alternatives that do not involve the different envs talking to each other.
+
+

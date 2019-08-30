@@ -66,7 +66,7 @@ export const confirmDeleteCategory = category => dispatch => {
     type: DIALOG_SHOW,
     data: {
       title: 'Delete category',
-      msg: [`Are you sure you want to delete category: \'${category.get('title')}\'?`, 'This cannot be undone!'],
+      msg: [`Are you sure you want to delete category: '${category.get('title')}'?`, 'This cannot be undone!'],
       buttons: [
         {
           text: 'Yes, delete',

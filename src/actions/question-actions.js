@@ -83,7 +83,7 @@ export const confirmDeleteQuestion = question => dispatch => {
     type: DIALOG_SHOW,
     data: {
       title: 'Delete question',
-      msg: [`Are you sure you want to delete question: \'${question.get('title')}\'?`, 'This cannot be undone!'],
+      msg: [`Are you sure you want to delete question: '${question.get('title')}'?`, 'This cannot be undone!'],
       buttons: [
         {
           text: 'Yes, delete',

@@ -12,10 +12,15 @@ const defaultState = {
   errors: []
 }
 
+const resetState = {
+  token: null, 
+  errors: []
+}
+
 export default (state = defaultState, action) => {
   switch (action.type) {
     case AUTH_RESET: {
-      return { ...defaultState }
+      return resetState
     }
 
     case AUTH_SUCCESS: {
@@ -30,7 +35,7 @@ export default (state = defaultState, action) => {
     case CATEGORIES_ERRORED:
     case PROVIDERS_ERRORED:
     case FRAMEWORKS_ERRORED: {
-      return (action.err === 401) ? defaultState : state
+      return (action.err === 401 || action.err === 403) ? resetState : state
     }
 
     case AUTH_LOGOUT: {

@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 
-import Input from '../form/Input'
 import TextArea from '../form/TextArea'
 import ErrorSummary from '../form/ErrorSummary'
 import { List, Map } from 'immutable'
@@ -132,7 +131,6 @@ export class StructureEditor extends Component {
     }
     const status = this.state.structure.get('status')
     const hasErrors = this.props.updateErrors && this.props.updateErrors.data && this.props.updateErrors.data.errors
-    const errorIds = hasErrors ? this.props.updateErrors.data.errors.map(e => e.id) : []
     const errors = hasErrors ? this.props.updateErrors.data.errors : []
     return (
       <div className="structureeditor govuk-width-container">
