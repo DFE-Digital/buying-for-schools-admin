@@ -45,13 +45,10 @@ export const getStructures = () => dispatch => {
     .catch(err => dispatch(structuresErrored(err)))
 }
 
-export const archive = (id, note) => dispatch => {
+export const archive = (id, title) => dispatch => {
   const data = {
     status: 'ARCHIVE',
-    archived: {
-      date: Date.now(),
-      note
-    }
+    archived: new Date().toISOString()
   }
   return put(`${structureUrl}/${id}`, data)
 }
@@ -60,13 +57,11 @@ export const archive = (id, note) => dispatch => {
 //   return post(structureUrl, { source: id, status: 'DRAFT', published: {}, archived: {} })
 // }
 
-export const publish = (id, note) => dispatch => {
+export const publish = (id, title) => dispatch => {
   const data = {
     status: 'LIVE',
-    published: {
-      date: Date.now(),
-      note
-    }
+    published: new Date().toISOString(),
+    title
   }
   return put(`${structureUrl}/${id}`, data)
 }
@@ -76,6 +71,6 @@ export const deleteStructure = id => dispatch => {
 }
 
 export const restore = id => dispatch => {
-  return post(structureUrl, { source: id, status: 'DRAFT', published: {}, archived: {} })
+  return post(structureUrl, { source: id, status: 'DRAFT', published: null, archived: null })
 }
 

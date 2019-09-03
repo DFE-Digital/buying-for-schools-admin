@@ -11,14 +11,9 @@ const structureModelSchema = new Schema({
     type: String,
     default: 'DRAFT'
   },
-  published: {
-    date: Date,
-    note: String
-  },
-  archived: {
-    date: Date,
-    note: String
-  },
+  published: Date,
+  archived: Date,
+  title: String,  
   framework: [{
     ref: {
       type: String,

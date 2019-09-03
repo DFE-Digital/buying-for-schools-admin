@@ -1,8 +1,10 @@
 import React, { Component } from 'react'
+import moment from 'moment'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { List } from 'immutable'
 
+import './management.css'
 import { getStructures } from '../../actions/structure-actions'
 
 
@@ -27,36 +29,51 @@ export class Management extends Component {
   getLink(s) {
     switch(s.get('status')){
       case 'DRAFT': {
-        return <Link to={`/structure/${s.get('_id')}`}>Publish</Link>
+        return <Link to={`/structure/${s.get('_id')}`} className="button">Publish</Link>
       }
       case 'LIVE': {
-        return <Link to={`/structure/${s.get('_id')}`}>Copy to draft</Link>
+        return <Link to={`/structure/${s.get('_id')}`} className="button">Copy to draft</Link>
       }
       default: {
-        return <Link to={`/structure/${s.get('_id')}`}>Restore</Link>
+        return <Link to={`/structure/${s.get('_id')}`} className="button">Restore</Link>
       }
     }
   }
 
   render() {
+    const structures = this.props.structures.map(s => {
+      const updatedAt = moment(s.get('updatedAt'))
+      const published = moment(s.get('published'))
+      const archived = moment(s.get('archived'))
+
+      return s
+        .set('updatedAt', updatedAt.isValid() ? updatedAt.format('DD/MM/YYYY HH:mm'): '')
+        .set('published', published.isValid() ? published.format('DD/MM/YYYY HH:mm'): '')
+        .set('archived', archived.isValid() ? archived.format('DD/MM/YYYY HH:mm'): '')
+    })
+
     return (
-      <div className="categoryeditor govuk-width-container">
+      <div className="managementeditor govuk-width-container">
         <h1>Management</h1>
         <table>
           <thead>
             <tr>
               <th>Title</th>
-              <th></th>
+              <th>Status</th>
+              <th>Updated</th>
+              <th>Published</th>
+              <th>Archived</th>
+              <th>Action</th>
             </tr>
           </thead>
           <tbody>
-            {this.props.structures.map((s) => (
-              <tr key={s.get('_id')}>
-                <td>{ s.get('_id') }</td>
+            {structures.map((s) => (
+              <tr key={s.get('_id')} className={`structuretable__${s.get('status').toLowerCase()}`}>
+                <td>{ s.get('title') }</td>
                 <td>{ s.get('status') }</td>
                 <td>{ s.get('updatedAt') }</td>
-                <td>{ s.getIn(['published', 'date']) }</td>
-                <td>{ s.getIn(['published', 'note']) }</td>
+                <td>{ s.get('published') }</td>
+                <td>{ s.get('archived') }</td>
                 <td>{ this.getLink(s) }</td>
               </tr>
             ))}

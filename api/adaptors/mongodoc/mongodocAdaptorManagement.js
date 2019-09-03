@@ -19,10 +19,7 @@ const mongodocAdaptorManagement = model => {
       return Promise.resolve()
     }
     doc.status = 'ARCHIVE'
-    doc.archived = {
-      date: Date.now(),
-      note: 'Hello'
-    }
+    doc.archived = Date.now()
     return shared.save(doc)
   }
 
@@ -82,7 +79,8 @@ const mongodocAdaptorManagement = model => {
       category: [],
       provider: [],
       framework: [],
-      question: []
+      question: [],
+      title: doc.title
     }
 
     newdoc.category = doc.category.map(c => {
@@ -181,6 +179,15 @@ const mongodocAdaptorManagement = model => {
     if (updates.archived) {
       doc.archived = updates.archived
     }
+
+    if (updates.title) {
+      doc.title = updates.title
+    }
+
+    if (updates.status === 'DRAFT') {
+      doc.published = null
+      doc.archived = null
+    } 
     
     return doc
   }
@@ -190,7 +197,7 @@ const mongodocAdaptorManagement = model => {
       return new Promise((resolve, reject) => {
         model
         .find()
-        .select('published archived status createdAt updatedAt')
+        .select('title published archived status createdAt updatedAt')
         .sort({ 'updatedAt': 'desc' })
         .exec((err, result) => {
           if (err) {

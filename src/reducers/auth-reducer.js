@@ -5,6 +5,7 @@ import { QUESTIONS_ERRORED } from '../actions/question-actions'
 import { CATEGORIES_ERRORED } from '../actions/category-actions'
 import { PROVIDERS_ERRORED } from '../actions/provider-actions'
 import { FRAMEWORKS_ERRORED } from '../actions/framework-actions'
+import { STRUCTURES_ERRORED } from '../actions/structure-actions'
 import { AUTH_SUCCESS, AUTH_LOGOUT, AUTH_FAILED, AUTH_RESET } from '../actions/auth-actions'
 
 const defaultState = {
@@ -31,6 +32,7 @@ export default (state = defaultState, action) => {
       return { token: null, errors: action.errors }
     }
 
+    case STRUCTURES_ERRORED:
     case QUESTIONS_ERRORED:
     case CATEGORIES_ERRORED:
     case PROVIDERS_ERRORED:

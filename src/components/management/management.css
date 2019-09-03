@@ -1,0 +1,14 @@
+.structuretable__draft {
+  color: #000;
+  background-color: var(--govuk-colour--yellow);
+}
+
+.structuretable__live {
+  color: #fff;
+  background-color: var(--govuk-colour--red);
+}
+
+.structuretable__archive {
+  color: #999;
+  /*background-color: #eee;*/
+}

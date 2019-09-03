@@ -9,7 +9,6 @@ const defaultState = {
 export default (state = defaultState, action) => {
   switch (action.type) {
     case STRUCTURE_DRAFT_CHANGED: {
-      console.log(action)
       return { ...state, draftId: action.id }
     }
 

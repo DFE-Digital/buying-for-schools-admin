@@ -1,6 +1,7 @@
 import { Map } from 'immutable'
 import { rootQuestionRef } from '../config'
 import moment from 'moment'
+import { List } from 'immutable'
 
 export const FRAMEWORK_ACTIVE = 'FRAMEWORK_ACTIVE'
 export const FRAMEWORK_EXPIRED = 'FRAMEWORK_EXPIRED'
@@ -11,7 +12,8 @@ export const getBlankFramework = () => {
   return Map({
     _id: 'new',
     ref: '',
-    title: ''
+    title: '',
+    links: List()
   })
 }
 

@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 
-import TextArea from '../form/TextArea'
+import Input from '../form/Input'
 import ErrorSummary from '../form/ErrorSummary'
 import { List, Map } from 'immutable'
 
@@ -18,10 +18,10 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     getStructures: () => dispatch(getStructures()),
-    publish: (id, note) => dispatch(publish(id, note)),
+    publish: (id, title) => dispatch(publish(id, title)),
     deleteStructure: id => dispatch(deleteStructure(id)),
     restore: id => dispatch(restore(id)),
-    archive: (id, note) => dispatch(archive(id, note)),
+    archive: (id) => dispatch(archive(id)),
     structureDraftChanged: id => dispatch(structureDraftChanged(id))
     // clone: (id, updates) => dispatch(clone(id, updates))
   }
@@ -35,7 +35,7 @@ export class StructureEditor extends Component {
       structure: null,
       originalStructure: null,
       error: '',
-      note: ''
+      title: ''
     }
   }
 
@@ -100,7 +100,7 @@ export class StructureEditor extends Component {
     e.preventDefault()
     const id = this.state.structure.get('_id')
     const liveDocs = this.props.structures.filter(s => s.get('status') === 'LIVE')
-    const promises = liveDocs.map(s => this.props.archive(s.get('_id'), `Archived in favour of: ${this.state.note}`))
+    const promises = liveDocs.map(s => this.props.archive(s.get('_id')))
     Promise.all(promises)
       .then(() => this.props.publish(id, this.state.note))
       .then(() => this.props.restore(id))
@@ -144,11 +144,10 @@ export class StructureEditor extends Component {
             <div>
               <p className="govuk-body">Publish the current draft to live.</p>
               <p className="govuk-body">Archive the current live version.</p>
-              <TextArea 
+              <Input 
                 id="note"
-                value={this.state.publishnote}
-                label="Publish note"
-                hint="Why is this being published? e.g. Updated the Books and Materials framework"
+                value={this.state.structure.get('title')}
+                label="Label"
                 onChange={this.onChange.bind(this)}
                 />
               <button className="button button--red" onClick={e => this.onPublish(e)}>Publish</button>

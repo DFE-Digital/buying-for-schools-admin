@@ -9,12 +9,14 @@ import { List, Map } from 'immutable'
 import queryString from 'query-string'
 import { getAllAncestorIDs } from '../../services/question'
 import { getBlankOption } from '../../services/question'
+import { sortBy } from '../../services/utils'
 
 const mapStateToProps = (state) => {
   return {
     updateErrors: state.questionReducer.updateErrors,
     questions: state.questionReducer.questions,
-    frameworks: state.frameworkReducer.frameworks
+    frameworks: state.frameworkReducer.frameworks,
+    providers: state.providerReducer.providers
   }
 }
 
@@ -54,10 +56,22 @@ export class OptionEditor extends Component {
       return false
     }
 
+    if (!List.isList(this.props.frameworks)) {
+      // no frameworks have not loaded
+      return false
+    }
+
+    if (!List.isList(this.props.providers)) {
+      // no providers have not loaded
+      return false
+    }
+
     if (!Map.isMap(this.state.question)) {
       // no question to edit has been defined
       return true
     }
+
+    
 
     const questionId = this.props.match.params.questionId
     const originalQuestion = this.props.questions.find(q => q.get('_id') === questionId)
@@ -114,16 +128,17 @@ export class OptionEditor extends Component {
     const otherQuestions = this.props.questions.filter(q => !ancestorIDs.includes(q.get('_id')))
     const questionOptions = otherQuestions.map(q => {
       return {
-        label: q.get('title'),
+        label: `${q.get('title')} (${q.get('ref')}) `,
         value: q.get('_id')
       }
     }).toJS()
-    questionOptions.unshift({
+    const questionOptionsSorted = sortBy(questionOptions, q => q.label)
+    questionOptionsSorted.unshift({
       label: '...',
       value: ''
     })
 
-    return questionOptions
+    return questionOptionsSorted
   }
 
   onChange (id, value) {
@@ -155,7 +170,10 @@ export class OptionEditor extends Component {
   }
 
   render () {
-    if (!Map.isMap(this.state.option) || !List.isList(this.props.frameworks)) {
+    if (!Map.isMap(this.state.option) 
+    || !List.isList(this.props.frameworks)
+    || !List.isList(this.props.questions)
+    || !List.isList(this.props.providers)) {
       return <h1>Loading</h1>
     }
 
@@ -165,29 +183,31 @@ export class OptionEditor extends Component {
       saveButtonClasses.push('button--green')
     }
 
-    const frameworks = this.props.frameworks || List([])
-    const frameworkOptions = frameworks.map(f => {
+    const frameworks = this.props.frameworks
+    const allFrameworkOptions = frameworks.map(f => {
+      const prov = this.props.providers.find(p => p.get('_id') === f.get('provider')) || Map({})
       return {
-        label: f.get('title'),
+        label: `${f.get('title')} (${prov.get('initials')}) ` ,
         value: f.get('_id')
       }
-    }).filter(f => !this.state.option.get('result').includes(f.value)).toJS()
-    frameworkOptions.unshift({
+    })
+    const frameworkOptionsUsed = allFrameworkOptions.filter(f => this.state.option.get('result').includes(f.value))
+    const frameworkOptions = allFrameworkOptions.filter(f => !this.state.option.get('result').includes(f.value)).toJS()
+    const frameworkOptionsSorted = sortBy(frameworkOptions, f => f.label)
+    frameworkOptionsSorted.unshift({
       label: '...',
       value: '0'
     })
 
-    const resultFrameworks = []
-    this.state.option.get('result').forEach(r => {
-      const framework = this.props.frameworks.find(f => f.get('_id') === r)
-      if (framework) {
-        resultFrameworks.push({
-          title: framework.get('title'),
-          id: framework.get('_id')
-        })
-      }
-    })
 
+    const resultFrameworks = frameworkOptionsUsed.map(fu => {
+      return {
+        title: fu.label,
+        id: fu.value
+      }
+    }).toJS()
+
+    const resultFrameworksSorted = sortBy(resultFrameworks, r => r.label)
 
 
     const showFrameworkOptions = this.state.option.get('next') ? false : true
@@ -241,7 +261,7 @@ export class OptionEditor extends Component {
             <h2 className="govuk-label">Results</h2>
             <table>
               <tbody>
-                {resultFrameworks.map(r => (
+                {resultFrameworksSorted.map(r => (
                   <tr key={r.id}>
                     <td>{r.title}</td>
                     <td><button className="button button--red editoption__resultremove" onClick={e => this.onRemoveFrameworkOption(r.id)}>Remove</button></td>
@@ -255,7 +275,7 @@ export class OptionEditor extends Component {
                       id="result"
                       label="Framework"
                       value={Math.random().toString()}
-                      options={frameworkOptions}
+                      options={frameworkOptionsSorted}
                       disabled={!showFrameworkOptions}
                       onChange={this.onChangeFramework.bind(this)}
                     />

@@ -1,10 +1,11 @@
-const connectionString = process.env.S107D01_MONGO_01//.replace(/\/s107d01-mongo-01\?/, '/testing?')
+const connectionString = process.env.S107D01_MONGO_01
+// const connectionString = process.env.S107D01_MONGO_01.replace(/\/s107d01-mongo-01\?/, '/testing?')
 
-const frameworkData = require('../../../../buying-for-schools/app/data/frameworks')
-const categoryData = require('../../../../buying-for-schools/app/data/categories')
-const questionData = require('../../../../buying-for-schools/app/data/tree')
+const frameworkData = require('../../../../buying-for-schools-v1/app/data/frameworks')
+const categoryData = require('../../../../buying-for-schools-v1/app/data/categories')
+const questionData = require('../../../../buying-for-schools-v1/app/data/tree')
 
-const model = require('./model')(connectionString)
+const modelTemplate = require('./model')
 
 const prepNewData = () => {
   const data = {
@@ -61,7 +62,7 @@ const prepNewData = () => {
 }
 
 
-const createRecord = (data) => {
+const createRecord = (model, data) => {
   return new Promise((resolve, reject) => {
     model.create(data, (err, result) => {
       if (err) {
@@ -131,9 +132,26 @@ const save = (doc) => {
   })
 }
 
-let newids
-let newdoc
 
+const go = async () => {
+  try {
+    const model = await modelTemplate(connectionString)
+    const newData = prepNewData()
+    const newDoc = await createRecord(model, newData)
+    const newIds = getIDs(newDoc)
+    resync(newIds, newDoc)
+    await save(newDoc)
+    console.log(newDoc)
+    process.exit()
+  } catch (err) {
+    console.log(err)
+    process.exit()
+  }
+}
+
+go()
+
+/*
 createRecord(prepNewData())
 .then(d => newdoc = d)
 .then(() => newids = getIDs(newdoc))
@@ -150,3 +168,4 @@ createRecord(prepNewData())
   process.exit(1)
 })
 
+*/

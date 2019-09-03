@@ -24,6 +24,7 @@ const authController = () => {
       jwt.verify(token, process.env.AUTHSECRET, function (err, decoded) {
         if (err) {
           res.status(403)
+          console.log('jwt error', err)
           return res.json({ success: false, message: 'Failed to authenticate token.' })
         } else {
           // if everything is good, save to request for use in other routes
