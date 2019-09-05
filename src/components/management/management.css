@@ -12,3 +12,9 @@
   color: #999;
   /*background-color: #eee;*/
 }
+
+.structureeditor__json textarea {
+  font-family: courier;
+  width: 100%;
+  min-height: 400px;
+}

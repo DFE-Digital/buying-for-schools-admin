@@ -41,7 +41,9 @@
     "build": "react-scripts build",
     "test": "npm run test:jshint && npm run test:api",
     "test:jshint": "jshint api/**/*.js",
-    "test:api": "mocha api/test/*.test.js --exit"
+    "test:api": "mocha api/test/*.test.js --exit",
+    "test:bdd": "./node_modules/.bin/cucumber-js -f node_modules/cucumber-pretty --exit",
+    "test:build:bdd": "react-scripts build && ./node_modules/.bin/cucumber-js -f node_modules/cucumber-pretty --exit"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -60,12 +62,15 @@
   },
   "devDependencies": {
     "chai": "^4.2.0",
+    "cucumber": "^5.1.0",
+    "cucumber-pretty": "^1.5.2",
     "jest-cli": "^24.8.0",
     "jest-junit-reporter": "^1.1.0",
     "jshint": "^2.10.2",
     "mocha": "^6.1.4",
     "node-env-run": "^3.0.2",
     "nodemon": "^1.19.1",
+    "puppeteer": "^1.19.0",
     "superagent": "^5.1.0"
   }
 }

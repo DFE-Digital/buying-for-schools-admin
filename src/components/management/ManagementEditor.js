@@ -5,7 +5,8 @@ import { connect } from 'react-redux'
 import Input from '../form/Input'
 import ErrorSummary from '../form/ErrorSummary'
 import { List, Map } from 'immutable'
-
+import { get } from '../../services/io'
+import { structureUrl } from '../../config'
 import { getStructures, publish, deleteStructure, restore, archive, structureDraftChanged } from '../../actions/structure-actions'
 
 const mapStateToProps = (state) => {
@@ -35,7 +36,8 @@ export class StructureEditor extends Component {
       structure: null,
       originalStructure: null,
       error: '',
-      title: ''
+      title: '',
+      json: ''
     }
   }
 
@@ -88,6 +90,16 @@ export class StructureEditor extends Component {
         originalStructure: structure
       })
     }
+
+    get(`${structureUrl}/${structureId}`)
+    .then(data => {
+      console.log(data)
+      this.setState({ json:JSON.stringify(data, null, '  ') })
+    })
+    .catch(err => {
+      console.log(err)
+      this.setState({ json: '' })
+    })
   }
 
   onChange (id, value) {
@@ -175,7 +187,15 @@ export class StructureEditor extends Component {
 
           
           <Link to="/structure" className="button">{ hasChanged ? 'Cancel' : 'Back' }</Link>
+
         </form>
+
+        <div className="structureeditor__json">
+          <a onClick={ e => this.setState({ showJson: !this.state.showJson }) }>Show JSON</a>
+          { this.state.showJson && (
+            <textarea value={ this.state.json } />
+          )}
+        </div>
       </div>
     )
   }

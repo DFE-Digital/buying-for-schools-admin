@@ -36,3 +36,9 @@
 .frameworkeditor_links td .govuk-form-group {
   margin-bottom: 0;
 }
+
+.framework__warning--blank {
+  padding: 1px 5px;
+  color: #000;
+  background-color: var(--govuk-colour--yellow);
+}

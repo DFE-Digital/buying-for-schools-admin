@@ -3,7 +3,8 @@ import moment from 'moment'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { List } from 'immutable'
-
+import { getCookie } from '../../services/utils'
+import { cookieName } from '../../config'
 import './management.css'
 import { getStructures } from '../../actions/structure-actions'
 
@@ -52,33 +53,36 @@ export class Management extends Component {
         .set('archived', archived.isValid() ? archived.format('DD/MM/YYYY HH:mm'): '')
     })
 
+    
     return (
       <div className="managementeditor govuk-width-container">
         <h1>Management</h1>
-        <table>
-          <thead>
-            <tr>
-              <th>Title</th>
-              <th>Status</th>
-              <th>Updated</th>
-              <th>Published</th>
-              <th>Archived</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            {structures.map((s) => (
-              <tr key={s.get('_id')} className={`structuretable__${s.get('status').toLowerCase()}`}>
-                <td>{ s.get('title') }</td>
-                <td>{ s.get('status') }</td>
-                <td>{ s.get('updatedAt') }</td>
-                <td>{ s.get('published') }</td>
-                <td>{ s.get('archived') }</td>
-                <td>{ this.getLink(s) }</td>
+        {structures.size && (
+          <table id="structuretable">
+            <thead>
+              <tr>
+                <th>Title</th>
+                <th>Status</th>
+                <th>Updated</th>
+                <th>Published</th>
+                <th>Archived</th>
+                <th>Action</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {structures.map((s) => (
+                <tr key={s.get('_id')} className={`structuretable__${s.get('status').toLowerCase()}`}>
+                  <td>{ s.get('title') }</td>
+                  <td>{ s.get('status') }</td>
+                  <td>{ s.get('updatedAt') }</td>
+                  <td>{ s.get('published') }</td>
+                  <td>{ s.get('archived') }</td>
+                  <td>{ this.getLink(s) }</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
       </div>
     )
   }

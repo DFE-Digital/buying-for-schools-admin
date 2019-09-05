@@ -1,3 +1,4 @@
+import moment from 'moment'
 
 export const getCookie = name => {
   const b = document.cookie.match('(^|[^;]+)\\s*' + name + '\\s*=\\s*([^;]+)')
@@ -8,7 +9,9 @@ export const setCookie = (name, value) => {
   if (value === null) {
     document.cookie = `${name}=;path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT;`
   } else {
-    document.cookie = `${name}=${value}; path=/;`  
+    const expiry = moment().add(2, 'h').utc().format('ddd, DD MMM YYYY HH:mm:ss [GMT]')
+    console.log(expiry)
+    document.cookie = `${name}=${value}; path=/; expires=${expiry}`  
   }
   return getCookie(name)
 }

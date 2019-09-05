@@ -119,7 +119,6 @@ const mongodocAdaptorManagement = model => {
     return newdoc
   }
 
-
   const isValidStatusFlow = (doc, data) => {
     switch(doc.status) {
       case 'DRAFT': {
@@ -208,6 +207,10 @@ const mongodocAdaptorManagement = model => {
       })
     },
 
+    get: id => {
+      return shared.getRecordById(id)
+    },
+    
     put: (id, data) => {
       let doc
       return shared.getRecordById(id)

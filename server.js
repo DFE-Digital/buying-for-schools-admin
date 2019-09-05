@@ -18,6 +18,11 @@ const haveBuildDirectory = fs.existsSync(path.join(__dirname, 'build/index.html'
 const haveUsers = process.env.USERS && process.env.USERS.length >= 16
 const haveSecret = process.env.AUTHSECRET && process.env.AUTHSECRET.length >= 16
 
+const exportables = {
+  app,
+  server: null,
+  go: null
+}
 
 const go = async () => {
   const noGoErrors = []
@@ -39,8 +44,10 @@ const go = async () => {
 
   const dataSource = await mongodoc({ connectionString })
   api(app, dataSource)
+  console.log('API STARTED')
 
   if (haveBuildDirectory) {
+    console.log('BUILD DIRECTORY BEING SERVED')
     app.use(serveStatic('build/', { index: ['index.html'] }))
     app.get('*', (req, res) => {
       res.sendFile(path.join(__dirname, 'build/index.html'))
@@ -48,14 +55,15 @@ const go = async () => {
   } 
 }
 
-go()
+exportables.go = go()
   .catch(e => {
     errors.log(e.message.split())
   })
   .finally(() => {
     app.get('/api/*', (req, res) => res.status(500).send('Error - check config'))
-    const server = app.listen(port, () => {
+    exportables.server = app.listen(port, () => {
       console.log('Magic happens on port ' + port)
     })
   })
 
+module.exports = exportables

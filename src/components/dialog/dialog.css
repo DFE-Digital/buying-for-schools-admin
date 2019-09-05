@@ -24,4 +24,9 @@
   max-width: 480px;
   margin: 0 auto;
   border-bottom: 10px solid #005ea5;
+  display: none;
+}
+
+.dialog--open .dialog__content {
+  display: block;
 }

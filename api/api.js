@@ -36,6 +36,7 @@ const api = (app, dataSource) => {
   app.delete('/api/provider/:providerId', providerController.remove)
 
   app.get('/api/structure', structureController.list)
+  app.get('/api/structure/:structureId', structureController.get)
   app.post('/api/structure', structureController.post)
   app.put('/api/structure/:structureId', structureController.put)
   app.delete('/api/structure/:structureId', structureController.remove)

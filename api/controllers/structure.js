@@ -9,6 +9,11 @@ const structureController = (dataSource) => {
       .then(results => res.send(results))
       .catch(err => shared.stdErrorResponse(res, err))
     },
+    get: (req, res) => {
+      dataSource.structure.get(req.params.structureId)
+      .then(results => res.send(results))
+      .catch(err => shared.stdErrorResponse(res, err))
+    },
     post: (req, res) => {
       dataSource.structure.post(req.body)
       .then(results => res.send(results))
