@@ -92,6 +92,7 @@ Entrypoint to the application, this is the file which is started when app runs.
   node server.js
 ```
 
+
 ### /api ###
 
 Contains everything to do with the API with the exception of the ` server.js ` file mentioned above.
@@ -111,7 +112,7 @@ Source code for the React front end.
 
 The data structure in Mongo (Cosmos) is a little unsual for a number of reasons. Each entry in the DB is one version of the entire data of the site, so one record contains all the frameworks, questions, answers, provider and category information.
 
-This is due mostly to the pricing of Micro$oft Cosmos, each collection (table) is priced separately and regardless of quantity of data stored, which incurs a cost disproportionate to the scale of the thing itself. Also the fact that there is expected to be **NO DEV SUPPORT** for this project after going live.
+This is due mostly to the pricing of Micro$oft Cosmos, each collection (table) is priced separately and regardless of quantity of data stored, which incurs a cost disproportionate to the scale of the thing itself. Also the fact that there was expected to little dev support for this project after going live.
 
 It is only possible due to the small scale of the app, typical content is forecast to be only approx.40 frameworks and a similar number of questions to determine a recommendation.
 
@@ -122,3 +123,6 @@ Being a JSON based structure there is no issue when it comes to querying the dat
 The infrastructure is such that the test env of the service will access the database and consume the newest record with ` status: 'DRAFT' ` while the production env will access the same database and use the record with ` status: 'LIVE' `, although it is recognised that having test and prod envs accessing the same database is not ideal, without dev/tech support to push changes up through the env hierarchy there are no alternatives that do not involve the different envs talking to each other.
 
 
+## Default data ##
+
+When the app starts if the database is found to be empty then a default record will be created with DRAFT status this is to aid initial set up of the app and not intended as a backup, any changes made whilst using the admin tool will not be reflected in this default content. In case of disaster recovery this default content should not be relied on.

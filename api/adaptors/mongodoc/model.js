@@ -4,6 +4,7 @@ const validateFrameworkRef = RegExp(/^[a-z-]*$/)
 const validateQuestionRef = RegExp(/^[a-z-]*$/)
 
 const mongoose = require('mongoose')
+const defaultData = require('./monogodocAdaptorDefaultContent')
 
 const Schema = mongoose.Schema
 const structureModelSchema = new Schema({
@@ -118,8 +119,10 @@ const structure =  async connectionString => {
       throw new Error(errors.CONNECTION_ERROR)
     }
   })
-
-  return mongoose.model('structure', structureModelSchema)
+  const collection = mongoose.model('structure', structureModelSchema)
+  await defaultData(collection)
+  
+  return collection
 }
 
 exports = module.exports = structure
