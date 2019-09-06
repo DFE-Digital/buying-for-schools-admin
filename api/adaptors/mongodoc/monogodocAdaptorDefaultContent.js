@@ -1,5 +1,5 @@
 const defaultData = async (collection) => {
-  const count = await collection.countDocuments()
+  const count = await collection.count()
   console.log(typeof count, count)
   if (count !== 0) {
     return
