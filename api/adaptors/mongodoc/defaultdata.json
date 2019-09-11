@@ -3,62 +3,70 @@
   "category": [
     {
       "_id": "5d6fb3562b5e77897d3a545e",
-      "title": "Books and related materials"
+      "title": "Books and related materials",
+      "ref": "books"
     },
     {
       "_id": "5d6fb3562b5e77897d3a545d",
-      "title": "Energy and utilities"
+      "title": "Energy and utilities",
+      "ref": "energy"
     },
     {
       "_id": "5d6fb3562b5e77897d3a545c",
-      "title": "Facilities management and estates"
+      "title": "Facilities management and estates",
+      "ref": "facilities"
     },
     {
       "_id": "5d6fb3562b5e77897d3a545b",
-      "title": "Financial"
+      "title": "Financial",
+      "ref": "financial"
     },
     {
       "_id": "5d6fb3562b5e77897d3a545a",
-      "title": "ICT"
+      "title": "ICT",
+      "ref": "ict"
     },
     {
       "_id": "5d6fb3562b5e77897d3a5459",
-      "title": "Recruitment and HR"
+      "title": "Recruitment and HR",
+      "ref": "hr"
     },
     {
       "_id": "5d6fb3562b5e77897d3a5458",
-      "title": "Legal"
+      "title": "Legal",
+      "ref": "legal"
     },
     {
       "_id": "5d6fb3562b5e77897d3a5457",
-      "title": "Professional"
+      "title": "Professional",
+      "ref": "professional"
     }
   ],
   "provider": [
     {
       "initials": "ESPO",
       "_id": "5d6fb3562b5e77897d3a5469",
-      "title": "ESPO"
+      "title": "Eastern Shires Purchasing Organisation"
     },
     {
       "initials": "CPC",
       "_id": "5d6fb3562b5e77897d3a5468",
-      "title": "CPC"
+      "title": "Crescent Purchasing Consortium"
     },
     {
       "initials": "NEPO",
       "_id": "5d6fb3562b5e77897d3a5467",
-      "title": "NEPO"
+      "title": "North East Procurement Organisation"
     },
     {
       "initials": "CCS",
       "_id": "5d6fb3562b5e77897d3a5466",
-      "title": "CCS"
+      "title": "Crown Commercial Service"
     },
     {
       "initials": "YPO",
       "_id": "5d6fb3562b5e77897d3a5465",
-      "title": "YPO"
+      "title": "Yorkshire Purchasing Organisation"
     },
     {
       "initials": "Fusion 21",
@@ -68,22 +76,22 @@
     {
       "initials": "SBS",
       "_id": "5d6fb3562b5e77897d3a5463",
-      "title": "SBS"
+      "title": "NHS Shared Business Services"
     },
     {
       "initials": "E2BN",
       "_id": "5d6fb3562b5e77897d3a5462",
-      "title": "E2BN"
+      "title": "Think IT"
     },
     {
       "initials": "KCS",
       "_id": "5d6fb3562b5e77897d3a5461",
-      "title": "KCS"
+      "title": "Kent County Supplies"
     },
     {
       "initials": "RPA",
       "_id": "5d6fb3562b5e77897d3a5460",
-      "title": "RPA"
+      "title": "Risk Protection Arrangement"
     },
     {
       "initials": "Salix",
@@ -246,17 +254,6 @@
       "descr": "The RE:FIT framework streamlines the procurement process for energy services and helps retrofit energy efficiency and local energy generation measures to your buildings or estate, reducing annual energy expenditure and carbon emissions.",
       "expiry": "2020-04-19T00:00:00.000Z",
       "body": "## Offers ##\n- streamlines procurement process for energy services\n- helps retrofit energy efficiency and local energy generation measures to your buildings or estate, reducing annual energy expenditure and carbon emissions\n\n\n## Benefits ##\n- improves energy performance of your buildings\n- reduces carbon emissions and achieves annual savings on energy\n- guaranteed level of energy savings – offering a secure financial saving over period of agreement"
-    },
-    {
-      "provider": "5d6fb3562b5e77897d3a5464",
-      "cat": "5d6fb3562b5e77897d3a545d",
-      "links": [],
-      "_id": "5d6fb3562b5e77897d3a547d",
-      "ref": "retrofit",
-      "title": "Energy efficiency improvements from Retrofit",
-      "url": "https://www.fusion21.co.uk/",
-      "descr": "Suppliers to complete improvement projects including insulation, heating and energy systems, energy efficient lighting, windows and doors.",
-      "body": "## Offers ##\n- insulation\n- heating and energy systems\n- energy efficient lighting\n- windows\n- doors\n\n\n## Benefits ##\n- choice of regional and national suppliers\n- single or fully integrated solutions"
     },
     {
       "provider": "5d6fb3562b5e77897d3a5466",
@@ -736,8 +733,10 @@
           "hint": ""
         },
         {
-          "next": "5d6fb3562b5e77897d3a54aa",
-          "result": [],
+          "next": null,
+          "result": [
+            "5d6fb3562b5e77897d3a547e"
+          ],
           "_id": "5d6fb3562b5e77897d3a54c2",
           "ref": "efficiency",
           "title": "Energy efficiency improvements",
@@ -832,36 +831,6 @@
         {
           "next": null,
           "result": [
-            null
-          ],
-          "_id": "5d6fb3562b5e77897d3a54b8",
-          "ref": "helpdesk",
-          "title": "General helpdesk",
-          "hint": "For schools and MATs with knowledge or experience of procurement (only need minimal guidance)."
-        },
-        {
-          "next": null,
-          "result": [
-            "5d6fb3562b5e77897d3a5481"
-          ],
-          "_id": "5d6fb3562b5e77897d3a54b7",
-          "ref": "specific",
-          "title": "Schools focused",
-          "hint": "Varying levels of support for schools and MATs with any level of knowledge or experience of procurement (including detailed end-to-end support)."
-        }
-      ],
-      "_id": "5d6fb3562b5e77897d3a54b6",
-      "ref": "support",
-      "title": "What level of support are you looking for?",
-      "err": "Select if you want general helpdesk or schools focused support",
-      "hint": "",
-      "suffix": ""
-    },
-    {
-      "options": [
-        {
-          "next": null,
-          "result": [
             "5d6fb3562b5e77897d3a5480"
           ],
           "_id": "5d6fb3562b5e77897d3a54b5",
@@ -922,66 +891,6 @@
         {
           "next": null,
           "result": [
-            null
-          ],
-          "_id": "5d6fb3562b5e77897d3a54af",
-          "ref": "helpdesk",
-          "title": "General helpdesk",
-          "hint": "For schools and MATs with knowledge or experience of procurement (only need minimal guidance)."
-        },
-        {
-          "next": null,
-          "result": [
-            "5d6fb3562b5e77897d3a547f"
-          ],
-          "_id": "5d6fb3562b5e77897d3a54ae",
-          "ref": "specific",
-          "title": "Schools focused",
-          "hint": "Varying levels of support for schools and MATs with any level of knowledge or experience of procurement (including detailed end-to-end support)."
-        }
-      ],
-      "_id": "5d6fb3562b5e77897d3a54ad",
-      "ref": "gas-support",
-      "title": "What level of support are you looking for?",
-      "err": "Select if you want general helpdesk or schools focused support",
-      "hint": "",
-      "suffix": ""
-    },
-    {
-      "options": [
-        {
-          "next": null,
-          "result": [
-            "5d6fb3562b5e77897d3a547e"
-          ],
-          "_id": "5d6fb3562b5e77897d3a54ac",
-          "ref": "yes",
-          "title": "Yes",
-          "hint": ""
-        },
-        {
-          "next": null,
-          "result": [
-            "5d6fb3562b5e77897d3a547d"
-          ],
-          "_id": "5d6fb3562b5e77897d3a54ab",
-          "ref": "no",
-          "title": "No, I want products supplied and fitted",
-          "hint": ""
-        }
-      ],
-      "_id": "5d6fb3562b5e77897d3a54aa",
-      "ref": "efficiency",
-      "title": "Are you planning a major energy efficiency project?",
-      "err": "Select yes if you’re planning a major energy efficiency project",
-      "hint": "This could involving multiple products or be across multiple sites.",
-      "suffix": ""
-    },
-    {
-      "options": [
-        {
-          "next": null,
-          "result": [
             "5d6fb3562b5e77897d3a547a"
           ],
           "_id": "5d6fb3562b5e77897d3a54a9",
@@ -1000,61 +909,13 @@
           "hint": ""
         },
         {
-          "next": "5d6fb3562b5e77897d3a549d",
-          "result": [],
+          "next": null,
+          "result": [
+            "5d6fb3562b5e77897d3a5478"
+          ],
           "_id": "5d6fb3562b5e77897d3a54a7",
           "ref": "support",
           "title": "Cleaning",
-          "hint": ""
-        },
-        {
-          "next": null,
-          "result": [
-            "5d6fb3562b5e77897d3a547b"
-          ],
-          "_id": "5d6fb3562b5e77897d3a54a6",
-          "ref": "catering",
-          "title": "Catering",
-          "hint": ""
-        },
-        {
-          "next": null,
-          "result": [
-            "5d6fb3562b5e77897d3a547b"
-          ],
-          "_id": "5d6fb3562b5e77897d3a54a5",
-          "ref": "maintenance",
-          "title": "Maintenance",
-          "hint": ""
-        },
-        {
-          "next": null,
-          "result": [
-            "5d6fb3562b5e77897d3a547b"
-          ],
-          "_id": "5d6fb3562b5e77897d3a54a4",
-          "ref": "grounds",
-          "title": "Grounds maintenance",
-          "hint": ""
-        },
-        {
-          "next": null,
-          "result": [
-            "5d6fb3562b5e77897d3a547b"
-          ],
-          "_id": "5d6fb3562b5e77897d3a54a3",
-          "ref": "security",
-          "title": "Security",
-          "hint": ""
-        },
-        {
-          "next": null,
-          "result": [
-            "5d6fb3562b5e77897d3a547b"
-          ],
-          "_id": "5d6fb3562b5e77897d3a54a2",
-          "ref": "waste",
-          "title": "Waste",
           "hint": ""
         },
         {
@@ -1072,36 +933,6 @@
       "ref": "fm-categories",
       "title": "What services are you looking for in facilities management and estates?",
       "err": "Select which services you are looking for",
-      "hint": "",
-      "suffix": ""
-    },
-    {
-      "options": [
-        {
-          "next": null,
-          "result": [
-            "5d6fb3562b5e77897d3a547b"
-          ],
-          "_id": "5d6fb3562b5e77897d3a549f",
-          "ref": "helpdesk",
-          "title": "General helpdesk",
-          "hint": "For schools and MATs with knowledge or experience of procurement (only need minimal guidance)."
-        },
-        {
-          "next": null,
-          "result": [
-            "5d6fb3562b5e77897d3a5478"
-          ],
-          "_id": "5d6fb3562b5e77897d3a549e",
-          "ref": "specific",
-          "title": "Schools focused",
-          "hint": "Varying levels of support for schools and MATs with any level of knowledge or experience of procurement (including detailed end-to-end support)."
-        }
-      ],
-      "_id": "5d6fb3562b5e77897d3a549d",
-      "ref": "fm-support",
-      "title": "What level of support are you looking for?",
-      "err": "Select if you want general helpdesk or schools focused support",
       "hint": "",
       "suffix": ""
     },
@@ -1146,37 +977,6 @@
       "ref": "ict-services",
       "title": "What services are you looking for in ICT?",
       "err": "Select which services you are looking for",
-      "hint": "",
-      "suffix": ""
-    },
-    {
-      "options": [
-        {
-          "next": null,
-          "result": [
-            "5d6fb3562b5e77897d3a5470",
-            "5d6fb3562b5e77897d3a546f"
-          ],
-          "_id": "5d6fb3562b5e77897d3a5498",
-          "ref": "specific",
-          "title": "Schools focused",
-          "hint": "Varying levels of support for schools and MATs with any level of knowledge or experience of procurement (including detailed end-to-end support)."
-        },
-        {
-          "next": null,
-          "result": [
-            null
-          ],
-          "_id": "5d6fb3562b5e77897d3a5497",
-          "ref": "helpdesk",
-          "title": "General helpdesk",
-          "hint": "For schools and MATs with knowledge or experience of procurement (only need minimal guidance)."
-        }
-      ],
-      "_id": "5d6fb3562b5e77897d3a5496",
-      "ref": "managed-ict-support",
-      "title": "What level of support are you looking for?",
-      "err": "Select if you want general helpdesk or schools focused support",
       "hint": "",
       "suffix": ""
     },
@@ -1301,9 +1101,9 @@
       "suffix": ""
     }
   ],
-  "title": "testjsonpaste",
+  "title": "Default data",
   "createdAt": "2019-09-04T12:51:34.321Z",
-  "updatedAt": "2019-09-05T09:28:24.864Z",
+  "updatedAt": "2019-09-10T08:26:16.566Z",
   "archived": null,
   "published": null
 }
