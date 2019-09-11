@@ -21,6 +21,7 @@
     "govuk-frontend": "^2.13.0",
     "immutable": "^4.0.0-rc.12",
     "jsonwebtoken": "^8.5.1",
+    "lodash.template": ">=4.5.0",
     "md5": "^2.2.1",
     "moment": "^2.24.0",
     "mongoose": "^5.5.13",
