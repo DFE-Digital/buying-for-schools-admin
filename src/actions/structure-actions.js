@@ -53,10 +53,6 @@ export const archive = (id, title) => dispatch => {
   return put(`${structureUrl}/${id}`, data)
 }
 
-// export const clone = (id, updates = {}) => dispatch => {
-//   return post(structureUrl, { source: id, status: 'DRAFT', published: {}, archived: {} })
-// }
-
 export const publish = (id, title) => dispatch => {
   const data = {
     status: 'LIVE',

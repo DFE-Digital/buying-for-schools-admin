@@ -9,7 +9,7 @@
 }
 
 .structuretable__archive {
-  color: #999;
+  color: #000;
   /*background-color: #eee;*/
 }
 
@@ -17,4 +17,9 @@
   font-family: courier;
   width: 100%;
   min-height: 400px;
+}
+
+.structure__attribute {
+  color: #393;
+  /*font-style: italic;*/
 }

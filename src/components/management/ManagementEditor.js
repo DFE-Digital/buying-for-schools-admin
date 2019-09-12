@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
+import moment from 'moment'
 
 import Input from '../form/Input'
 import ErrorSummary from '../form/ErrorSummary'
@@ -117,7 +118,7 @@ export class StructureEditor extends Component {
       .then(() => this.props.publish(id, this.state.note))
       .then(() => this.props.restore(id))
       .then(draft => this.props.structureDraftChanged(draft.data._id))
-      .then(() => this.props.getStructures())
+      .then(() => this.props.history.push('/structure'))
   }
 
   onRestore (e) {
@@ -128,7 +129,7 @@ export class StructureEditor extends Component {
     return Promise.all(promises)
       .then(() => this.props.restore(id))
       .then(draft => this.props.structureDraftChanged(draft.data._id))
-      .then(() => this.props.getStructures())
+      .then(() => this.props.history.push('/structure'))
   }
 
   render () {
@@ -136,30 +137,38 @@ export class StructureEditor extends Component {
       return <h1>Loading</h1>
     }
 
-    const hasChanged = !this.state.structure.equals(this.state.originalStructure)
+    const published = moment(this.state.structure.get('published'))
+
+    const structure = this.state.structure
+      .set('published', published.isValid() ? published.format('DD/MM/YYYY HH:mm'): '')
+      .set('publishedAgo', published.isValid() ? published.fromNow(): '')
+      
+
+    const hasChanged = !structure.equals(this.state.originalStructure)
     const saveButtonClasses = ['button']
     if (hasChanged) {
       saveButtonClasses.push('button--green')
     }
-    const status = this.state.structure.get('status')
+    const status = structure.get('status')
     const hasErrors = this.props.updateErrors && this.props.updateErrors.data && this.props.updateErrors.data.errors
     const errors = hasErrors ? this.props.updateErrors.data.errors : []
     return (
       <div className="structureeditor govuk-width-container">
-        <h1 className="structureeditor__title">Structure</h1>
+        
         
         <form className="structureeditor__structure">
           <ErrorSummary errors={errors} />
-          
-          <h2>{ status }</h2>
+         
           { status === 'DRAFT' && (
             <div>
-              <p className="govuk-body">Publish the current draft to live.</p>
+              <h1 className="structureeditor__title">Publish changes</h1>
+              <p className="govuk-body">Publish the current changes to live.</p>
               <p className="govuk-body">Archive the current live version.</p>
               <Input 
                 id="note"
-                value={this.state.structure.get('title')}
-                label="Label"
+                value={structure.get('title')}
+                label="Title"
+                hint="A label or reference to help identify this version of the data"
                 onChange={this.onChange.bind(this)}
                 />
               <button className="button button--red" onClick={e => this.onPublish(e)}>Publish</button>
@@ -168,24 +177,20 @@ export class StructureEditor extends Component {
 
           { status === 'ARCHIVE' && (
             <div>
-              <p className="govuk-body-l">Replace the current draft with a copy of this archive?</p>
-              <p className="govuk-body">The archived data will remain so, but a copy of it will replace the draft version, such that it can be edited and then pushed live.</p>
-              <button className="button button--red" onClick={e => this.onRestore(e)}>Replace draft with archive</button>
+              <h1 className="structureeditor__title">Restore an archive</h1>
+              <p className="govuk-body">Load archive: <span className="structure__attribute">{ structure.get('title') }</span> published: <span className="structure__attribute">{structure.get('publishedAgo')} ({structure.get('published')})</span> to the test site, so that it can be checked before being published.</p>
+              <button className="button button--red" onClick={e => this.onRestore(e)}>Restore</button>
             </div>
           )}
 
           { status === 'LIVE' && (
             <div>
-              <p className="govuk-body">{ this.state.structure.getIn(['published', 'date']) }</p>
-              <p className="govuk-body">{ this.state.structure.getIn(['published', 'note']) }</p>
-              <p className="govuk-body-l">Replace the current draft with a copy of the Live data?</p>
-              <p className="govuk-body">The live data will not be altered, but a copy of it will replace the draft version, such that it can be edited and then pushed live.</p>
-              <button className="button button--red" onClick={e => this.onRestore(e)}>Replace draft with live</button>
+              <h1 className="structureeditor__title">Discard changes</h1>
+              <p className="govuk-body">Discard all changes, revert test site to match content on Live: <span className="structure__attribute">{ structure.get('title') }</span> published: <span className="structure__attribute">{structure.get('publishedAgo')} ({structure.get('published')})</span></p>
+              <button className="button button--red" onClick={e => this.onRestore(e)}>Revert changes</button>
             </div>
           )}
 
-
-          
           <Link to="/structure" className="button">{ hasChanged ? 'Cancel' : 'Back' }</Link>
 
         </form>
@@ -201,4 +206,4 @@ export class StructureEditor extends Component {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(StructureEditor)
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(StructureEditor))
