@@ -43,7 +43,7 @@
     "build": "react-scripts build",
     "test": "npm run test:jshint && npm run test:api",
     "test:jshint": "jshint api/**/*.js",
-    "test:api": "mocha api/test/*.test.js --exit",
+    "test:api": "mocha -t 10000 api/test/*.test.js --exit",
     "test:bdd": "./node_modules/.bin/cucumber-js -f node_modules/cucumber-pretty --exit",
     "test:build:bdd": "react-scripts build && ./node_modules/.bin/cucumber-js -f node_modules/cucumber-pretty --exit"
   },
