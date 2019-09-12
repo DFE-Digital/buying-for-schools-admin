@@ -1,1 +1,3 @@
-docker-compose.test.yml
+sut:
+  build: .
+  command: npm test
