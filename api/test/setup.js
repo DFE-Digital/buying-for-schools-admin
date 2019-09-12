@@ -13,6 +13,14 @@ const setup = {}
 process.env.USERS = '579b1220a4e48538c1989daf7a514f52'
 process.env.AUTHSECRET = '1234567890'
 
+
+after(() => {
+  console.log('closing server')
+  setup.server.close()
+  console.log('Closed')
+})
+
+
 exports = module.exports = async () => {
   if (setup.app) {
     return setup
