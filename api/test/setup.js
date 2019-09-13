@@ -12,12 +12,15 @@ const setup = {}
 
 process.env.USERS = '579b1220a4e48538c1989daf7a514f52'
 process.env.AUTHSECRET = '1234567890'
+process.env.COLLECTION_NAME = 'MOCHA_' + Date.now()
 
 
-after(() => {
+after(async () => {
   console.log('closing server')
   setup.server.close()
-  console.log('Closed')
+  if (process.env.COLLECTION_NAME !== 'structure') {
+    await setup.dataSource.model.collection.drop()
+  }
 })
 
 
@@ -26,7 +29,7 @@ exports = module.exports = async () => {
     return setup
   }
 
-  const dataSource = await mongodoc({ connectionString: process.env.MONGO_TEST })
+  const dataSource = await mongodoc({ connectionString: process.env.MONGO, collectionName: process.env.COLLECTION_NAME })
   const helpers = require('./helpers.mongodoc')(dataSource)
   api(app, dataSource)
 

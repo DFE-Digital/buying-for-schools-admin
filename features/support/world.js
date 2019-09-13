@@ -2,6 +2,8 @@ const md5 = require('md5')
 process.env.USERS = md5('bdd@dfe.gov.uk:cucumber')
 process.env.AUTHSECRET = 'secretsecretsecretsecret'
 process.env.AUTHDISABLED = 'DISABLED'
+process.env.COLLECTION_NAME = 'BDD_' + Date.now()
+
 const theApp = require('../../server.js')
 
 const { setWorldConstructor, AfterAll, BeforeAll } = require('cucumber')
@@ -220,6 +222,10 @@ AfterAll(async function () {
   // await timeout(5000)
   await browser.close()
   await theApp.server.close()
+  if (process.env.COLLECTION_NAME !== 'structure') {
+    await theApp.dataSource.model.collection.drop()
+  }
+
 }, {timeout: 30 * 1000})
 
 setWorldConstructor(B4SWorld)

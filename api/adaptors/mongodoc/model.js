@@ -111,7 +111,8 @@ const structureModelSchema = new Schema({
   timestamps: true
 })
 
-const structure =  async connectionString => {
+const structure =  async options => {
+  const { connectionString, collectionName } = options
   mongoose.set('useCreateIndex', true)
   mongoose.set('useFindAndModify', false)
   const db = await mongoose.connect(connectionString, { useNewUrlParser: true }, err => {
@@ -119,7 +120,7 @@ const structure =  async connectionString => {
       throw new Error(errors.CONNECTION_ERROR)
     }
   })
-  const collection = mongoose.model('structure', structureModelSchema)
+  const collection = mongoose.model(collectionName, structureModelSchema)
   await defaultData(collection)
   
   return collection

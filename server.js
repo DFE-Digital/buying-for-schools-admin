@@ -9,6 +9,7 @@ const api = require('./api/api')
 const errors = require('./api/errors')
 // const connectionString = process.env.MONGO.replace(/\/s107d01-mongo-01\?/, '/testing?')
 const connectionString = process.env.MONGO
+const collectionName = process.env.COLLECTION_NAME || 'structure'
 
 const app = express()
 app.use(bodyParser.json())
@@ -21,7 +22,8 @@ const haveSecret = process.env.AUTHSECRET && process.env.AUTHSECRET.length >= 16
 const exportables = {
   app,
   server: null,
-  go: null
+  go: null,
+  dataSource: null
 }
 
 const go = async () => {
@@ -42,8 +44,9 @@ const go = async () => {
     throw(new Error(noGoErrors))
   }
 
-  const dataSource = await mongodoc({ connectionString })
-  api(app, dataSource)
+  exportables.dataSource = await mongodoc({ connectionString, collectionName })
+
+  api(app, exportables.dataSource)
   console.log('API STARTED')
 
   if (haveBuildDirectory) {
