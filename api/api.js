@@ -4,11 +4,11 @@ const api = (app, dataSource) => {
   const categoryController = require('./controllers/genericController')(dataSource, 'category')
   const providerController = require('./controllers/genericController')(dataSource, 'provider')
   const structureController = require('./controllers/structure')(dataSource, 'structure')
-  const authController = require('./controllers/auth')()
+  
 
-  app.post('/auth', authController.login)
-
-  app.all('/api/*', authController.ensureAuth)
+  // const authController = require('./controllers/auth')()
+  // app.post('/auth', authController.login)
+  // app.all('/api/*', authController.ensureAuth)
 
   app.get('/api/framework', frameworkController.list)
   app.post('/api/framework', frameworkController.create)

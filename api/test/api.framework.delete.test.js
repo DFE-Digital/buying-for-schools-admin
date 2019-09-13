@@ -6,7 +6,6 @@ const testRecords = {}
 
 const setup = require('./setup')
 let records = null
-let authtoken
 let helpers
 
 describe('api:framework:delete', () => {
@@ -17,14 +16,12 @@ describe('api:framework:delete', () => {
     await setupDone.helpers.createRecord('framework', testData.loans)
     await setupDone.helpers.createRecord('framework', testData.weapons)
     await setupDone.helpers.createRecord('framework', testData.builders)
-    authtoken = await setupDone.getToken()
   })
 
   it('should be able to delete a specific record', done => {   
     const id = helpers.recordCache.loans._id
     server
       .delete(`http://127.0.0.1:5000/api/framework/${id}`)
-      .set('authorization-token', authtoken)
       .end((err, res) => {
         expect(res.statusCode).to.equal(200)
         done()
@@ -35,7 +32,6 @@ describe('api:framework:delete', () => {
     const id = helpers.recordCache.loans._id
     server
       .delete(`http://127.0.0.1:5000/api/framework/${id}`)
-      .set('authorization-token', authtoken)
       .end((err, res) => {
         expect(res.statusCode).to.equal(404)
         done()

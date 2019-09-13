@@ -8,7 +8,6 @@ const testRecords = {}
 
 const setup = require('./setup')
 let records = null
-let authtoken
 
 
 describe('api:framework:post', () => {
@@ -22,14 +21,12 @@ describe('api:framework:post', () => {
     testProvider = await setupDone.helpers.createRecord('provider', testProviderData.spectre)
     await setupDone.helpers.removeAllRecords('category')
     testCategory = await setupDone.helpers.createRecord('category', testCategoryData.construction)
-    authtoken = await setupDone.getToken()
   })
 
   describe('new framework', () => {
     it('should create with minimum data', done => {
       server
         .post('http://127.0.0.1:5000/api/framework')
-        .set('authorization-token', authtoken)
         .send({
           ref: 'vehicles',
           title: 'Vehicles for Bond to wreck'
@@ -47,7 +44,6 @@ describe('api:framework:post', () => {
       testRecord.provider = testProvider._id.toString()
       server
         .post('http://127.0.0.1:5000/api/framework')
-        .set('authorization-token', authtoken)
         .send(testRecord)
         .end((err, res) => {
           expect(res.statusCode).to.equal(200)
@@ -63,7 +59,6 @@ describe('api:framework:post', () => {
     it('must have a unique ref', done => {
       server
         .post('http://127.0.0.1:5000/api/framework')
-        .set('authorization-token', authtoken)
         .send({
           ref: 'builders',
           title: 'Builders'
@@ -80,7 +75,6 @@ describe('api:framework:post', () => {
     it('cannot have a blank title', done => {
       server
         .post('http://127.0.0.1:5000/api/framework')
-        .set('authorization-token', authtoken)
         .send({
           ref: 'newframework',
           title: ''
@@ -99,7 +93,6 @@ describe('api:framework:post', () => {
       it(`should not create anything with an invalid ref: "${ref}"`, done => {
         server
           .post(`http://127.0.0.1:5000/api/framework`)
-          .set('authorization-token', authtoken)
           .send({
             ref,
             title: `title: ${ref}`

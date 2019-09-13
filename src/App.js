@@ -25,12 +25,13 @@ import ManagementEditor from './components/management/ManagementEditor'
 import CategoryEditor from './components/category/CategoryEditor'
 import Dialog from './components/dialog/Dialog'
 import Header from './components/Header'
-import Auth from './components/auth/Auth'
+import Nav from './components/Nav'
+// import Auth from './components/auth/Auth'
 
 const mapStateToProps = (state) => {
   return {
     structure: state.structureReducer,
-    auth: state.authReducer
+    // auth: state.authReducer
     // questions: state.questionReducer.questions || List([]),
     // frameworks: state.frameworkReducer.frameworks || List([]),
     // providers: state.providerReducer.providers || List([]),
@@ -49,19 +50,15 @@ const mapDispatchToProps = (dispatch) => {
 
 export class App extends Component {
   componentDidMount() {
-    if (this.props.auth.token) {
       this.props.getQuestions()
       this.props.getFrameworks()
       this.props.getProviders()
       this.props.getCategories()
-    }
   }
 
   componentDidUpdate(prevProps) {
     // console.log('Now:', this.props.structure, 'Prev:', prevProps.structure)
-    if (this.props.auth.token
-      && (this.props.structure.draftId !== prevProps.structure.draftId
-          || this.props.auth.token !== prevProps.auth.token)) {
+    if (this.props.structure.draftId !== prevProps.structure.draftId) {
       this.props.getQuestions()
       this.props.getFrameworks()
       this.props.getProviders()
@@ -76,7 +73,8 @@ export class App extends Component {
         <div className="govuk-width-container app-width-container">
           <main className="govuk-main-wrapper app-main-wrapper" id="main-content" role="main">
             <div className="app">
-              <Auth>
+              <div>
+                <Nav />
                 <Route path='/' component={Dashboard} exact />
                 <Route path='/framework' component={Frameworks} exact />
                 <Route path='/framework/:frameworkId' component={FrameworkEditor} exact />
@@ -90,7 +88,7 @@ export class App extends Component {
                 <Route path='/diagram/:questionId?/:optionId?' component={Diagram} />
                 <Route path='/structure' component={Management} exact />
                 <Route path='/structure/:structureId' component={ManagementEditor} exact />
-              </Auth>
+              </div>
             </div>
           </main>
         </div>

@@ -6,7 +6,6 @@ const testRecords = {}
 
 const setup = require('./setup')
 let records = null
-let authtoken
 
 describe('api:question:get', () => {
   before(async () => {
@@ -15,13 +14,11 @@ describe('api:question:get', () => {
     await setupDone.helpers.createRecord('question', testData.bond)
     await setupDone.helpers.createRecord('question', testData.conneryFilms)
     await setupDone.helpers.createRecord('question', testData.world)
-    authtoken = await setupDone.getToken()
   })
 
   it('should be able to get a list of all questions in the database', done => {
     server
       .get('http://127.0.0.1:5000/api/question')
-      .set('authorization-token', authtoken)
       .end((err, res) => {
         records = res.body
         expect(res.statusCode).to.equal(200)
@@ -34,7 +31,6 @@ describe('api:question:get', () => {
     const id = records[1]._id
     server
       .get(`http://127.0.0.1:5000/api/question/${id}`)
-      .set('authorization-token', authtoken)
       .end((err, res) => {
         expect(res.statusCode).to.equal(200)
         expect(res.body).to.have.property('_id', id)
@@ -46,7 +42,6 @@ describe('api:question:get', () => {
   it('should return 404 if the document does not exist', done => {
     server
       .get(`http://127.0.0.1:5000/api/question/ffffffffffffffffffffffff`)
-      .set('authorization-token', authtoken)
       .end((err, res) => {
         expect(res.statusCode).to.equal(404)        
         expect(res.body).to.have.property('success', false)

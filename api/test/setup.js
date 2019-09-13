@@ -10,8 +10,6 @@ app.use(bodyParser.json())
 
 const setup = {}
 
-process.env.USERS = '579b1220a4e48538c1989daf7a514f52'
-process.env.AUTHSECRET = '1234567890'
 process.env.COLLECTION_NAME = 'MOCHA_' + Date.now()
 
 
@@ -38,18 +36,9 @@ exports = module.exports = async () => {
     console.log('Magic happens on port ' + port)
   })
 
-  const getToken = async () => {
-    const response = await agent.post('http://127.0.0.1:5000/auth').send({
-      user: 'user@dfe.gov.uk',
-      pass: 'dfe'
-    })
-    return response.body.token
-  }
-
   setup.app = app
   setup.server = server
   setup.helpers = helpers
   setup.dataSource = dataSource
-  setup.getToken = getToken
   return setup
 }

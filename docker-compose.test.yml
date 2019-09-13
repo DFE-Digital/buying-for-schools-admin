@@ -2,4 +2,4 @@ sut:
   build: .
   command: npm test
   environment:
-    - MONGO_TEST
+    - MONGO

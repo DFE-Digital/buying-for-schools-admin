@@ -6,7 +6,6 @@ const testRecords = {}
 
 const setup = require('./setup')
 let records = null
-let authtoken
 let helpers
 
 describe('api:question:delete', () => {
@@ -17,14 +16,12 @@ describe('api:question:delete', () => {
     await helpers.createRecord('question', testData.bond)
     await helpers.createRecord('question', testData.conneryFilms)
     await helpers.createRecord('question', testData.world)
-    authtoken = await setupDone.getToken()
   })
 
   it('should be able to delete a specific record', done => {   
     const id = helpers.recordCache.bond._id
     server
       .delete(`http://127.0.0.1:5000/api/question/${id}`)
-      .set('authorization-token', authtoken)
       .end((err, res) => {
         expect(res.statusCode).to.equal(200)
         done()
@@ -35,7 +32,6 @@ describe('api:question:delete', () => {
     const id = helpers.recordCache.bond._id
     server
       .delete(`http://127.0.0.1:5000/api/question/${id}`)
-      .set('authorization-token', authtoken)
       .end((err, res) => {
         expect(res.statusCode).to.equal(404)
         done()

@@ -28,13 +28,13 @@ const exportables = {
 
 const go = async () => {
   const noGoErrors = []
-  if (!haveUsers) {
-    noGoErrors.push(errors.USERS_ERROR)
-  }
+  // if (!haveUsers) {
+  //   noGoErrors.push(errors.USERS_ERROR)
+  // }
 
-  if (!haveSecret) {
-    noGoErrors.push(errors.AUTHSECRET_ERROR)
-  }
+  // if (!haveSecret) {
+  //   noGoErrors.push(errors.AUTHSECRET_ERROR)
+  // }
 
   if (!haveConnectionDetails) {
     noGoErrors.push(errors.MONGO_ERROR)

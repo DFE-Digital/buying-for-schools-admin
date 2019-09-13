@@ -6,7 +6,6 @@ const testRecords = {}
 
 const setup = require('./setup')
 let records = null
-let authtoken
 
 
 describe('api:provider', () => {
@@ -16,7 +15,6 @@ describe('api:provider', () => {
     await setupDone.helpers.createRecord('provider', testData.qbranch)
     await setupDone.helpers.createRecord('provider', testData.spectre)
     await setupDone.helpers.createRecord('provider', testData.commandeered)
-    authtoken = await setupDone.getToken()
   })
 
   
@@ -24,7 +22,6 @@ describe('api:provider', () => {
     it('should be able to get a list of all providers in the database', done => {
       server
         .get('http://127.0.0.1:5000/api/provider')
-        .set('authorization-token', authtoken)
         .end((err, res) => {
           records = res.body
           expect(res.statusCode).to.equal(200)
@@ -37,7 +34,6 @@ describe('api:provider', () => {
       const id = records[1]._id
       server
         .get(`http://127.0.0.1:5000/api/provider/${id}`)
-        .set('authorization-token', authtoken)
         .end((err, res) => {
           expect(res.statusCode).to.equal(200)
           expect(res.body).to.have.property('_id', id)
@@ -50,7 +46,6 @@ describe('api:provider', () => {
     it('should return 404 if the document does not exist', done => {
       server
         .get(`http://127.0.0.1:5000/api/provider/ffffffffffffffffffffffff`)
-        .set('authorization-token', authtoken)
         .end((err, res) => {
           expect(res.statusCode).to.equal(404)        
           expect(res.body).to.have.property('success', false)
@@ -63,7 +58,6 @@ describe('api:provider', () => {
     it('should create with minimum data', done => {
       server
         .post('http://127.0.0.1:5000/api/provider')
-        .set('authorization-token', authtoken)
         .send({
           initials: 'eb',
           title: 'Evil Billionaires club'
@@ -78,7 +72,6 @@ describe('api:provider', () => {
     it('cannot have a blank title', done => {
       server
         .post('http://127.0.0.1:5000/api/provider')
-        .set('authorization-token', authtoken)
         .send({
           initials: 'blank',
           title: ''
@@ -98,7 +91,6 @@ describe('api:provider', () => {
       const id = records[1]._id
       server
         .put(`http://127.0.0.1:5000/api/provider/${id}`)
-        .set('authorization-token', authtoken)
         .send({
           initials: 'spectre',
           title: 'Spectre Corp'
@@ -115,7 +107,6 @@ describe('api:provider', () => {
       const id = records[1]._id
       server
         .put(`http://127.0.0.1:5000/api/provider/${id}`)
-        .set('authorization-token', authtoken)
         .send({
           title: ''
         })
@@ -134,7 +125,6 @@ describe('api:provider', () => {
       const id = records[0]._id
       server
         .delete(`http://127.0.0.1:5000/api/provider/${id}`)
-        .set('authorization-token', authtoken)
         .end((err, res) => {
           expect(res.statusCode).to.equal(200)
           done()
@@ -145,7 +135,6 @@ describe('api:provider', () => {
       const id = records[0]._id
       server
         .delete(`http://127.0.0.1:5000/api/provider/${id}`)
-        .set('authorization-token', authtoken)
         .end((err, res) => {
           expect(res.statusCode).to.equal(404)
           done()
