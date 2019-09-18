@@ -30,7 +30,10 @@ export const getHeaders = () => {
 
 export const get = (url) => {
   return new Promise((resolve, reject) => {
-    fetch(url, { headers: getHeaders() }).then(response => {
+    fetch(url, { 
+      headers: getHeaders(),
+      credentials: 'same-origin'
+    }).then(response => {
       if (!response.ok) {
         return reject(response.status)
       }
@@ -43,7 +46,8 @@ export const put = (url, data) => {
   const opts = {
     method: 'PUT',
     body: JSON.stringify(data),
-    headers: getHeaders()
+    headers: getHeaders(),
+    credentials: 'same-origin'
   }
   let theresponse = null
 
@@ -72,7 +76,8 @@ export const post = (url, data) => {
   const opts = {
     method: 'POST',
     body: JSON.stringify(data),
-    headers: getHeaders()
+    headers: getHeaders(),
+    credentials: 'same-origin'
   }
 
   let theresponse = null
@@ -101,7 +106,8 @@ export const post = (url, data) => {
 export const remove = (url) => {
   const opts = {
     method: 'DELETE',
-    headers: getHeaders()
+    headers: getHeaders(),
+    credentials: 'same-origin'
   }
 
   let theresponse = null
