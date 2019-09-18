@@ -39,13 +39,15 @@ export class DiagramResult extends Component {
   }
 
   render () {
-
     if (this.state.framework === null) {
       return ''
     }
+
+    const resultIdFromRef = this.state.framework.get('ref').replace(/[^a-z]/ig, '')
+    const resultPath = `${this.props.path}_${resultIdFromRef}`
     const provider = this.props.providers.find(p => p.get('_id') === this.state.framework.get('provider')) || Map({})
     return (
-      <div className="dresult">{ this.state.framework.get('title')} <span>{ provider.get('initials') }</span></div>
+      <div id={resultPath} className="dresult">{ this.state.framework.get('title')} <span>{ provider.get('initials') }</span></div>
     )
   }
 }

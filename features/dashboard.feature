@@ -1,8 +1,4 @@
 Feature: Dashboard
-  
-  Background:
-    Given the user is logged in
-
   Scenario: Dashboard display
     Given user is on page /
     Then the service displays the following page content

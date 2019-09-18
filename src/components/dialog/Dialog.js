@@ -54,7 +54,7 @@ export class Dialog extends Component {
 
           <div className="dialog__buttons">
             { this.props.settings.buttons.map((b, i) => (
-              <button className={`button button--${b.color}`} onClick={e => this.onClick(b) } key={`button--n${i}`}>{b.text}</button>  
+              <button className={`button button--${b.color}`} id={b.id} onClick={e => this.onClick(b) } key={`button--n${i}`}>{b.text}</button>  
             )) }
           </div>
         </div>

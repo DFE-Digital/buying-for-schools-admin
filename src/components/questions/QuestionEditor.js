@@ -148,7 +148,7 @@ export class QuestionEditor extends Component {
       <div className="questioneditor govuk-width-container">
         <h1 className="questioneditor__title">Question</h1>
         
-        <form className="questioneditor__question">
+        <form className="questioneditor__question" id="questioneditorform">
           <ErrorSummary errors={errors} />
           
           <Input 

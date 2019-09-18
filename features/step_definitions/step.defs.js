@@ -53,6 +53,26 @@ Then('a modal dialog should ask for confirmation', async function (data) {
   await this.modalDialogCheck(data.raw())
 })
 
-When(/^(a|the) (.*) is pressed$/, async function (foo, sel) {
+// Then('the dialog should not be displayed', async function() {
+//   await this.modalDialogCheck(null)
+// })
+
+When(/^(a|the) (.+) is (pressed|clicked)$/, async function (foo, sel, bar) {
   await this.clickButton(sel)
+})
+
+Then('the form has these fields', async function (data) {
+  await this.checkFormFields(data.raw())
+})
+
+Then(/^(a|the) (.+) (should|should NOT) be displayed$/i, async function (foo, item, includes) {
+  await this.checkDisplay(item, includes==='should')
+})
+
+Then('the form is completed with', async function (data) {
+  await this.formCompleted(data.raw())
+})
+
+Then(/^the (.+) category of the framework list should contain$/, async function (cat, data) {
+  await this.frameworkListContains(cat, data.raw())
 })

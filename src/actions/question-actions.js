@@ -127,6 +127,7 @@ export const updateQuestion = json => dispatch => {
   return put(`${questionUrl}/${json._id}`, json).then(data => {
     dispatch(questionUpdateErrored([]))
     dispatch(getQuestions())
+    console.log('updateQuestion', data)
     return data.data
   }).catch(err => {
     return dispatch(questionUpdateErrored(err.error))

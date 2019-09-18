@@ -71,12 +71,12 @@ export class Frameworks extends Component {
               </tr>
             </thead>
             {categories.map(c => (
-              <tbody>
+              <tbody key={c.ref}>
                 <tr>
                   <th colspan="7">{c.title}</th>
                 </tr>
                 {c.frameworks.map(f => (
-                  <tr key={f.get('_id')}>
+                  <tr key={f.get('_id')} id={f.get('ref')} data-cat={c.ref}>
                     <td className={`framework__status--${f.getIn(['_info', 'expiry', 'class'])}`}>{f.getIn(['_info', 'expiry', 'msg'])}</td>
                     <td><Link to={`/framework/${f.get('_id')}`}>{f.get('ref')}</Link></td>
                     <td>{f.get('title')} {!f.get('body') && (<span className="framework__warning--blank">BLANK</span>)}</td>
@@ -90,7 +90,7 @@ export class Frameworks extends Component {
             ))}
           </table>
         )}
-        <Link to="/framework/new" className="button button--green">New Framework</Link>
+        <Link to="/framework/new" className="button button--green" id="newframework">New Framework</Link>
       </div>
     )
   }

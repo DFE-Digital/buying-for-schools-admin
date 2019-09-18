@@ -7,7 +7,6 @@ const port = process.env.PORT || 8000
 const mongodoc = require('./api/adaptors/mongodoc/mongodocAdaptor')
 const api = require('./api/api')
 const errors = require('./api/errors')
-// const connectionString = process.env.MONGO.replace(/\/s107d01-mongo-01\?/, '/testing?')
 const connectionString = process.env.MONGO
 const collectionName = process.env.COLLECTION_NAME || 'structure'
 
@@ -28,13 +27,6 @@ const exportables = {
 
 const go = async () => {
   const noGoErrors = []
-  // if (!haveUsers) {
-  //   noGoErrors.push(errors.USERS_ERROR)
-  // }
-
-  // if (!haveSecret) {
-  //   noGoErrors.push(errors.AUTHSECRET_ERROR)
-  // }
 
   if (!haveConnectionDetails) {
     noGoErrors.push(errors.MONGO_ERROR)

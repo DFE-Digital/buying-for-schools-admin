@@ -163,10 +163,10 @@ export class OptionEditor extends Component {
     const newQuestion = this.state.question.setIn(['options', this.state.optionIndex], this.state.option)
     
     this.props.updateQuestion(newQuestion.toJS()).then(data => {
-      if ( this.state.option.get('_id') === 'new') {
+      if ( this.state.option.get('_id') === 'new' && !data.err) {
         this.props.history.push(`${this.state.baseLink}/${qId}/${data.options[data.options.length-1]._id}`)
       }
-    })  
+    })
   }
 
   render () {
@@ -218,12 +218,23 @@ export class OptionEditor extends Component {
     const returnPath = query.return === 'question' ? `${cancelLink}/${this.state.question.get('_id')}` : cancelLink
 
     const hasErrors = this.props.updateErrors && this.props.updateErrors.data && this.props.updateErrors.data.errors
-    const errorIds = hasErrors ? this.props.updateErrors.data.errors.map(e => e.id) : []
-    const errors = hasErrors ? this.props.updateErrors.data.errors : []
+    let errors = []
+    let errorIds = []
+    if (hasErrors) {
+      // console.log(this.props.updateErrors.data.errors)
+      errors = this.props.updateErrors.data.errors.map(err => {
+        return {
+          id: err.id.replace(/^options\.\d+\.(.+)/i, '$1')
+        }
+      })
+      errorIds = errors.map(e => e.id)
+      console.log(errors)
+      console.log(errorIds)
+    }
 
     return (
       <div className="govuk-width-container">
-        <form>
+        <form id="optioneditorform">
           <h2>Option</h2>
 
           <ErrorSummary errors={errors} />
@@ -231,7 +242,7 @@ export class OptionEditor extends Component {
           <Input 
             id="ref"
             value={this.state.option.get('ref')}
-            label="Ref"
+            label="Slug"
             onChange={this.onChange.bind(this)}
             error={errorIds.includes('ref')}
             />
@@ -261,10 +272,10 @@ export class OptionEditor extends Component {
             <h2 className="govuk-label">Results</h2>
             <table>
               <tbody>
-                {resultFrameworksSorted.map(r => (
+                {resultFrameworksSorted.map((r, i ) => (
                   <tr key={r.id}>
                     <td>{r.title}</td>
-                    <td><button className="button button--red editoption__resultremove" onClick={e => this.onRemoveFrameworkOption(r.id)}>Remove</button></td>
+                    <td><button id={`removeresult_${i}`} className="button button--red editoption__resultremove" onClick={e => this.onRemoveFrameworkOption(r.id)}>Remove</button></td>
                   </tr>
                 ))}
 
@@ -286,8 +297,8 @@ export class OptionEditor extends Component {
             </table>
           </div>
 
-          <input type="submit" value="Save" className={saveButtonClasses.join(' ')} onClick={e => this.onSave(e)} />
-          <Link to={returnPath} className="button">{ hasChanged ? 'Cancel' : 'Back' }</Link>
+          <input id="savebtn" type="submit" value="Save" className={saveButtonClasses.join(' ')} onClick={e => this.onSave(e)} />
+          <Link id="backbtn" to={returnPath} className="button">{ hasChanged ? 'Cancel' : 'Back' }</Link>
         </form>
       </div>
     )

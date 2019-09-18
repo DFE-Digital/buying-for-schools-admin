@@ -43,11 +43,13 @@ export const confirmDeleteFramework = framework => dispatch => {
       msg: [`Are you sure you want to delete framework: '${framework.get('title')}'?`, 'This cannot be undone!'],
       buttons: [
         {
+          id: 'dialogbuttonyes',
           text: 'Yes, delete',
           color: 'red',
           action: deleteFramework(framework.get('_id'))
         },
         {
+          id: 'dialogbuttonno',
           text: 'No',
           color: 'green',
           action: null

@@ -34,7 +34,8 @@ export class DiagramQuestion extends Component {
       return <p>{qID}</p>
     }
 
-    const path = Map.isMap(this.props.path) || Map({}).set(qID, null)
+    const idFromRef = q.get('ref').replace(/[^a-z]/ig, '')
+    const path = (this.props.path) ?  `${this.props.path}_${idFromRef}` : idFromRef
     const title = q.get('title')
     const hint = q.get('hint') || ''
     const err = q.get('err')
@@ -50,8 +51,9 @@ export class DiagramQuestion extends Component {
       <table className="dquestiontable">
         <tbody>
           <tr className="dquestion--outer">
-            <td className="dquestion" colSpan={ options.size }>
-              <h2 id={path}><Link to={`/diagram/${qID}`}>{ title }</Link></h2>
+            <td id={path} className="dquestion" colSpan={ options.size }>
+              <span className="dquestion__slug">{q.get('ref')}</span>
+              <h2><Link to={`/diagram/${qID}`}>{ title }</Link></h2>
               { hint && (<span className="dquestion__hint">{ hint }</span>)}
               { err && (<span className="dquestion__err">{err}</span>)}
               <Link className="dquestion__addoption" to={`/diagram/${qID}/new`}></Link>
@@ -59,7 +61,8 @@ export class DiagramQuestion extends Component {
           </tr>
           <tr className={`doptions doptions--x${options.size}`}>
             {options.map((opt, i) => {
-              const optionPath = path.set(qID, i)
+              const optIdFromRef = opt.get('ref').replace(/[^a-z]/ig, '')
+              const optionPath = `${path}_${optIdFromRef}`
               return (
                 <td className="doption--outer" key={`option-${i}`}>
                   <DiagramOption 

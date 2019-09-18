@@ -17,25 +17,106 @@ const serviceName = 'Find a DfE approved framework for your school'
 let browser = null
 let page = null
 
-BeforeAll(async () => {
+BeforeAll({timeout: 30 * 1000}, async () => {
   await theApp.go
 })
 
+const findAll = (html, comparator) => {
+  let result = []
+  if (comparator(html)) {
+    result.push(html)
+    return result
+  }
+  if (!Array.isArray(html.children)) {
+    return []
+  }
+  html.children.forEach(child => {
+    result = result.concat(findAll(child, comparator))
+  })
+  return result
+}
+
+const getText = node => {
+  if (node.text) {
+    return node.text
+  }
+  let str = ''
+  node.children.forEach(child => {
+    str += getText(child)
+  }) 
+  return str
+}
+
+const getAttr = (node, attrName) => {
+  const attr = node.attributes.find(a => a.name === attrName)
+  return attr ? attr.value : null
+}
+
+const matchLabelsWithFields = (labels, fields) => {
+  const pairs = {}
+  labels.forEach(l => {
+    const id = getAttr(l, 'for')
+    if (id) {
+      pairs[id] = pairs[id] ? {...pairs[id], label: l }: {label: l}
+    }
+  })
+  fields.forEach(f => {
+    const id = getAttr(f, 'id')
+    if (id) {
+      pairs[id] = pairs[id] ? {...pairs[id], field: f }: {field: f}
+    }
+  })
+
+  return pairs
+}
+
+const sleep = ms => new Promise(resolve => setTimeout(resolve, ms))
+
 class B4SWorld {
   constructor () {
-    // console.log('B4SWorld Constructor')
+    
+  }
+
+  async waitForUrl (u, timeout = 2000) {
+    let et = 0
+    const recur = async () => {
+      const urlNow = page.url()
+      if ( urlNow === HOMEPAGE + u) {
+        return u
+      }
+      
+      await sleep(100)
+      et += 100
+      if (et >= timeout) {
+        return null
+      }
+
+      return await recur()
+    }
+    
+    return await recur()
   }
 
   async gotoPage (u) {
     if (!browser) {
-      browser = await puppeteer.launch({ headless: true, devtools: false })
+      browser = await puppeteer.launch({ headless: false, devtools: false })
     }
 
     if (!page) {
       page = await browser.newPage()
     }
 
+    await page.goto(HOMEPAGE)
     await page.goto(HOMEPAGE + u)
+  }
+
+  async checkDisplay (ref, showing) {
+    const sel = selectors(ref)
+    if (showing) {
+      await page.waitForSelector(sel, { visible: true })
+    } else {
+      await page.waitForSelector(sel, { hidden: true })
+    }
   }
 
   async checkPageContent (data) {
@@ -193,24 +274,71 @@ class B4SWorld {
 
   async hasFrameworkTable() {
     const table = await this.getHtml('#frameworktable')
-    const tbody = table.children[1]
-    const rows = tbody.children
-    rows.forEach(r => {
-      const link = r.children[1].children[0]
-      expect(link.name).to.equal('a')
-      expect(link.attributes.find(a => a.name === 'href').value).to.include('/framework')
-    }) 
-
+    const tbodies = table.children.filter(t => t.name === 'tbody')
+    tbodies.forEach(tbody => {
+      const rows = tbody.children
+      rows.forEach((r, i) => {
+        if ( i === 0) {
+          expect(r.children[0].name).to.equal('th')
+        } else {
+          const link = r.children[1].children[0]
+          expect(link.name).to.equal('a')
+          expect(link.attributes.find(a => a.name === 'href').value).to.include('/framework')  
+        }
+      })   
+    })    
   }
 
-  async clickButton (sel) {
-    await page.waitForSelector('.button--red')
-    await page.$eval('.button--red', btn => btn.click())
+  async clickButton (ref) {
+    const sel = selectors(ref)
+    await page.waitForSelector(sel)
+    await page.$eval(sel, btn => btn.click())
   }
 
   async modalDialogCheck (data) {
     await page.waitForSelector('.dialog__content', { visible: true })
     await this.checkText('.dialog__content h1', data[0][1])
+  }
+
+  async checkFormFields (data) {
+    const form = await this.getHtml('form')
+    const labels = findAll(form, node => node.name === 'label')
+    const fields = findAll(form, node => ['input', 'textarea', 'select'].includes(node.name))
+    const pairs = matchLabelsWithFields(labels, fields)
+    
+    const labelsAndTypes = Object.values(pairs).map(p => {
+      const label = p.label ? p.label.children[0].text : ''
+      if (!p.field) {
+        return null
+      }
+
+      const type = p.field.name === 'input' ? getAttr(p.field, 'type') : p.field.name
+      return { label, type }
+    }).filter(item => item !== null)
+    data.forEach(row => {
+      const pair = labelsAndTypes.find(p => p.label === row[0])
+      expect(pair ? pair.type: null).to.equal(row[1], `${row[0]} | ${row[1]}`)
+    })
+  }
+
+  async formCompleted(data) {
+    await page.waitForSelector('form.frameworkeditor__framework')
+    for(let i=0; i< data.length; i++) {
+      const row = data[i]
+      const key = `field:${row[0]}`
+      const sel = selectors(key)
+      await page.focus(sel)
+      await page.keyboard.type(row[1])
+    }
+  }
+
+  async frameworkListContains(cat, data) {
+    const slug = data[0][1]
+    const tr = await(this.getHtml(`#${slug}`))
+    data[0].forEach((td, i) => {
+      expect(getText(tr.children[i]).trim()).to.equal(td.trim())
+    })
+    expect(getAttr(tr, 'data-cat')).to.equal(cat)
   }
 }
 
@@ -220,7 +348,7 @@ const timeout = async ms =>  {
 
 AfterAll(async function () {
   // await timeout(5000)
-  await browser.close()
+  // await browser.close()
   await theApp.server.close()
   if (process.env.COLLECTION_NAME !== 'structure') {
     await theApp.dataSource.model.collection.drop()

@@ -10,6 +10,7 @@
 
 .dquestion {
   padding: 10px 0 20px 0;
+  position: relative;
 }
 
 .dquestion a {
@@ -31,7 +32,7 @@
 .dquestion h2 {
   font-size: 14px;
   margin: 0;
-  padding: 4px 8px;
+  padding: 8px 16px;
   position: relative;
   background-color: #eee;
   display: inline-block;
@@ -123,4 +124,12 @@
   left: 3px;
   top: 7px;
   background-color: #fff;
+}
+
+.dquestion__slug {
+  position: relative;
+  font-size: 10px;
+  display: block;
+  background-color: #fff;
+  z-index: 10;
 }

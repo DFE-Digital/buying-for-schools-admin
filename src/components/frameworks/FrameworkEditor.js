@@ -124,12 +124,15 @@ export class FrameworkEditor extends Component {
     const f = this.state.framework.delete('_info')
     if (f.get('_id') === 'new') {
       this.props.saveNewFramework(f.toJS()).then(data => {
-        if (data._id) {
-          this.props.history.push(`/framework/${data._id}`)
-        }
+        // if (data._id) {
+        //   this.props.history.push(`/framework/${data._id}`)
+        // }
+        this.props.history.push('/framework')
       })
     } else {
-      this.props.updateFramework(f.toJS())
+      this.props.updateFramework(f.toJS()).then(data => {
+        this.props.history.push('/framework')
+      })
     }
   }
 
@@ -188,7 +191,7 @@ export class FrameworkEditor extends Component {
       <div className="frameworkeditor govuk-width-container">
         <h1 className="frameworkeditor__title">Framework</h1>
         
-        <form className="frameworkeditor__framework">
+        <form className="frameworkeditor__framework" id="frameworkeditorform">
           <ErrorSummary errors={errors} />
           
           <Input 
@@ -284,12 +287,12 @@ export class FrameworkEditor extends Component {
                 )) }
               </tbody>
             </table>
-            <button className="button" onClick={e => this.addLink(e)}>Add link</button>
+            <button id="addlinkbtn" className="button" onClick={e => this.addLink(e)}>Add link</button>
           </div>
           {/*<ReactMarkdown source={this.state.framework.get('body')} />*/}
 
-          <input type="submit" value="Save" className={saveButtonClasses.join(' ')} onClick={e => this.onSave(e)} />
-          <Link to="/framework" className="button">{ hasChanged ? 'Cancel' : 'Back' }</Link>    
+          <input type="submit" id="savebtn" value="Save" className={saveButtonClasses.join(' ')} onClick={e => this.onSave(e)} />
+          <Link to="/framework" id="cancelbtn" className="button">{ hasChanged ? 'Cancel' : 'Back' }</Link>    
         </form>
       </div>
     )

@@ -10,7 +10,7 @@ app.use(bodyParser.json())
 
 const setup = {}
 
-process.env.COLLECTION_NAME = 'MOCHA_' + Date.now()
+process.env.COLLECTION_NAME = 'MOCHA_API_' + Date.now()
 
 
 after(async () => {
@@ -30,7 +30,6 @@ exports = module.exports = async () => {
   const dataSource = await mongodoc({ connectionString: process.env.MONGO, collectionName: process.env.COLLECTION_NAME })
   const helpers = require('./helpers.mongodoc')(dataSource)
   api(app, dataSource)
-
  
   const server = app.listen(port, () => {
     console.log('Magic happens on port ' + port)
