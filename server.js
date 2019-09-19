@@ -13,7 +13,10 @@ const cors = require('cors')
 
 const app = express()
 app.use(bodyParser.json())
-app.use(cors())
+app.use(cors({
+  origin: 'https://s107p01-webapp-admin-01.azurewebsites.net',
+  optionsSuccessStatus: 200
+}))
 
 const haveConnectionDetails = !!process.env.MONGO
 const haveBuildDirectory = fs.existsSync(path.join(__dirname, 'build/index.html'))
