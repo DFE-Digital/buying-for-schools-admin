@@ -16,6 +16,7 @@ RUN npm install
 COPY api/ ./api
 COPY public/ ./public
 COPY src/ ./src
+COPY testing-ui/ ./testing-ui
 COPY server.js ./server.js
 
 RUN npm run build
