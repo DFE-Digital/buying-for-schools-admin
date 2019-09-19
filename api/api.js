@@ -9,6 +9,11 @@ const api = (app, dataSource) => {
   // const authController = require('./controllers/auth')()
   // app.post('/auth', authController.login)
   // app.all('/api/*', authController.ensureAuth)
+  // app.all('/api/*', (req, res, next) => {
+  //   res.set('Access-Control-Allow-Origin', req.origin)
+  //   console.log(req.origin)
+  //   next()
+  // })
 
   app.get('/api/framework', frameworkController.list)
   app.post('/api/framework', frameworkController.create)

@@ -9,9 +9,11 @@ const api = require('./api/api')
 const errors = require('./api/errors')
 const connectionString = process.env.MONGO
 const collectionName = process.env.COLLECTION_NAME || 'structure'
+const cors = require('cors')
 
 const app = express()
 app.use(bodyParser.json())
+app.use(cors())
 
 const haveConnectionDetails = !!process.env.MONGO
 const haveBuildDirectory = fs.existsSync(path.join(__dirname, 'build/index.html'))
