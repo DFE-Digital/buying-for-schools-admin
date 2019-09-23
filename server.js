@@ -3,17 +3,29 @@ const express = require('express')
 const bodyParser = require('body-parser')
 const serveStatic = require('serve-static')
 const path = require('path')
-const port = process.env.PORT || 8000
+const basicAuth = require('express-basic-auth')
+const cors = require('cors')
+
 const mongodoc = require('./api/adaptors/mongodoc/mongodocAdaptor')
 const api = require('./api/api')
 const errors = require('./api/errors')
+
+const port = process.env.PORT || 8000
+const authUser = process.env.AUTHUSER || null
+const authPass = process.env.AUTHPASS || null
 const connectionString = process.env.MONGO
 const collectionName = process.env.COLLECTION_NAME || 'structure'
-const cors = require('cors')
+
 
 const app = express()
 app.use(bodyParser.json())
 app.use(cors())
+
+if (authUser && authPass) {
+  const auth = { users: {}, challenge: true }
+  auth.users[authUser] = authPass
+  app.use(basicAuth(auth))
+}
 
 const haveConnectionDetails = !!process.env.MONGO
 const haveBuildDirectory = fs.existsSync(path.join(__dirname, 'build/index.html'))
