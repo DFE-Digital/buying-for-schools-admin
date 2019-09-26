@@ -1,5 +1,7 @@
 process.env.PORT = 8888
 process.env.COLLECTION_NAME = 'MOCHA_UI_' + Date.now()
+process.env.AUTHUSER = ''
+process.env.AUTHPASS = ''
 
 const puppeteer = require('puppeteer')
 const pseudoHtml = require('./pseudoHtml')
@@ -10,7 +12,6 @@ const setup = { app: null }
 
 let page
 let browser
-
 
 const gotoPage = async u => {
   await page.goto(HOMEPAGE + u)
