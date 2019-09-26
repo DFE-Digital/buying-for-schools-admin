@@ -44,7 +44,7 @@
     "start:dev": "nodemon server.js & react-scripts start",
     "build": "react-scripts build",
     "test": "npm run test:jshint && npm run test:api",
-    "test:jshint": "jshint api/**/*.js",
+    "test:jshint": "jshint api",
     "test:api": "mocha -t 10000 api/test/*.test.js --exit",
     "test:ui": "mocha -t 10000 testing-ui/*.test.js --exit",
     "test:bdd": "./node_modules/.bin/cucumber-js -f node_modules/cucumber-pretty --exit",
