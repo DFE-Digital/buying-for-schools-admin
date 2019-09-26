@@ -59,20 +59,18 @@ Run Mocha unit tests on the api
 Defines the port for serving the app, defaults: 8000
 
 
-### ` USERS ` ###
+### ` AUTHUSER ` ###
 
-**REQUIRED**
+Sets the user for http basic auth - ONLY TO BE USED IN THE **TEST** and **DEV** environments.
 
-Sets the authenticated users for the admin tool, should be a space separated list of md5 hashes of user email, colon, password.
-
-For example if the user is ` user@dfe.gov.uk ` and the password is ` dfe ` then the hash should be `md5( 'user@dfe.gov.uk:dfe' )` = ` 579b1220a4e48538c1989daf7a514f52 `, DON'T USE THIS ACTUAL VALUE.
+For **PROD** env, do not use this, Azure Active Directory should be configured instead.
 
 
-### ` AUTHSECRET ` ###
+### ` AUTHPASS ` ###
 
-**REQUIRED**
+Sets the password for http basic auth - ONLY TO BE USED IN THE **TEST** and **DEV** environments.
 
-The auth secret is used to sign the JWT authentication token. Must be suitably long and random.
+For **PROD** env, do not use this, Azure Active Directory should be configured instead.
 
 
 ### ` MONGO ` ###

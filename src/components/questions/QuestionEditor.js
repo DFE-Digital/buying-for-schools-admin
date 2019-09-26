@@ -154,7 +154,7 @@ export class QuestionEditor extends Component {
           <Input 
             id="ref"
             value={this.state.question.get('ref')}
-            label="Ref"
+            label="Slug"
             onChange={this.onChange.bind(this)}
             error={errorIds.includes('ref')}
             disabled={this.state.question.get('ref') === 'type'}
