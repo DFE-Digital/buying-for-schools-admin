@@ -29,8 +29,6 @@ if (authUser && authPass) {
 
 const haveConnectionDetails = !!process.env.MONGO
 const haveBuildDirectory = fs.existsSync(path.join(__dirname, 'build/index.html'))
-const haveUsers = process.env.USERS && process.env.USERS.length >= 16
-const haveSecret = process.env.AUTHSECRET && process.env.AUTHSECRET.length >= 16
 
 const exportables = {
   app,
