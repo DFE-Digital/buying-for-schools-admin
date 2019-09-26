@@ -53,10 +53,20 @@ export class DiagramQuestion extends Component {
           <tr className="dquestion--outer">
             <td id={path} className="dquestion" colSpan={ options.size }>
               <span className="dquestion__slug">{q.get('ref')}</span>
-              <h2><Link to={`/diagram/${qID}`}>{ title }</Link></h2>
+              <div className="dquestion__holder">
+                <h2><Link to={`/diagram/${qID}`}>{ title }</Link></h2>
+                {/*<div class="dquestion__menu">
+                  <ul>
+                    <li><Link to={`/diagram/${qID}`}>Edit question</Link></li>
+                    <li><Link to={`/diagram/${qID}/new`}>Add a new option</Link></li>
+                    <li><a>Visit on production site</a></li>
+                    <li><a>Visit on test site</a></li>
+                  </ul>
+                </div>*/}
+              </div>
               { hint && (<span className="dquestion__hint">{ hint }</span>)}
               { err && (<span className="dquestion__err">{err}</span>)}
-              <Link className="dquestion__addoption" to={`/diagram/${qID}/new`}></Link>
+              <Link className="dquestion__addoption" to={`/diagram/${qID}/new`}>Add option</Link>
             </td>
           </tr>
           <tr className={`doptions doptions--x${options.size}`}>

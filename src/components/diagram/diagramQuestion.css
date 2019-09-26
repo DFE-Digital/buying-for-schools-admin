@@ -29,20 +29,65 @@
   background-color: #000;
 }
 
+.dquestion__holder {
+  margin: 0;
+  padding: 0;
+  position: relative;
+  display: inline-block;
+  background-color: #eee;
+}
+
 .dquestion h2 {
   font-size: 14px;
   margin: 0;
   padding: 8px 16px;
-  position: relative;
-  background-color: #eee;
-  display: inline-block;
   font-weight: normal;
   cursor: pointer;
+  background-color: #eee;
 }
 
 .dquestion h2:hover {
   /*color: #fff;*/
   background-color: #9f9;
+}
+
+.dquestion__menu {
+  position: relative;
+  display: none;
+}
+
+.dquestion__holder:hover .dquestion__menu {
+  display: block;
+}
+
+.dquestion__menu::before {
+  
+}
+
+.dquestion__menu ul {
+  position: absolute;
+  top: 0;
+  left: 0;
+  margin: 0;
+  padding: 0;
+  /*background-color: #fff;*/
+  z-index: 1000;
+  list-style: none;
+}
+
+.dquestion__menu ul li {
+  position: relative;
+  margin: 0;
+  padding: 0;
+  text-align: left;
+}
+
+.dquestion__menu ul li a {
+  position: relative;
+  margin: 0;
+  padding: 2px 16px;
+  display: inline-block;
+  background-color: rgba(255, 255, 255, 0.9);
 }
 
 .dquestion__addanswer {
@@ -60,8 +105,6 @@
   background-color: #090;
   color: #fff;
 }
-
-
 
 .dquestion__hint {
   position: relative;
@@ -100,6 +143,10 @@
   opacity: 0.1;
   transition: opacity 0.25s;
   cursor: pointer;
+  font-size: 10px;
+  white-space: nowrap;
+  text-indent: 20px;
+  color: #138213;
 }
 
 .dquestion:hover .dquestion__addoption {
