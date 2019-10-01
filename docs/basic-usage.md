@@ -6,7 +6,7 @@ A basic tutorial to change the text and settings of a decision tree option.
 
 ### Make the change in the admin app ###
 
-In the admin app [Temporary location here](https://s107t01-webapp-admin-01.azurewebsites.net)
+In the [admin app](https://s107p01-webapp-admin-01.azurewebsites.net)
 
 - Click the diagram tab
 - Click the option (dotted outline) you'd like to change
@@ -35,7 +35,7 @@ In the admin app [Temporary location here](https://s107t01-webapp-admin-01.azure
 
 ### Publish changes to live ###
 
-In the admin app [Temporary location here](https://s107t01-webapp-admin-01.azurewebsites.net)
+In the [admin app](https://s107p01-webapp-admin-01.azurewebsites.net)
 
 - Click the `Dashboard` tab
 - Click the `Publish options` button
