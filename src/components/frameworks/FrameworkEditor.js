@@ -216,6 +216,7 @@ export class FrameworkEditor extends Component {
             />
           <Input 
             id="expiry"
+            hint="yyyy-mm-dd"
             value={this.state.framework.get('expiry')}
             label="Expiry"
             onChange={this.onChange.bind(this)}  

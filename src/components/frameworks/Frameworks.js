@@ -52,6 +52,8 @@ export class Frameworks extends Component {
       }
     }).sortBy(c => c.title)
 
+    const unassignedFrameworks = frameworksWithProvider.filter(f => f.get('cat') === null)
+
     // const frameworks = frameworksWithCategories.sortBy(f => `${f.get('cat')} ${f.get('title')}`)
 
     return (
@@ -88,6 +90,24 @@ export class Frameworks extends Component {
                 ))}
               </tbody>
             ))}
+            { unassignedFrameworks.size && (
+            <tbody>
+                <tr>
+                  <th colspan="7">Unassigned</th>
+                </tr>
+                {unassignedFrameworks.map(f => (
+                  <tr key={f.get('_id')} id={f.get('ref')} data-cat="none">
+                    <td className={`framework__status--${f.getIn(['_info', 'expiry', 'class'])}`}>{f.getIn(['_info', 'expiry', 'msg'])}</td>
+                    <td><Link to={`/framework/${f.get('_id')}`}>{f.get('ref')}</Link></td>
+                    <td>{f.get('title')} {!f.get('body') && (<span className="framework__warning--blank">BLANK</span>)}</td>
+                    <td>{f.get('provider')}</td>
+                    <td>{f.getIn(['_info', 'displayDate'])}</td>
+                    <td>{usage[f.get('_id')] || 0}</td>
+                    <td><button className="button button--red" onClick={e => this.props.deleteFramework(f)}>Delete</button></td>
+                  </tr>
+                ))}
+              </tbody>
+              )}
           </table>
         )}
         <Link to="/framework/new" className="button button--green" id="newframework">New Framework</Link>
