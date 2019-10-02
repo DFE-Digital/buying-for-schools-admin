@@ -21,7 +21,7 @@ describe('testing diagram', () => {
       const attr = helpers.html.getAttr(node, 'class')
       return attr ? attr.includes('dresult') : false
     })
-    expect(resultingFrameworks.length).to.equal(41)
+    expect(resultingFrameworks.length).to.equal(47)
   })
 
   describe('show hide option edit form', () => {
