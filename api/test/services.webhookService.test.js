@@ -34,7 +34,7 @@ describe('webhookService', () => {
         headers: {
           'Content-Type': 'application/json',
           'Content-Length': 664,
-          'Authorization': 'Bearer secret'
+          'Authorization': 'Token secret'
         }
       }
 

@@ -8,7 +8,7 @@ const send = async (payload) => {
     headers: {
       'Content-Type': 'application/json',
       'Content-Length': Buffer.byteLength(data),
-      'Authorization': `Bearer ${process.env.GHBS_WEBHOOK_SECRET}`
+      'Authorization': `Token ${process.env.GHBS_WEBHOOK_SECRET}`
     }
   }
   
