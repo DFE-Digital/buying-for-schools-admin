@@ -1,7 +1,7 @@
 
 const shared = require('./shared')
 
-const frameworkController = (dataSource) => { 
+const frameworkController = (dataSource) => {
   return {
     list: (req, res) => {
       dataSource.framework.list()

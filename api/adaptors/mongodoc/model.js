@@ -113,8 +113,6 @@ const structureModelSchema = new Schema({
 
 const structure =  async options => {
   const { connectionString, collectionName } = options
-  mongoose.set('useCreateIndex', true)
-  mongoose.set('useFindAndModify', false)
   const db = await mongoose.connect(connectionString, { useNewUrlParser: true }, err => {
     if (err) {
       throw new Error(errors.CONNECTION_ERROR)
