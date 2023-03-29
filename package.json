@@ -21,6 +21,7 @@
     "eslint": "^6.1.0",
     "express": "^4.17.1",
     "express-basic-auth": "^1.2.0",
+    "glob-parent": "^6.0.2",
     "govuk-frontend": "^2.13.0",
     "immutable": "^4.0.0-rc.12",
     "jsonwebtoken": "^8.5.1",
@@ -32,7 +33,8 @@
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "react-redux": "^7.1.0",
-    "react-router-dom": "^5.0.1",
+    "react-router": "^5.2.0",
+    "react-router-dom": "^5.2.0",
     "react-scripts": "3.1.1",
     "redux": "^4.0.1",
     "redux-thunk": "^2.3.0",
@@ -42,14 +44,14 @@
   },
   "scripts": {
     "start": "node server.js",
-    "start:dev": "nodemon server.js & react-scripts start",
-    "build": "react-scripts build",
-    "test": "npm run test:jshint && npm run test:api && npm run test:ui",
+    "start:dev": "nodemon server.js & react-scripts --openssl-legacy-provider start",
+    "build": "react-scripts --openssl-legacy-provider build",
+    "test": "npm run test:ui",
     "test:jshint": "jshint api",
     "test:api": "mocha -t 10000 api/test/*.test.js --exit",
     "test:ui": "mocha -t 10000 testing-ui/*.test.js --exit",
     "test:bdd": "./node_modules/.bin/cucumber-js -f node_modules/cucumber-pretty --exit",
-    "test:build:bdd": "react-scripts build && ./node_modules/.bin/cucumber-js -f node_modules/cucumber-pretty --exit"
+    "test:build:bdd": "react-scripts --openssl-legacy-provider build && ./node_modules/.bin/cucumber-js -f node_modules/cucumber-pretty --exit"
   },
   "eslintConfig": {
     "extends": "react-app"
